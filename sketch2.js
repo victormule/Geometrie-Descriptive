@@ -41,7 +41,9 @@ const sketch2 = (p) => {
     let descriptionSize = 18;         // Taille initiale des descriptions
     let description2Size = 14;        // Taille initiale des descriptions2
     let lineSpacing = 24;             // Espacement initial entre les lignes
+    let lineSpacing2 = 20;             // Espacement initial entre les lignes
     let titleToDescriptionSpacing = 40; // Ecart initial entre le titre et les descriptions
+    let description2YShift = 0; // Ajustement dynamique pour description2Y
 
     // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
     function calculateSizes() {
@@ -49,8 +51,8 @@ const sketch2 = (p) => {
         let scaleFactor = p.width / initialWidth;
 
         // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
-        baseSize = p.max(20, 50 * scaleFactor);
-        spacing = p.max(4, 20 * scaleFactor);
+        baseSize = p.max(30, 50 * scaleFactor);
+        spacing = p.max(8, 20 * scaleFactor);
 
         // Ajuster les tailles de police proportionnellement, avec des minima
         titleSize = p.max(16, 24 * scaleFactor);
@@ -59,9 +61,15 @@ const sketch2 = (p) => {
 
         // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
         lineSpacing = p.max(14, 24 * scaleFactor);
+        lineSpacing2 = p.max(14, 20 * scaleFactor);
 
         // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
         titleToDescriptionSpacing = p.max(20, 40 * scaleFactor);
+
+        // Ajuster l'écart pour description2Y, avec une augmentation jusqu'à 100px lorsque la fenêtre se rétrécit
+        description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+
+
     }
 
     // Classe représentant un rectangle
@@ -137,12 +145,27 @@ const sketch2 = (p) => {
                         `LEGENDE`,
                         `Fig(1): a,a' point situé dans l'angle antérieur supérieur,`,
                         `figuré par le coude d'une pièce de cuivre.`,
-                        `Fig(2): a,a' point situé sur le mur, au dessus du sol, et `,
-                        `       se confondant avec sa projection horizontale a`,
-                        `Fig(3): a,a' point situé sur le sol, en avant du mur, et  `,
-                        `       se confondant avec sa projection horizontale a`,
-                        `Fig(4): a,a' point situé sur la ligne de terre et se con- `,
-                        `  fondant avec chacune de ses projections.`,
+                        `Fig(2): a,a' point situé sur le mur,  au dessus du sol, et`,
+                        `se confondant avec sa projection horizontale a`,
+                        `Fig(3): a,a' point situé sur le sol,  en avant  du mur, et`,
+                        `se confondant avec sa projection horizontale a`,
+                        `Fig(4): a,a' point situé sur la ligne de  terre  et se con-`,
+                        `fondant avec chacune de ses projections.`,
+                        `Fig(5): a,a' point situé dans l'angle  antérieur inférieur`,
+                        `figuré par le coude d'une pièce de cuivre.`,
+                        `Fig(6): a,a' point situé  sur le mur,  au dessous  du sol.`,
+                        `Le point vient en a'après le rabattement du plan verti-`,
+                        `cal sur le plan horizontal. Dans l'espace,  il n'est autre `,
+                        `que le trou 5.`,
+                        `Fig(7): a,a' point situé dans l'angle postérieur supérieur`,
+                        `figuré par le coude d'une pièce de cuivre.`,
+                        `Fig(8): a,a' point sur  le sol derrière  le mur.  Ce point`,
+                        `n'est  autre que le trou 2  avec lequel a coïncide après`,
+                        `le rabattement du plan vertical.`,
+                        `Fig(9): a,a' point situé dans l'angle postérieur inférieur,`,
+                        `figuré par le coude d'une pièce de cuivre.`,
+                        `Les projections sont les trous 1 et 4 avec lesquels a et `,
+                        ` a' se confondent après le rabattement du plan vertical.`,
                     ],
                 });
             }
@@ -212,6 +235,8 @@ const sketch2 = (p) => {
             }
         }
     };
+
+    
 
     // Fonction draw pour dessiner les rectangles, les images et gérer les interactions
     p.draw = function() {
@@ -392,21 +417,22 @@ const sketch2 = (p) => {
             if (currentText.descriptions2) {
                 p.textSize(description2Size);
                 // Définir une marge
-                const margin = 20;
+                const margin = 400;
 
                 // Calculer la position X pour descriptions2 (côté droit avec marge)
                 let description2X = p.width / 2 - margin;
 
                 // Réinitialiser la position Y pour descriptions2
-                let description2Y = titleY + titleToDescriptionSpacing;  // Aligner avec le début des descriptions
+                let description2Y = titleY + titleToDescriptionSpacing + description2YShift;  // Aligner avec le début des descriptions et ajouter l'ajustement
+
 
                 // Aligner le texte à droite
-                p.textAlign(p.RIGHT, p.TOP);
+                p.textAlign(p.LEFT, p.TOP);
 
                 // Itérer sur le tableau des descriptions2 et les afficher
                 currentText.descriptions2.forEach(description2 => {
                     p.text(description2, description2X, description2Y);  // Afficher chaque ligne
-                    description2Y += lineSpacing;  // Ajouter de l'espace entre les lignes
+                    description2Y += lineSpacing2;  // Ajouter de l'espace entre les lignes
                 });
 
                 // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
