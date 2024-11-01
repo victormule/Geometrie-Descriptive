@@ -3,8 +3,8 @@
 const sketch2 = (p) => {
     let myFont; // Variable pour stocker la police
     let rectangles = []; // Tableau pour stocker les objets rectangles
-    let rows = 3; // Nombre de lignes (modifiable)
-    let cols = 10; // Nombre de colonnes (modifiable)
+    let rows = 3; // Nombre de lignes
+    let cols = 10; // Nombre de colonnes
     let baseSize = 60; // Taille de base des rectangles (modifiable)
     let hoverSize = 70; // Taille des rectangles au survol
     let spacing = 24; // Espacement entre les rectangles (modifiable)
@@ -46,7 +46,7 @@ const sketch2 = (p) => {
     let lineSpacing2 = 20;            // Espacement initial entre les lignes pour descriptions2
     let lineSpacing3 = 18;            // Espacement initial entre les lignes pour descriptions3
     let lineSpacing4 = 18;            // Espacement initial entre les lignes pour descriptions4
-    let titleToDescriptionSpacing = 40; // Écart initial entre le titre et les descriptions
+    let titleToDescriptionSpacing = 40; // Ecart initial entre le titre et les descriptions
     let description2YShift = 0;       // Ajustement dynamique pour description2Y
     let description3YShift = 0;       // Ajustement dynamique pour description3Y
     let description4YShift = 0;       // Ajustement dynamique pour description4Y
@@ -57,25 +57,36 @@ const sketch2 = (p) => {
     let paragrapheSpacing3; // Pour descriptions3
     let paragrapheSpacing4; // Pour descriptions4
 
-    // Fonction pour déterminer l'orientation
+        // Fonction pour déterminer l'orientation
     function isPortrait() {
         return p.windowHeight > p.windowWidth;
     }
 
-    // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre et de l'orientation
+    function horizontalRows(){
+        rows = 2;
+        cols = 15;
+    }
+
+    function verticalRows(){
+        rows = 3;
+        cols = 10;
+    }
+    // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
     function calculateSizes() {
         const initialWidth = 1600; // Largeur de référence pour baseSize et spacing
         let scaleFactor = p.width / initialWidth;
-
         // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
         // Ajout d'ajustements basés sur l'orientation
         if (isPortrait()) {
-            baseSize = p.max(60, 60 * scaleFactor);
+            baseSize = p.max(80, 90 * scaleFactor);
             spacing = p.max(18, 24 * scaleFactor);
+            verticalRows();
         } else {
-            baseSize = p.max(60, 80 * scaleFactor); // Exemple: plus grand en paysage
-            spacing = p.max(18, 30 * scaleFactor);  // Exemple: plus grand en paysage
+            baseSize = p.max(40, 50 * scaleFactor); // Exemple: plus grand en paysage
+            spacing = p.max(14, 20 * scaleFactor);  // Exemple: plus grand en paysage
+            horizontalRows();
         }
+
 
         // Ajuster les tailles de police proportionnellement, avec des minima
         if (isPortrait()) {
@@ -102,9 +113,9 @@ const sketch2 = (p) => {
         titleToDescriptionSpacing = p.max(20, 40 * scaleFactor);
 
         // Ajuster l'écart pour description2Y, description3Y, et description4Y
-        description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 120 à 0
-        description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 120 à 0
-        description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 120 à 0
+        description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
 
         // Calculer les largeurs de ligne
         lineWidth2 = p.max(270, 370 * scaleFactor);
@@ -117,22 +128,16 @@ const sketch2 = (p) => {
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
     }
 
-    // Fonction pour initialiser les rectangles
-    function initializeRectangles() {
-        rectangles = []; // Réinitialiser le tableau des rectangles
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < cols; col++) {
-                let number = row * cols + col + 1; // Numérotation de 1 à (rows * cols)
-                rectangles.push(new Rectangle(row, col, number));
-            }
-        }
-    }
+
+
+    
+
 
     // Classe représentant un rectangle
     class Rectangle {
         constructor(row, col, number) {
-            this.row = row; // Numéro de la ligne (0 à rows-1)
-            this.col = col; // Numéro de la colonne (0 à cols-1)
+            this.row = row; // Numéro de la ligne (0 ou 1)
+            this.col = col; // Numéro de la colonne (0 à 14)
             this.number = number; // Numéro affiché dans le rectangle
 
             // Propriétés pour gérer la taille
@@ -176,6 +181,8 @@ const sketch2 = (p) => {
     // Fonction preload pour charger la police et les images avant le setup
     p.preload = function() {
         myFont = p.loadFont('fonts/OldNewspaperTypes.ttf');
+
+
 
         // Charger les images de relief
         for (let i = 1; i <= 30; i++) {
@@ -583,8 +590,8 @@ const sketch2 = (p) => {
         }
     }
 
-      // Fonction setup pour initialiser le canvas et les rectangles
-    p.setup = function() {
+     // Fonction setup pour initialiser le canvas et les rectangles
+     p.setup = function() {
         // Créer un canvas en 2D qui couvre toute la fenêtre
         p.createCanvas(p.windowWidth, p.windowHeight);
         p.rectMode(p.CENTER); // Mode de dessin des rectangles centrés
@@ -592,7 +599,7 @@ const sketch2 = (p) => {
         p.noStroke();
         p.smooth(0); // Désactiver l'anti-aliasing pour améliorer la performance
 
-        // Calculer les tailles initiales en fonction de la largeur de la fenêtre et de l'orientation
+        // Calculer les tailles initiales en fonction de la largeur de la fenêtre
         calculateSizes();
 
         // Positionner le canvas au-dessus du premier canvas
@@ -603,41 +610,10 @@ const sketch2 = (p) => {
         p.canvas.style.zIndex = '2'; // Assurer que ce canvas est au-dessus
 
         // Initialiser les rectangles avec leurs numéros
-        initializeRectangles();
-
-        // Ajouter les écouteurs d'événements pour les boutons
-        // Assurez-vous que les boutons existent dans votre HTML
-        if (typeof document !== 'undefined') {
-            const increaseRowsBtn = document.getElementById('increaseRows');
-            const decreaseRowsBtn = document.getElementById('decreaseRows');
-            const increaseColsBtn = document.getElementById('increaseCols');
-            const decreaseColsBtn = document.getElementById('decreaseCols');
-
-            if (increaseRowsBtn && decreaseRowsBtn && increaseColsBtn && decreaseColsBtn) {
-                increaseRowsBtn.addEventListener('click', () => {
-                    rows += 1;
-                    calculateSizes();
-                    initializeRectangles();
-                });
-                decreaseRowsBtn.addEventListener('click', () => {
-                    if (rows > 1) {
-                        rows -= 1;
-                        calculateSizes();
-                        initializeRectangles();
-                    }
-                });
-                increaseColsBtn.addEventListener('click', () => {
-                    cols += 1;
-                    calculateSizes();
-                    initializeRectangles();
-                });
-                decreaseColsBtn.addEventListener('click', () => {
-                    if (cols > 1) {
-                        cols -= 1;
-                        calculateSizes();
-                        initializeRectangles();
-                    }
-                });
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                let number = row * cols + col + 1; // Numérotation de 1 à 30
+                rectangles.push(new Rectangle(row, col, number));
             }
         }
     };
@@ -704,8 +680,6 @@ const sketch2 = (p) => {
                             rect.targetShiftY = 70 - shiftAmount; // Déplacer légèrement vers le haut
                         } else if (rect.row === 1) {
                             rect.targetShiftY = 70 + shiftAmount; // Déplacer légèrement vers le bas
-                        } else {
-                            rect.targetShiftY = 70; // Ajuster selon le nombre de lignes
                         }
                     } else {
                         rect.targetSize = baseSize; // Réinitialiser la taille des autres rectangles
@@ -823,9 +797,9 @@ const sketch2 = (p) => {
             if (currentText.descriptions2) {
                 p.textSize(description2Size);
                 const margin = paragrapheSpacing2;
-                let description2X = -p.width / 2 + margin; // Alignement à gauche
+                let description2X = p.width / 2 - margin;
 
-                let description2Y = titleY + titleToDescriptionSpacing + description2YShift;
+                let description2Y = titleY + titleToDescriptionSpacing + description2YShift ;
 
                 // Aligner le texte à gauche
                 p.textAlign(p.LEFT, p.TOP);
@@ -845,14 +819,15 @@ const sketch2 = (p) => {
 
                     // If total words width is greater than lineWidth, we need to handle it
                     if (totalWordsWidth > lineWidth) {
-                        // Draw the text normally (no wrapping)
+                        // Scale down the font size or wrap the text
+                        // For simplicity, we'll draw the text normally
                         p.text(line, description2X, description2Y);
                     } else {
                         let extraSpace = lineWidth - totalWordsWidth;
 
                         let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
 
-                        // Start drawing words with adjusted spacing
+                        // Start drawing words
                         let x = description2X;
 
                         words.forEach((word, index) => {
@@ -875,7 +850,7 @@ const sketch2 = (p) => {
             if (currentText.descriptions3) {
                 p.textSize(description3Size);
                 const margin = paragrapheSpacing3;
-                let description3X = -p.width / 2 + margin; // Alignement à gauche
+                let description3X = p.width / 2 - margin;
 
                 let description3Y = titleY + titleToDescriptionSpacing + description3YShift;
 
@@ -897,14 +872,15 @@ const sketch2 = (p) => {
 
                     // If total words width is greater than lineWidth, we need to handle it
                     if (totalWordsWidth > lineWidth) {
-                        // Draw the text normally (no wrapping)
+                        // Scale down the font size or wrap the text
+                        // For simplicity, we'll draw the text normally
                         p.text(line, description3X, description3Y);
                     } else {
                         let extraSpace = lineWidth - totalWordsWidth;
 
                         let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
 
-                        // Start drawing words with adjusted spacing
+                        // Start drawing words
                         let x = description3X;
 
                         words.forEach((word, index) => {
@@ -926,7 +902,7 @@ const sketch2 = (p) => {
             if (currentText.descriptions4) {
                 p.textSize(description4Size);
                 const margin = paragrapheSpacing4;
-                let description4X = -p.width / 2 + margin; // Alignement à gauche
+                let description4X = p.width / 2 - margin;
 
                 let description4Y = titleY + titleToDescriptionSpacing + description4YShift + lineSpacing3 - 1;
 
@@ -948,14 +924,15 @@ const sketch2 = (p) => {
 
                     // If total words width is greater than lineWidth, we need to handle it
                     if (totalWordsWidth > lineWidth) {
-                        // Draw the text normally (no wrapping)
+                        // Scale down the font size or wrap the text
+                        // For simplicity, we'll draw the text normally
                         p.text(line, description4X, description4Y);
                     } else {
                         let extraSpace = lineWidth - totalWordsWidth;
 
                         let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
 
-                        // Start drawing words with adjusted spacing
+                        // Start drawing words
                         let x = description4X;
 
                         words.forEach((word, index) => {
@@ -974,20 +951,33 @@ const sketch2 = (p) => {
             }
 
             p.pop();
-        };
+        }
 
-        // Fonction pour redimensionner le canvas lors du changement de taille de la fenêtre
-        p.windowResized = function() {
-            p.resizeCanvas(p.windowWidth, p.windowHeight);
-            // Calculer les tailles en fonction de la nouvelle taille et de l'orientation
-            calculateSizes();
-            // Réinitialiser les rectangles pour refléter les nouvelles tailles et dimensions
-            initializeRectangles();
-        };
+        // Dessiner les rectangles après le fond et les images pour qu'ils restent visibles
+        rectangles.forEach(rect => {
+            // Calculer la position ajustée du rectangle
+            let totalWidth = cols * (baseSize + spacing) - spacing;
+            let totalHeight = rows * (baseSize + spacing) - spacing;
+            let startX = -totalWidth / 2 + baseSize / 2;
+            let startY = -totalHeight / 2 + baseSize / 2;
+            let x = startX + rect.col * (baseSize + spacing) + rect.currentShiftX;
+            let yPos = startY + rect.row * (baseSize + spacing) + rect.currentShiftY;
+
+            // Dessiner le rectangle avec l'opacité actuelle des rectangles
+            rect.draw(x, yPos, rectOpacity);
+        });
     };
 
-    // Initialiser le second sketch après le chargement de p5.js
-    if (typeof p5 !== 'undefined') {
-        new p5(sketch2);
-    }
+    // Fonction pour redimensionner le canvas lors du changement de taille de la fenêtre
+    p.windowResized = function() {
+        p.resizeCanvas(p.windowWidth, p.windowHeight);
+        // Recalculer les tailles des rectangles, des polices, de l'espacement et de l'écart titre-descriptions
+        calculateSizes();
+        // Aucun recalcul supplémentaire nécessaire car les positions sont recalculées dynamiquement dans draw()
+    };
 };
+
+// Initialiser le second sketch après le chargement de p5.js
+if (typeof p5 !== 'undefined') {
+    new p5(sketch2);
+}
