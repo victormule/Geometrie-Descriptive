@@ -10,8 +10,8 @@ let targetAngle = 0;
 let mouseIncline = 0;
 
 // Variables de zoom et déplacement vertical
-let zoomFactor = 100;
-let maxZoom = -300;
+let zoomFactor = -100;
+let maxZoom = -500;
 let zoomSpeed = 5;
 let yOffset = 0;
 let ySpeed = 2;
