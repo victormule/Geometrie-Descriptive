@@ -98,23 +98,6 @@ const sketch2 = (p) => {
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
     }
 
-    function formatSpecialWords(text, p) {
-        const specialWords = ["APA'", "m'", "M1", "a", "a'","a,a'", "b", "b'","b,b'", 
-                              "c", "c'", "d", "d'", "BQB'", "mm'", "cd,c'd'", "ef,e'f'",
-                              "cd", "c'd'", "ef", "e'f'", "c'd1c", "c'd1", "cdC1", "C1d", "C1",
-                              "A1", "B1", "A1B1", "a'1b'1", "b1'", "cc'"];
-        let formattedText = [];
-        let words = text.split(' ');
-    
-        words.forEach(word => {
-            if (specialWords.includes(word)) {
-                formattedText.push({ text: word, color: [200, 200, 255] }); // Par exemple, rouge
-            } else {
-                formattedText.push({ text: word, color: [255, 255, 255] }); // Blanc par défaut
-            }
-        });
-        return formattedText;
-    }
     // Classe représentant un rectangle
     class Rectangle {
         constructor(row, col, number) {
@@ -163,6 +146,8 @@ const sketch2 = (p) => {
     // Fonction preload pour charger la police et les images avant le setup
     p.preload = function() {
         myFont = p.loadFont('fonts/OldNewspaperTypes.ttf');
+
+
 
         // Charger les images de relief
         for (let i = 1; i <= 30; i++) {
@@ -570,8 +555,8 @@ const sketch2 = (p) => {
         }
     }
 
-    // Fonction setup pour initialiser le canvas et les rectangles
-    p.setup = function() {
+     // Fonction setup pour initialiser le canvas et les rectangles
+     p.setup = function() {
         // Créer un canvas en 2D qui couvre toute la fenêtre
         p.createCanvas(p.windowWidth, p.windowHeight);
         p.rectMode(p.CENTER); // Mode de dessin des rectangles centrés
@@ -774,34 +759,57 @@ const sketch2 = (p) => {
             });
 
             // Vérifier si descriptions2 existe et l'afficher
-// Vérifier si descriptions2 existe et l'afficher
-if (currentText.descriptions2) {
-    p.textSize(description2Size);
-    const margin = paragrapheSpacing2;
-    let description2X = p.width / 2 - margin;
+            if (currentText.descriptions2) {
+                p.textSize(description2Size);
+                const margin = paragrapheSpacing2;
+                let description2X = p.width / 2 - margin;
 
-    let description2Y = titleY + titleToDescriptionSpacing + description2YShift;
+                let description2Y = titleY + titleToDescriptionSpacing + description2YShift ;
 
-    // Aligner le texte à gauche
-    p.textAlign(p.LEFT, p.TOP);
+                // Aligner le texte à gauche
+                p.textAlign(p.LEFT, p.TOP);
 
-    currentText.descriptions2.forEach(line => {
-        let formattedLine = formatSpecialWords(line, p); // Formate la ligne avec les mots spéciaux colorés
-        let x = description2X; // Position X de départ
+                currentText.descriptions2.forEach(line => {
+                    // Split the line into words
+                    let words = line.split(' ');
 
-        // Affiche chaque mot avec la couleur définie
-        formattedLine.forEach(wordObj => {
-            p.fill(...wordObj.color); // Applique la couleur
-            p.text(wordObj.text + ' ', x, description2Y); // Ajoute un espace après chaque mot
-            x += p.textWidth(wordObj.text + ' '); // Ajuste la position X pour le mot suivant
-        });
+                    // Calculate total width of words
+                    let totalWordsWidth = words.reduce((sum, word) => sum + p.textWidth(word), 0);
 
-        description2Y += lineSpacing2; // Ajoute de l'espace entre les lignes
-    });
+                    // Calculate the number of spaces
+                    let numberOfSpaces = words.length - 1;
 
-    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
-    p.textAlign(p.CENTER, p.TOP);
-}
+                    // Maximum line width is lineWidth2
+                    let lineWidth = lineWidth2;
+
+                    // If total words width is greater than lineWidth, we need to handle it
+                    if (totalWordsWidth > lineWidth) {
+                        // Scale down the font size or wrap the text
+                        // For simplicity, we'll draw the text normally
+                        p.text(line, description2X, description2Y);
+                    } else {
+                        let extraSpace = lineWidth - totalWordsWidth;
+
+                        let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
+
+                        // Start drawing words
+                        let x = description2X;
+
+                        words.forEach((word, index) => {
+                            p.text(word, x, description2Y);
+                            x += p.textWidth(word);
+                            if (index < words.length - 1) {
+                                x += spaceWidth;
+                            }
+                        });
+                    }
+
+                    description2Y += lineSpacing2;
+                });
+
+                // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
+                p.textAlign(p.CENTER, p.TOP);
+            }
 
             // Vérifier si descriptions3 existe et l'afficher
             if (currentText.descriptions3) {
@@ -938,4 +946,3 @@ if (currentText.descriptions2) {
 if (typeof p5 !== 'undefined') {
     new p5(sketch2);
 }
-
