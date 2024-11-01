@@ -1,20 +1,20 @@
 // sketch1.js
 
 // Variables de rotation et d'animation
-let angle = 0;              // Angle de rotation autour de l'axe Y
-let coverAngle = 0;         // Angle d'ouverture du couvercle
-let isRotating = true;      // Indique si la boîte tourne automatiquement
-let xIncline = 0;           // Inclinaison sur l'axe X
-let isAnimating = false;    // Indique si une animation est en cours
-let targetAngle = 0;        // Angle cible pour aligner la boîte
-let mouseIncline = 0;       // Inclinaison basée sur la souris
+let angle = 0;
+let coverAngle = 0;
+let isRotating = true;
+let xIncline = 0;
+let isAnimating = false;
+let targetAngle = 0;
+let mouseIncline = 0;
 
 // Variables de zoom et déplacement vertical
-let zoomFactor = 100;       // Distance initiale de la caméra (plus grand = plus éloigné)
-let maxZoom = 100;         // Distance minimale de zoom (plus petit = plus proche)
-let zoomSpeed = 5;          // Vitesse du zoom pendant l'animation
-let yOffset = 0;            // Déplacement vertical du coffre
-let ySpeed = 2;             // Vitesse de déplacement vertical
+let zoomFactor = 100;
+let maxZoom = -300;
+let zoomSpeed = 5;
+let yOffset = 0;
+let ySpeed = 2;
 
 // Variables pour les textures
 let couvercleTexture, couvercleTexture2;
@@ -26,6 +26,11 @@ let animationComplete = false;
 
 // Variable pour stocker le canvas
 let canvas;
+
+// Fonction pour déterminer l'orientation
+function isPortrait() {
+  return windowHeight > windowWidth;
+}
 
 function preload() {
   // Charger les images pour le couvercle et la boîte
@@ -48,12 +53,15 @@ function setup() {
   canvas.position(0, 0);
   canvas.style('z-index', '1'); // S'assurer que ce canvas est sous sketch2.js
   canvas.style('pointer-events', 'none'); // Permettre aux interactions de passer à sketch2.js
+
+  // Ajuster les variables initiales en fonction de l'orientation
+  adjustZoomAndFactor();
 }
 
 function draw() {
-  background(180, 120, 0); // Fond coloré avec transparence
+  background(180, 120, 0, 50); // Fond coloré avec transparence
 
-  // Calculer la distance de la souris par rapport au centre de l'écran
+  // Calculer la distance du touch par rapport au centre de l'écran
   let centerX = width / 2;
   let centerY = height / 2;
   let distance = dist(mouseX, mouseY, centerX, centerY);
@@ -70,13 +78,13 @@ function draw() {
     angle += rotationSpeed;
   }
 
-  // Inclinaison basée sur la position de la souris si aucune animation n'est en cours
+  // Inclinaison basée sur la position du touch si aucune animation n'est en cours
   if (!isAnimating) {
-    let mouseOffset = (mouseY - centerY) / centerY; // Normaliser entre -1 et 1
-    mouseIncline = map(mouseOffset, -1, 1, PI / 8, -PI / 8);  // Incliner entre +PI/8 et -PI/8
+    let touchOffset = (mouseY - centerY) / centerY; // Normaliser entre -1 et 1
+    mouseIncline = map(touchOffset, -1, 1, PI / 8, -PI / 8);  // Incliner entre +PI/8 et -PI/8
   }
 
-  // Gestion de l'animation lors du clic
+  // Gestion de l'animation lors du clic/touch
   if (isAnimating) {
     let diff = targetAngle - angle;
 
@@ -201,20 +209,26 @@ function drawBox() {
 
 function mousePressed() {
   if (!isAnimating && !animationComplete) {
-   if (mouseX > windowWidth / 3 && mouseX < windowWidth - windowWidth / 3 && mouseY > windowHeight / 3 && mouseY < windowHeight - windowHeight / 3) {
-    isRotating = false;        // Arrêter la rotation automatique
-    isAnimating = true;        // Démarrer l'animation
-    zoomFactor = 100;           // Réinitialiser le zoomFactor pour commencer le zoom avant
-    yOffset = 0;                // Réinitialiser le décalage vertical
+    if (
+      mouseX > windowWidth / 3 &&
+      mouseX < windowWidth - windowWidth / 3 &&
+      mouseY > windowHeight / 3 &&
+      mouseY < windowHeight - windowHeight / 3
+    ) {
+      isRotating = false;        // Arrêter la rotation automatique
+      isAnimating = true;        // Démarrer l'animation
+      zoomFactor = 100;           // Réinitialiser le zoomFactor pour commencer le zoom avant
+      yOffset = 0;                // Réinitialiser le décalage vertical
 
-    // Calculer l'angle cible pour aligner la boîte face à nous
-    let angleMod = angle % TWO_PI;
-    if (angleMod > PI) {
-      targetAngle = angle - angleMod + TWO_PI;
-    } else {
-      targetAngle = angle - angleMod;
+      // Calculer l'angle cible pour aligner la boîte face à nous
+      let angleMod = angle % TWO_PI;
+      if (angleMod > PI) {
+        targetAngle = angle - angleMod + TWO_PI;
+      } else {
+        targetAngle = angle - angleMod;
+      }
     }
-  }}
+  }
 }
 
 // Fonction pour lancer le second sketch
@@ -232,6 +246,26 @@ function triggerSketch2() {
 // Fonction pour redimensionner le canvas lors du changement de taille de la fenêtre
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  adjustZoomAndFactor();
   // Aucun recalcul supplémentaire nécessaire car les positions sont recalculées dynamiquement dans draw()
 }
 
+// Fonction pour ajuster maxZoom et zoomFactor en fonction de l'orientation
+function adjustZoomAndFactor() {
+  if (isPortrait()) {
+    maxZoom = -300;
+    zoomFactor = 50;
+  } else {
+    maxZoom = 0;
+    zoomFactor = 100;
+  }
+}
+
+// Gestion des événements tactiles pour les appareils mobiles
+function touchStarted() {
+  mousePressed(); // Appeler la fonction mousePressed lors d'un touch
+  return false; // Empêcher le comportement par défaut
+}
+
+// Appel de la fonction pour ajuster les variables initialement
+adjustZoomAndFactor();
