@@ -3,8 +3,8 @@
 const sketch2 = (p) => {
     let myFont; // Variable pour stocker la police
     let rectangles = []; // Tableau pour stocker les objets rectangles
-    const rows = 3; // Nombre de lignes
-    const cols = 10; // Nombre de colonnes
+    let rows = 3; // Nombre de lignes
+    let cols = 10; // Nombre de colonnes
     let baseSize = 60; // Taille de base des rectangles (modifiable)
     let hoverSize = 70; // Taille des rectangles au survol
     let spacing = 24; // Espacement entre les rectangles (modifiable)
@@ -70,9 +70,13 @@ const sketch2 = (p) => {
         if (isPortrait()) {
             baseSize = p.max(80, 90 * scaleFactor);
             spacing = p.max(18, 24 * scaleFactor);
+            rows = 3; // Nombre de lignes
+            cols = 10
         } else {
             baseSize = p.max(40, 50 * scaleFactor); // Exemple: plus grand en paysage
             spacing = p.max(14, 20 * scaleFactor);  // Exemple: plus grand en paysage
+            rows = 2; // Nombre de lignes
+            cols = 15
         }
 
         // Ajuster les tailles de police proportionnellement, avec des minima
