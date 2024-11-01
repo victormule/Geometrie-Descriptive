@@ -71,7 +71,6 @@ const sketch2 = (p) => {
             baseSize = p.max(80, 90 * scaleFactor);
             spacing = p.max(18, 24 * scaleFactor);
         } else {
-            rows = 2
             baseSize = p.max(40, 50 * scaleFactor); // Exemple: plus grand en paysage
             spacing = p.max(14, 20 * scaleFactor);  // Exemple: plus grand en paysage
         }
