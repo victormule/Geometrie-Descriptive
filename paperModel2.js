@@ -141,29 +141,34 @@ function setGridBasedOnOrientation() {
             }
         }
     }
-
+    function setTargetShiftYBasedOnOrientation() {
+        if (isPortrait()) {
+            targetShiftY = 150; // Déplace les rectangles plus vers le bas en mode portrait
+        } else {
+            targetShiftY = 70; // Valeur par défaut pour le mode paysage
+        }
+    }
     
 
 
     // Classe représentant un rectangle
     class Rectangle {
         constructor(row, col, number) {
-            this.row = row; // Numéro de la ligne (0 ou 1)
-            this.col = col; // Numéro de la colonne (0 à 14)
-            this.number = number; // Numéro affiché dans le rectangle
-
-            // Propriétés pour gérer la taille
-            this.currentSize = baseSize; // Taille actuelle
-            this.targetSize = baseSize; // Taille cible
-
-            // Propriétés pour gérer le décalage horizontal
-            this.currentShiftX = 0; // Décalage horizontal actuel
-            this.targetShiftX = 0; // Décalage horizontal cible
-
-            // Propriétés pour gérer le décalage vertical
-            this.currentShiftY = 120; // Déplacement initial de 120 pixels vers le bas
-            this.targetShiftY = 70; // Position finale décalée de 70 pixels sur l'axe Y
+            this.row = row;
+            this.col = col;
+            this.number = number;
+    
+            this.currentSize = baseSize;
+            this.targetSize = baseSize;
+    
+            this.currentShiftX = 0;
+            this.targetShiftX = 0;
+    
+            this.currentShiftY = 120;
+            this.targetShiftY = targetShiftY; // Utilise la valeur modifiée selon l'orientation
         }
+    
+    
 
         // Méthode pour dessiner le rectangle avec une opacité dynamique
         draw(x, y, opacity) {
@@ -613,7 +618,7 @@ function setGridBasedOnOrientation() {
 
         // Calculer les tailles initiales en fonction de la largeur de la fenêtre
         calculateSizes();
-
+        setTargetShiftYBasedOnOrientation(); // Ajuste le décalage vertical basé sur l'orientation
         // Positionner le canvas au-dessus du premier canvas
         p.canvas.style.position = 'absolute';
         p.canvas.style.top = '0';
@@ -987,6 +992,7 @@ function setGridBasedOnOrientation() {
         // Recalculer les tailles des rectangles, des polices, de l'espacement et de l'écart titre-descriptions
         calculateSizes();
         setGridBasedOnOrientation();
+        setTargetShiftYBasedOnOrientation(); // Ajuste le décalage vertical basé sur l'orientation
         initializeRectangles();
         // Aucun recalcul supplémentaire nécessaire car les positions sont recalculées dynamiquement dans draw()
     };
