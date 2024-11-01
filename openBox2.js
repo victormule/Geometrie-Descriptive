@@ -237,7 +237,7 @@ function triggerSketch2() {
   if (typeof sketch2Loaded === 'undefined') {
     // Charger le fichier sketch2.js dynamiquement
     let script = document.createElement('script');
-    script.src = 'paperModel1.js';
+    script.src = 'paperModel2.js';
     document.body.appendChild(script);
     window.sketch2Loaded = true; // Marquer comme chargé
   }
