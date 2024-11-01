@@ -256,8 +256,8 @@ function adjustZoomAndFactor() {
     maxZoom = -300;
     zoomFactor = 50;
   } else {
-    maxZoom = 0;
-    zoomFactor = 100;
+    maxZoom = -100;
+    zoomFactor = -500;
   }
 }
 
