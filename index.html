@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <title>Sketch p5.js avec Deux Sketches</title>
   
-  <!-- Meta tag Viewport pour une meilleure adaptation sur les appareils mobiles -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  
   <!-- Charger p5.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
   
@@ -17,44 +14,37 @@
       return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
-    // Fonction pour charger le script du sketch approprié
-    function loadSketchScript() {
-      var script = document.createElement('script');
-      
-      // Définir la source du script en fonction de l'appareil
-      if (isMobileDevice()) {
-        script.src = 'openBox2.js';
-      } else {
-        script.src = 'openBox1.js';
-      }
-      
-      // Ajouter le script au head du document
-      document.head.appendChild(script);
+    // Créer un élément script
+    var script = document.createElement('script');
+    
+    // Définir la source du script en fonction de l'appareil
+    if (isMobileDevice()) {
+      script.src = 'openBox2.js';
+    } else {
+      script.src = 'openBox1.js';
     }
-
-    // Charger le script une fois le DOM prêt
-    document.addEventListener("DOMContentLoaded", loadSketchScript);
+    
+    // Ajouter le script au head du document
+    document.head.appendChild(script);
   </script>
+  
+  <!-- Ne pas charger sketch2.js ici, il sera chargé dynamiquement par sketch1.js après l'animation (si applicable) -->
   
   <style>
     /* S'assurer que le body ne contient pas de marges */
-    body, html {
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      width: 100%;
       overflow: hidden; /* Empêcher les barres de défilement */
     }
     
     /* Optionnel : définir le z-index pour s'assurer que sketch2 est au-dessus */
     canvas {
       z-index: 1;
-      position: absolute;
-      top: 0;
-      left: 0;
     }
   </style>
 </head>
 <body>
 </body>
 </html>
+
