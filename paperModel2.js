@@ -5,8 +5,8 @@ const sketch2 = (p) => {
     let rectangles = []; // Tableau pour stocker les objets rectangles
     let rows = 3; // Nombre de lignes
     let cols = 10; // Nombre de colonnes
-    let baseSize = 60; // Taille de base des rectangles (modifiable)
-    let hoverSize = 70; // Taille des rectangles au survol
+    let baseSize = 80; // Taille de base des rectangles (modifiable)
+    let hoverSize = 90; // Taille des rectangles au survol
     let spacing = 24; // Espacement entre les rectangles (modifiable)
     const shiftAmount = 5; // Décalage vertical lors du survol
     const shiftOffsetX = 5; // Décalage horizontal pour maintenir l'espacement
@@ -81,11 +81,13 @@ function setGridBasedOnOrientation() {
         
         // Ajout d'ajustements basés sur l'orientation
         if (isPortrait()) {
-            baseSize = p.max(80, 90 * scaleFactor);
+            baseSize = p.max(70, 80 * scaleFactor);
             spacing = p.max(18, 24 * scaleFactor);
+            hoverSize = 90;
         } else {
             baseSize = p.max(40, 50 * scaleFactor); // Exemple: plus grand en paysage
             spacing = p.max(14, 20 * scaleFactor);  // Exemple: plus grand en paysage
+            hoverSize = 60;
         }
 
 
@@ -129,7 +131,16 @@ function setGridBasedOnOrientation() {
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
     }
 
-
+ // Fonction pour initialiser ou réinitialiser les rectangles
+    function initializeRectangles() {
+        rectangles = []; // Réinitialiser le tableau des rectangles
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                let number = row * cols + col + 1; // Numérotation de 1 à (rows * cols)
+                rectangles.push(new Rectangle(row, col, number));
+            }
+        }
+    }
 
     
 
