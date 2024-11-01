@@ -9,7 +9,7 @@ let mouseIncline = 0;
 
 // Variables de zoom et déplacement vertical
 let zoomFactor = 100;
-let maxZoom = -300;
+let maxZoom = -600;
 let zoomSpeedPortrait = 10; // Vitesse de zoom pour portrait
 let zoomSpeedLandscape = 5; // Vitesse de zoom pour paysage
 let currentZoomSpeed = zoomSpeedLandscape; // Vitesse par défaut
