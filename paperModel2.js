@@ -57,21 +57,38 @@ const sketch2 = (p) => {
     let paragrapheSpacing3; // Pour descriptions3
     let paragrapheSpacing4; // Pour descriptions4
 
+        // Fonction pour déterminer l'orientation
+    function isPortrait() {
+        return p.windowHeight > p.windowWidth;
+    }
     // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
     function calculateSizes() {
         const initialWidth = 1600; // Largeur de référence pour baseSize et spacing
         let scaleFactor = p.width / initialWidth;
-
         // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
-        baseSize = p.max(60, 60 * scaleFactor);
-        spacing = p.max(18, 24 * scaleFactor);
+        // Ajout d'ajustements basés sur l'orientation
+        if (isPortrait()) {
+            baseSize = p.max(60, 60 * scaleFactor);
+            spacing = p.max(18, 24 * scaleFactor);
+        } else {
+            baseSize = p.max(60, 80 * scaleFactor); // Exemple: plus grand en paysage
+            spacing = p.max(18, 30 * scaleFactor);  // Exemple: plus grand en paysage
+        }
 
         // Ajuster les tailles de police proportionnellement, avec des minima
-        titleSize = p.max(16, 24 * scaleFactor);
-        descriptionSize = p.max(14, 18 * scaleFactor);
-        description2Size = p.max(10, 14 * scaleFactor);
-        description3Size = p.max(10, 14 * scaleFactor);
-        description4Size = p.max(10, 14 * scaleFactor);
+        if (isPortrait()) {
+            titleSize = p.max(16, 24 * scaleFactor);
+            descriptionSize = p.max(14, 18 * scaleFactor);
+            description2Size = p.max(10, 14 * scaleFactor);
+            description3Size = p.max(10, 14 * scaleFactor);
+            description4Size = p.max(10, 14 * scaleFactor);
+        } else {
+            titleSize = p.max(18, 28 * scaleFactor); // Plus grand en paysage
+            descriptionSize = p.max(16, 22 * scaleFactor); // Plus grand en paysage
+            description2Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
+            description3Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
+            description4Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
+        }
 
         // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
         lineSpacing = p.max(14, 24 * scaleFactor);
