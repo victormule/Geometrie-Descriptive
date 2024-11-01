@@ -1,4 +1,4 @@
-// sketch1.js
+// openBox2.js
 
 // Variables de rotation et d'animation
 let angle = 0;              // Angle de rotation autour de l'axe Y
@@ -7,11 +7,11 @@ let isRotating = true;      // Indique si la boîte tourne automatiquement
 let xIncline = 0;           // Inclinaison sur l'axe X
 let isAnimating = false;    // Indique si une animation est en cours
 let targetAngle = 0;        // Angle cible pour aligner la boîte
-let mouseIncline = 0;       // Inclinaison basée sur la souris
+let mouseIncline = 0;       // Inclinaison basée sur la souris (ou l'accéléromètre sur mobile)
 
 // Variables de zoom et déplacement vertical
-let zoomFactor = 100;       // Distance initiale de la caméra (plus grand = plus éloigné)
-let maxZoom = -300;         // Distance minimale de zoom (plus petit = plus proche)
+let zoomFactor;       // Distance initiale de la caméra (initialisée dans setup)
+let maxZoom;         // Distance minimale de zoom (initialisée dans setup)
 let zoomSpeed = 5;          // Vitesse du zoom pendant l'animation
 let yOffset = 0;            // Déplacement vertical du coffre
 let ySpeed = 2;             // Vitesse de déplacement vertical
@@ -27,6 +27,10 @@ let animationComplete = false;
 // Variable pour stocker le canvas
 let canvas;
 
+// Variables de dimension relative
+let boxWidth, boxHeight, boxDepth;
+
+// Fonction de préchargement des ressources
 function preload() {
   // Charger les images pour le couvercle et la boîte
   couvercleTexture = loadImage('assets2/couvercle_exterieur.png');
@@ -44,10 +48,25 @@ function setup() {
   canvas = createCanvas(windowWidth, windowHeight, WEBGL);
   noStroke(); // Supprimer les contours des formes
 
+  // Initialiser les dimensions de la boîte en fonction de la fenêtre
+  initializeDimensions();
+
   // Positionner le canvas correctement sous sketch2.js
   canvas.position(0, 0);
   canvas.style('z-index', '1'); // S'assurer que ce canvas est sous sketch2.js
   canvas.style('pointer-events', 'none'); // Permettre aux interactions de passer à sketch2.js
+}
+
+function initializeDimensions() {
+  // Définir les dimensions de la boîte proportionnellement à la taille de l'écran
+  let minDimension = min(windowWidth, windowHeight);
+  boxWidth = minDimension * 0.6;   // 60% de la plus petite dimension
+  boxHeight = boxWidth / 6;        // Ratio hauteur/largeur
+  boxDepth = boxWidth / 2;         // Ratio profondeur/largeur
+
+  // Définir le zoom initial et le zoom maximal proportionnellement
+  zoomFactor = minDimension * 0.5; // Ajuster selon besoin
+  maxZoom = -minDimension * 1.5;   // Ajuster selon besoin
 }
 
 function draw() {
@@ -135,86 +154,92 @@ function drawBox() {
   // Face avant
   push();
   texture(boiteTexture1);
-  translate(0, 0, 68); // Positionner la face avant
-  plane(300, 50);       // Dessiner la face avant
+  translate(0, 0, boxDepth / 2); // Positionner la face avant
+  plane(boxWidth, boxHeight);     // Dessiner la face avant
   pop();
 
   // Face arrière
   push();
   texture(boiteTexture2);
-  translate(0, 0, -68); // Positionner la face arrière
-  plane(300, 50);        // Dessiner la face arrière
+  translate(0, 0, -boxDepth / 2); // Positionner la face arrière
+  plane(boxWidth, boxHeight);      // Dessiner la face arrière
   pop();
 
   // Face droite
   push();
   texture(boiteTexture3);
-  rotateY(HALF_PI);        // Faire pivoter de 90 degrés pour la face droite
-  translate(0, 0, 150);    // Positionner la face droite
-  plane(136, 50);          // Dessiner la face droite
+  rotateY(HALF_PI);                 // Faire pivoter de 90 degrés pour la face droite
+  translate(0, 0, boxWidth / 2);    // Positionner la face droite
+  plane(boxDepth, boxHeight);       // Dessiner la face droite
   pop();
 
   // Face gauche
   push();
   texture(boiteTexture4);
-  rotateY(HALF_PI);        // Faire pivoter de 90 degrés pour la face gauche
-  translate(0, 0, -150);   // Positionner la face gauche
-  plane(136, 50);          // Dessiner la face gauche
+  rotateY(HALF_PI);                  // Faire pivoter de 90 degrés pour la face gauche
+  translate(0, 0, -boxWidth / 2);    // Positionner la face gauche
+  plane(boxDepth, boxHeight);        // Dessiner la face gauche
   pop();
 
   // Dessus de la boîte
   push();
   texture(boiteDessus);
-  translate(0, -24, 0);    // Positionner le dessus
-  rotateX(HALF_PI);        // Faire pivoter pour être horizontal
-  plane(300, 136);         // Dessiner le dessus
+  translate(0, -boxHeight / 2 - 2, 0);    // Positionner le dessus (ajustement léger)
+  rotateX(HALF_PI);                        // Faire pivoter pour être horizontal
+  plane(boxWidth, boxDepth);               // Dessiner le dessus
   pop();
 
   // Dessous de la boîte
   push();
   texture(boiteDessous);
-  translate(0, 25, 0);     // Positionner le dessous
-  rotateX(HALF_PI);        // Faire pivoter pour être horizontal
-  plane(300, 136);         // Dessiner le dessous
+  translate(0, boxHeight / 2 + 2, 0);      // Positionner le dessous (ajustement léger)
+  rotateX(HALF_PI);                        // Faire pivoter pour être horizontal
+  plane(boxWidth, boxDepth);               // Dessiner le dessous
   pop();
 
   pop(); // Restaurer l'état de transformation
 
   // Dessiner le couvercle (partie extérieure)
   push();
-  translate(0, -22, -65);    // Positionner le couvercle sur le dessus
-  rotateX(coverAngle);        // Faire pivoter le couvercle pour l'ouvrir
-  translate(0, 0, 65);        // Ajuster le pivot
+  translate(0, -boxHeight / 2 - 2, -boxDepth / 2);    // Positionner le couvercle sur le dessus
+  rotateX(coverAngle);                                 // Faire pivoter le couvercle pour l'ouvrir
+  translate(0, 0, boxDepth / 2);                      // Ajuster le pivot
   texture(couvercleTexture);
-  box(298, 5, 134);           // Dessiner le couvercle extérieur
+  box(boxWidth - 2, 5, boxDepth + 4);                 // Dessiner le couvercle extérieur
   pop();
 
   // Dessiner le couvercle (partie intérieure)
   push();
-  translate(0, -21, -65);    // Positionner le couvercle intérieur
-  rotateX(coverAngle);        // Faire pivoter le couvercle pour l'ouvrir
-  translate(0, 0, 65);        // Ajuster le pivot
+  translate(0, -boxHeight / 2 - 1, -boxDepth / 2);    // Positionner le couvercle intérieur
+  rotateX(coverAngle);                                 // Faire pivoter le couvercle pour l'ouvrir
+  translate(0, 0, boxDepth / 2);                      // Ajuster le pivot
   texture(couvercleTexture2);
-  box(298, 6, 134);           // Dessiner le couvercle intérieur
+  box(boxWidth - 2, 6, boxDepth + 4);                 // Dessiner le couvercle intérieur
   pop();
 }
 
 function mousePressed() {
   if (!isAnimating && !animationComplete) {
-   if (mouseX > windowWidth / 3 && mouseX < windowWidth - windowWidth / 3 && mouseY > windowHeight / 3 && mouseY < windowHeight - windowHeight / 3) {
-    isRotating = false;        // Arrêter la rotation automatique
-    isAnimating = true;        // Démarrer l'animation
-    zoomFactor = 100;           // Réinitialiser le zoomFactor pour commencer le zoom avant
-    yOffset = 0;                // Réinitialiser le décalage vertical
+    if (
+      mouseX > windowWidth / 3 &&
+      mouseX < windowWidth - windowWidth / 3 &&
+      mouseY > windowHeight / 3 &&
+      mouseY < windowHeight - windowHeight / 3
+    ) {
+      isRotating = false;        // Arrêter la rotation automatique
+      isAnimating = true;        // Démarrer l'animation
+      zoomFactor = 100;           // Réinitialiser le zoomFactor pour commencer le zoom avant
+      yOffset = 0;                // Réinitialiser le décalage vertical
 
-    // Calculer l'angle cible pour aligner la boîte face à nous
-    let angleMod = angle % TWO_PI;
-    if (angleMod > PI) {
-      targetAngle = angle - angleMod + TWO_PI;
-    } else {
-      targetAngle = angle - angleMod;
+      // Calculer l'angle cible pour aligner la boîte face à nous
+      let angleMod = angle % TWO_PI;
+      if (angleMod > PI) {
+        targetAngle = angle - angleMod + TWO_PI;
+      } else {
+        targetAngle = angle - angleMod;
+      }
     }
-  }}
+  }
 }
 
 // Fonction pour lancer le second sketch
@@ -232,6 +257,12 @@ function triggerSketch2() {
 // Fonction pour redimensionner le canvas lors du changement de taille de la fenêtre
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  // Aucun recalcul supplémentaire nécessaire car les positions sont recalculées dynamiquement dans draw()
+  initializeDimensions(); // Réinitialiser les dimensions proportionnelles
 }
+
+// Optionnel : Gérer les événements tactiles pour les appareils mobiles
+function touchStarted() {
+  mousePressed(); // Utiliser la même logique que pour le clic souris
+}
+
 
