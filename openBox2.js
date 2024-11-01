@@ -10,7 +10,7 @@ let targetAngle = 0;        // Angle cible pour aligner la boîte
 let mouseIncline = 0;       // Inclinaison basée sur la souris
 
 // Variables de zoom et déplacement vertical
-let zoomFactor = 100;       // Distance initiale de la caméra (plus grand = plus éloigné)
+let zoomFactor = 600;       // Distance initiale de la caméra (plus grand = plus éloigné)
 let maxZoom = -800;         // Distance minimale de zoom (plus petit = plus proche)
 let zoomSpeed = 5;          // Vitesse du zoom pendant l'animation
 let yOffset = 0;            // Déplacement vertical du coffre
@@ -51,7 +51,7 @@ function setup() {
 }
 
 function draw() {
-  background(180, 120, 0, 50); // Fond coloré avec transparence
+  background(180, 120, 0, 150); // Fond coloré avec transparence
 
   // Calculer la distance de la souris par rapport au centre de l'écran
   let centerX = width / 2;
