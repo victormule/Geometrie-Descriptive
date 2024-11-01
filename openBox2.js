@@ -11,7 +11,7 @@ let mouseIncline = 0;       // Inclinaison basée sur la souris
 
 // Variables de zoom et déplacement vertical
 let zoomFactor = 100;       // Distance initiale de la caméra (plus grand = plus éloigné)
-let maxZoom = -300;         // Distance minimale de zoom (plus petit = plus proche)
+let maxZoom = -800;         // Distance minimale de zoom (plus petit = plus proche)
 let zoomSpeed = 5;          // Vitesse du zoom pendant l'animation
 let yOffset = 0;            // Déplacement vertical du coffre
 let ySpeed = 2;             // Vitesse de déplacement vertical
