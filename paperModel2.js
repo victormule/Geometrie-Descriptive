@@ -3,8 +3,8 @@
 const sketch2 = (p) => {
     let myFont; // Variable pour stocker la police
     let rectangles = []; // Tableau pour stocker les objets rectangles
-    const rows = 2; // Nombre de lignes
-    const cols = 15; // Nombre de colonnes
+    const rows = 3; // Nombre de lignes
+    const cols = 10; // Nombre de colonnes
     let baseSize = 50; // Taille de base des rectangles (modifiable)
     let hoverSize = 70; // Taille des rectangles au survol
     let spacing = 20; // Espacement entre les rectangles (modifiable)
