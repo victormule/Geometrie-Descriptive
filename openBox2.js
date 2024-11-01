@@ -30,6 +30,9 @@ let canvas;
 // Variables de dimension relative
 let boxWidth, boxHeight, boxDepth;
 
+// Variables d'orientation
+let isLandscape = false;
+
 // Fonction de préchargement des ressources
 function preload() {
   // Charger les images pour le couvercle et la boîte
@@ -55,6 +58,9 @@ function setup() {
   canvas.position(0, 0);
   canvas.style('z-index', '1'); // S'assurer que ce canvas est sous sketch2.js
   canvas.style('pointer-events', 'none'); // Permettre aux interactions de passer à sketch2.js
+
+  // Détecter l'orientation initiale
+  detectOrientation();
 }
 
 function initializeDimensions() {
@@ -65,8 +71,17 @@ function initializeDimensions() {
   boxDepth = boxWidth / 2;         // Ratio profondeur/largeur
 
   // Définir le zoom initial et le zoom maximal proportionnellement
-  zoomFactor = minDimension * 0.5; // Ajuster selon besoin
-  maxZoom = -minDimension * 1.5;   // Ajuster selon besoin
+  if (isLandscape) {
+    zoomFactor = min(windowWidth, windowHeight) * 0.4; // Ajuster selon besoin
+    maxZoom = -min(windowWidth, windowHeight) * 2;      // Plus éloigné en paysage
+  } else {
+    zoomFactor = min(windowWidth, windowHeight) * 0.5; // Ajuster selon besoin
+    maxZoom = -min(windowWidth, windowHeight) * 1.5;   // Ajuster selon besoin
+  }
+}
+
+function detectOrientation() {
+  isLandscape = windowWidth > windowHeight;
 }
 
 function draw() {
@@ -228,7 +243,16 @@ function mousePressed() {
     ) {
       isRotating = false;        // Arrêter la rotation automatique
       isAnimating = true;        // Démarrer l'animation
-      zoomFactor = 100;           // Réinitialiser le zoomFactor pour commencer le zoom avant
+
+      // Ajuster le zoomFactor et yOffset en fonction de l'orientation
+      if (isLandscape) {
+        zoomFactor = min(windowWidth, windowHeight) * 0.4; // Plus éloigné en paysage
+        maxZoom = -min(windowWidth, windowHeight) * 2;      // Plus éloigné en paysage
+      } else {
+        zoomFactor = min(windowWidth, windowHeight) * 0.5; // Ajuster selon besoin
+        maxZoom = -min(windowWidth, windowHeight) * 1.5;   // Ajuster selon besoin
+      }
+
       yOffset = 0;                // Réinitialiser le décalage vertical
 
       // Calculer l'angle cible pour aligner la boîte face à nous
@@ -257,7 +281,8 @@ function triggerSketch2() {
 // Fonction pour redimensionner le canvas lors du changement de taille de la fenêtre
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  initializeDimensions(); // Réinitialiser les dimensions proportionnelles
+  detectOrientation();         // Détecter la nouvelle orientation
+  initializeDimensions();     // Réinitialiser les dimensions proportionnelles
 }
 
 // Optionnel : Gérer les événements tactiles pour les appareils mobiles
