@@ -68,11 +68,11 @@ const sketch2 = (p) => {
         // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
         // Ajout d'ajustements basés sur l'orientation
         if (isPortrait()) {
-            baseSize = p.max(60, 60 * scaleFactor);
+            baseSize = p.max(80, 90 * scaleFactor);
             spacing = p.max(18, 24 * scaleFactor);
         } else {
-            baseSize = p.max(60, 80 * scaleFactor); // Exemple: plus grand en paysage
-            spacing = p.max(18, 30 * scaleFactor);  // Exemple: plus grand en paysage
+            baseSize = p.max(50, 60 * scaleFactor); // Exemple: plus grand en paysage
+            spacing = p.max(14, 20 * scaleFactor);  // Exemple: plus grand en paysage
         }
 
         // Ajuster les tailles de police proportionnellement, avec des minima
