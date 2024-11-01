@@ -8,7 +8,7 @@ let targetAngle = 0;
 let mouseIncline = 0;
 
 // Variables de zoom et déplacement vertical
-let zoomFactor = 100;
+let zoomFactor = -100;
 let maxZoom = -600;
 let zoomSpeedPortrait = 10; // Vitesse de zoom pour portrait
 let zoomSpeedLandscape = 5; // Vitesse de zoom pour paysage
