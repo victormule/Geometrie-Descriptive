@@ -114,7 +114,7 @@ const sketch2 = (p) => {
             this.targetShiftX = 0; // Décalage horizontal cible
 
             // Propriétés pour gérer le décalage vertical
-            this.currentShiftY = 150; // Déplacement initial de 120 pixels vers le bas
+            this.currentShiftY = 200; // Déplacement initial de 120 pixels vers le bas
             this.targetShiftY = 70; // Position finale décalée de 70 pixels sur l'axe Y
         }
 
