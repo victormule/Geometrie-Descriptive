@@ -166,8 +166,9 @@ function setTargetShiftYBasedOnOrientation() {
             this.currentShiftX = 0;
             this.targetShiftX = 0;
     
-            this.currentShiftY = 120;
-            this.targetShiftY = targetShiftY; // Utilise la valeur modifiée selon l'orientation
+        // Position de départ initiale pour l'animation de descente
+        this.currentShiftY = isPortrait() ? -p.height / 2 : 120;
+        this.targetShiftY = targetShiftY; // Utilise la valeur définie selon l'orientation
         }
     
     
