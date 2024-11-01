@@ -660,7 +660,7 @@ function setTargetShiftYBasedOnOrientation() {
                 let y = -((rows * (baseSize + spacing) - spacing) / 2) + baseSize / 2 + row * (baseSize + spacing);
 
                 // Garder le décalage +70 comme demandé
-                let d = p.dist(relMouseX, relMouseY, x + rect.currentShiftX, y + rect.currentShiftY + 70);
+                let d = p.dist(relMouseX, relMouseY, x + rect.currentShiftX, y + rect.currentShiftY + targetShiftY);
 
                 if (d < rect.currentSize / 2) { // Si la souris est sur le rectangle
                     hoveredRect = rect.number; // Stocker le numéro du rectangle survolé
