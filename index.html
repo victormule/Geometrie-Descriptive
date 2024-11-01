@@ -36,7 +36,6 @@
     document.addEventListener("DOMContentLoaded", loadSketchScript);
   </script>
   
-  <!-- Styles CSS pour gérer l'orientation -->
   <style>
     /* S'assurer que le body ne contient pas de marges */
     body, html {
@@ -47,70 +46,15 @@
       overflow: hidden; /* Empêcher les barres de défilement */
     }
     
-    /* Conteneur pour le contenu en mode portrait */
-    .portrait-only {
-      display: block;
-      width: 100%;
-      height: 100%;
-      position: relative;
+    /* Optionnel : définir le z-index pour s'assurer que sketch2 est au-dessus */
+    canvas {
       z-index: 1;
-    }
-
-    /* Message à afficher en mode paysage */
-    .landscape-message {
-      display: none;
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #000;
-      color: #fff;
-      font-size: 24px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-      box-sizing: border-box;
-      z-index: 1000;
-    }
-
-    /* Afficher le message en mode paysage et masquer le contenu principal */
-    @media only screen and (orientation: landscape) {
-      .portrait-only {
-        display: none;
-      }
-      .landscape-message {
-        display: flex;
-      }
     }
   </style>
 </head>
 <body>
-  <!-- Contenu de votre sketch p5.js en mode portrait -->
-  <div class="portrait-only">
-    <!-- Les sketches seront chargés dynamiquement via openBox1.js ou openBox2.js -->
-  </div>
-
-  <!-- Message à afficher en mode paysage -->
-  <div class="landscape-message">
-    <p>Veuillez tourner votre appareil en mode portrait pour une meilleure expérience.</p>
-  </div>
-
-  <!-- Script pour tenter de verrouiller l'orientation en mode portrait -->
-  <script>
-    // Tenter de verrouiller l'orientation en mode portrait
-    function lockOrientation() {
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('portrait').catch(function(error) {
-          console.error('Impossible de verrouiller l\'orientation:', error);
-        });
-      }
-    }
-
-    // Charger l'orientation verrouillée une fois le DOM est prêt
-    document.addEventListener("DOMContentLoaded", lockOrientation);
-  </script>
 </body>
 </html>
