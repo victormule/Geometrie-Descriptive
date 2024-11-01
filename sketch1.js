@@ -201,6 +201,7 @@ function drawBox() {
 
 function mousePressed() {
   if (!isAnimating && !animationComplete) {
+   if (mouseX > windowWidth / 3 && mouseX < windowWidth - windowWidth / 3 && mouseY > windowHeight / 3 && mouseY < windowHeight - windowHeight / 3) {
     isRotating = false;        // Arrêter la rotation automatique
     isAnimating = true;        // Démarrer l'animation
     zoomFactor = 100;           // Réinitialiser le zoomFactor pour commencer le zoom avant
@@ -213,7 +214,7 @@ function mousePressed() {
     } else {
       targetAngle = angle - angleMod;
     }
-  }
+  }}
 }
 
 // Fonction pour lancer le second sketch
@@ -233,3 +234,4 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   // Aucun recalcul supplémentaire nécessaire car les positions sont recalculées dynamiquement dans draw()
 }
+
