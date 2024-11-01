@@ -74,7 +74,7 @@ function setGridBasedOnOrientation() {
 
 function setTargetShiftYBasedOnOrientation() {
         if (isPortrait()) {
-            targetShiftY = 250; // Déplace les rectangles plus vers le bas en mode portrait
+            targetShiftY = 280; // Déplace les rectangles plus vers le bas en mode portrait
         } else {
             targetShiftY = 70; // Valeur par défaut pour le mode paysage
         }
