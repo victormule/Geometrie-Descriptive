@@ -1,3 +1,5 @@
+// sketch1.js
+
 // Variables de rotation et d'animation
 let angle = 0;
 let coverAngle = 0;
@@ -10,9 +12,7 @@ let mouseIncline = 0;
 // Variables de zoom et déplacement vertical
 let zoomFactor = 100;
 let maxZoom = -300;
-let zoomSpeedPortrait = 10; // Vitesse de zoom pour portrait
-let zoomSpeedLandscape = 5; // Vitesse de zoom pour paysage
-let currentZoomSpeed = zoomSpeedLandscape; // Vitesse par défaut
+let zoomSpeed = 5;
 let yOffset = 0;
 let ySpeed = 2;
 
@@ -102,7 +102,7 @@ function draw() {
 
     // Effectuer le zoom avant pendant l'animation
     if (zoomFactor > maxZoom) {
-      zoomFactor -= currentZoomSpeed; // Utiliser la vitesse actuelle
+      zoomFactor -= zoomSpeed; // Diminuer zoomFactor pour se rapprocher
       if (zoomFactor < maxZoom) {
         zoomFactor = maxZoom;   // Limiter le zoom à maxZoom
       }
@@ -217,7 +217,7 @@ function mousePressed() {
     ) {
       isRotating = false;        // Arrêter la rotation automatique
       isAnimating = true;        // Démarrer l'animation
-      zoomFactor = (isPortrait()) ? 50 : 100; // Réinitialiser le zoomFactor en fonction de l'orientation
+      zoomFactor = 100;           // Réinitialiser le zoomFactor pour commencer le zoom avant
       yOffset = 0;                // Réinitialiser le décalage vertical
 
       // Calculer l'angle cible pour aligner la boîte face à nous
@@ -253,13 +253,11 @@ function windowResized() {
 // Fonction pour ajuster maxZoom et zoomFactor en fonction de l'orientation
 function adjustZoomAndFactor() {
   if (isPortrait()) {
-    maxZoom = -500;
-    zoomFactor = -200;
-    currentZoomSpeed = zoomSpeedPortrait; // Appliquer la vitesse pour portrait
+    maxZoom = -600;
+    zoomFactor = 350;
   } else {
-    maxZoom = 100;
-    zoomFactor = 50;
-    currentZoomSpeed = zoomSpeedLandscape; // Appliquer la vitesse pour paysage
+    maxZoom = -200;
+    zoomFactor = 100;
   }
 }
 
