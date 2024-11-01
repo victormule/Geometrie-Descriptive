@@ -716,7 +716,7 @@ function setTargetShiftYBasedOnOrientation() {
             rectangles.forEach(rect => {
                 rect.targetSize = baseSize; // Réinitialiser la taille
                 rect.targetShiftX = 0; // Réinitialiser le décalage horizontal
-                rect.targetShiftY = 150; // Réinitialiser le décalage vertical
+                rect.targetShiftY = targetShiftY; // Réinitialiser le décalage vertical
 
                 // Mettre à jour les propriétés pour des transitions fluides
                 rect.update();
