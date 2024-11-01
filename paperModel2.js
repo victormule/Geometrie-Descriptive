@@ -5,9 +5,9 @@ const sketch2 = (p) => {
     let rectangles = []; // Tableau pour stocker les objets rectangles
     const rows = 3; // Nombre de lignes
     const cols = 10; // Nombre de colonnes
-    let baseSize = 80; // Taille de base des rectangles (modifiable)
-    let hoverSize = 90; // Taille des rectangles au survol
-    let spacing = 20; // Espacement entre les rectangles (modifiable)
+    let baseSize = 60; // Taille de base des rectangles (modifiable)
+    let hoverSize = 70; // Taille des rectangles au survol
+    let spacing = 24; // Espacement entre les rectangles (modifiable)
     const shiftAmount = 5; // Décalage vertical lors du survol
     const shiftOffsetX = 5; // Décalage horizontal pour maintenir l'espacement
 
@@ -63,8 +63,8 @@ const sketch2 = (p) => {
         let scaleFactor = p.width / initialWidth;
 
         // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
-        baseSize = p.max(60, 80 * scaleFactor);
-        spacing = p.max(8, 20 * scaleFactor);
+        baseSize = p.max(60, 60 * scaleFactor);
+        spacing = p.max(18, 24 * scaleFactor);
 
         // Ajuster les tailles de police proportionnellement, avec des minima
         titleSize = p.max(16, 24 * scaleFactor);
