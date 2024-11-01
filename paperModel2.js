@@ -698,13 +698,13 @@ function setTargetShiftYBasedOnOrientation() {
                     if (rect.number === hoveredRect) {
                         rect.targetSize = hoverSize; // Agrandir le rectangle survolé
                         if (rect.row === 0) {
-                            rect.targetShiftY = 70 - shiftAmount; // Déplacer légèrement vers le haut
+                            rect.targetShiftY = targetShiftY - shiftAmount; // Déplacer légèrement vers le haut
                         } else if (rect.row === 1) {
-                            rect.targetShiftY = 70 + shiftAmount; // Déplacer légèrement vers le bas
+                            rect.targetShiftY = targetShiftY + shiftAmount; // Déplacer légèrement vers le bas
                         }
                     } else {
                         rect.targetSize = baseSize; // Réinitialiser la taille des autres rectangles
-                        rect.targetShiftY = 70; // Réinitialiser le décalage vertical
+                        rect.targetShiftY = targetShiftY; // Réinitialiser le décalage vertical
                     }
 
                     // Mettre à jour les propriétés pour des transitions fluides
