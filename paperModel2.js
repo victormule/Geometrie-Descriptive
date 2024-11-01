@@ -62,29 +62,30 @@ const sketch2 = (p) => {
         return p.windowHeight > p.windowWidth;
     }
 
-    function horizontalRows(){
-        rows = 2;
-        cols = 15;
-    }
-
-    function verticalRows(){
-        rows = 3;
-        cols = 10;
+function setGridBasedOnOrientation() {
+        if (isPortrait()) {
+            rows = 3;
+            cols = 10;
+        } else {
+            rows = 2;
+            cols = 15;
+        }
     }
     // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
     function calculateSizes() {
         const initialWidth = 1600; // Largeur de référence pour baseSize et spacing
         let scaleFactor = p.width / initialWidth;
         // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
+
+         setGridBasedOnOrientation();
+        
         // Ajout d'ajustements basés sur l'orientation
         if (isPortrait()) {
             baseSize = p.max(80, 90 * scaleFactor);
             spacing = p.max(18, 24 * scaleFactor);
-            verticalRows();
         } else {
             baseSize = p.max(40, 50 * scaleFactor); // Exemple: plus grand en paysage
             spacing = p.max(14, 20 * scaleFactor);  // Exemple: plus grand en paysage
-            horizontalRows();
         }
 
 
