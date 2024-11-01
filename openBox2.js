@@ -51,7 +51,7 @@ function setup() {
 }
 
 function draw() {
-  background(180, 120, 0, 150); // Fond coloré avec transparence
+  background(180, 0, 0); // Fond coloré avec transparence
 
   // Calculer la distance de la souris par rapport au centre de l'écran
   let centerX = width / 2;
