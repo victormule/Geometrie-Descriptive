@@ -2,11 +2,48 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boîte de Géométrie Descriptive</title>
+  <title>Sketch p5.js avec Deux Sketches</title>
+  
+  <!-- Charger p5.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  
+  <!-- Script pour détecter l'appareil et charger le sketch approprié -->
+  <script>
+    // Fonction pour détecter si l'appareil est un smartphone
+    function isMobileDevice() {
+      return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    // Créer un élément script
+    var script = document.createElement('script');
+    
+    // Définir la source du script en fonction de l'appareil
+    if (isMobileDevice()) {
+      script.src = 'openBox2.js';
+    } else {
+      script.src = 'openBox1.js';
+    }
+    
+    // Ajouter le script au head du document
+    document.head.appendChild(script);
+  </script>
+  
+  <!-- Ne pas charger sketch2.js ici, il sera chargé dynamiquement par sketch1.js après l'animation (si applicable) -->
+  
+  <style>
+    /* S'assurer que le body ne contient pas de marges */
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Empêcher les barres de défilement */
+    }
+    
+    /* Optionnel : définir le z-index pour s'assurer que sketch2 est au-dessus */
+    canvas {
+      z-index: 1;
+    }
+  </style>
 </head>
 <body>
-  <script src="sketch1.js"></script>
 </body>
 </html>
