@@ -71,6 +71,15 @@ function setGridBasedOnOrientation() {
             cols = 15;
         }
     }
+
+function setTargetShiftYBasedOnOrientation() {
+        if (isPortrait()) {
+            targetShiftY = 150; // Déplace les rectangles plus vers le bas en mode portrait
+        } else {
+            targetShiftY = 70; // Valeur par défaut pour le mode paysage
+        }
+    }
+    
     // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
     function calculateSizes() {
         const initialWidth = 1600; // Largeur de référence pour baseSize et spacing
@@ -141,14 +150,7 @@ function setGridBasedOnOrientation() {
             }
         }
     }
-    function setTargetShiftYBasedOnOrientation() {
-        if (isPortrait()) {
-            targetShiftY = 150; // Déplace les rectangles plus vers le bas en mode portrait
-        } else {
-            targetShiftY = 70; // Valeur par défaut pour le mode paysage
-        }
-    }
-    
+
 
 
     // Classe représentant un rectangle
