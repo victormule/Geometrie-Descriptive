@@ -167,7 +167,7 @@ function setTargetShiftYBasedOnOrientation() {
             this.targetShiftX = 0;
     
         // Position de départ initiale pour l'animation de descente
-        this.currentShiftY = isPortrait() ? -p.height / 2 : 120;
+        this.currentShiftY = 120;
         this.targetShiftY = targetShiftY; // Utilise la valeur définie selon l'orientation
         }
     
@@ -716,7 +716,7 @@ function setTargetShiftYBasedOnOrientation() {
             rectangles.forEach(rect => {
                 rect.targetSize = baseSize; // Réinitialiser la taille
                 rect.targetShiftX = 0; // Réinitialiser le décalage horizontal
-                rect.targetShiftY = 70; // Réinitialiser le décalage vertical
+                rect.targetShiftY = 150; // Réinitialiser le décalage vertical
 
                 // Mettre à jour les propriétés pour des transitions fluides
                 rect.update();
