@@ -253,8 +253,8 @@ function windowResized() {
 // Fonction pour ajuster maxZoom et zoomFactor en fonction de l'orientation
 function adjustZoomAndFactor() {
   if (isPortrait()) {
-    maxZoom = -1000;
-    zoomFactor = -250;
+    maxZoom = -700;
+    zoomFactor = 150;
     currentZoomSpeed = zoomSpeedPortrait; // Appliquer la vitesse pour portrait
   } else {
     maxZoom = -100;
