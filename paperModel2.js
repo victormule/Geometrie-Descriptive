@@ -974,6 +974,7 @@ function setGridBasedOnOrientation() {
         p.resizeCanvas(p.windowWidth, p.windowHeight);
         // Recalculer les tailles des rectangles, des polices, de l'espacement et de l'écart titre-descriptions
         calculateSizes();
+        setGridBasedOnOrientation();
         // Aucun recalcul supplémentaire nécessaire car les positions sont recalculées dynamiquement dans draw()
     };
 };
