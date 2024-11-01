@@ -628,6 +628,7 @@ function setGridBasedOnOrientation() {
                 rectangles.push(new Rectangle(row, col, number));
             }
         }
+         initializeRectangles();
     };
 
     // Fonction draw pour dessiner les rectangles, les images et gérer les interactions
@@ -986,6 +987,7 @@ function setGridBasedOnOrientation() {
         // Recalculer les tailles des rectangles, des polices, de l'espacement et de l'écart titre-descriptions
         calculateSizes();
         setGridBasedOnOrientation();
+        initializeRectangles();
         // Aucun recalcul supplémentaire nécessaire car les positions sont recalculées dynamiquement dans draw()
     };
 };
