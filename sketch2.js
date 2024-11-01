@@ -40,10 +40,22 @@ const sketch2 = (p) => {
     let titleSize = 24;               // Taille initiale du titre
     let descriptionSize = 18;         // Taille initiale des descriptions
     let description2Size = 14;        // Taille initiale des descriptions2
+    let description3Size = 14;        // Taille initiale des descriptions3
+    let description4Size = 14;        // Taille initiale des descriptions4
     let lineSpacing = 24;             // Espacement initial entre les lignes
-    let lineSpacing2 = 20;             // Espacement initial entre les lignes
+    let lineSpacing2 = 20;            // Espacement initial entre les lignes pour descriptions2
+    let lineSpacing3 = 18;            // Espacement initial entre les lignes pour descriptions3
+    let lineSpacing4 = 18;            // Espacement initial entre les lignes pour descriptions4
     let titleToDescriptionSpacing = 40; // Ecart initial entre le titre et les descriptions
-    let description2YShift = 0; // Ajustement dynamique pour description2Y
+    let description2YShift = 0;       // Ajustement dynamique pour description2Y
+    let description3YShift = 0;       // Ajustement dynamique pour description3Y
+    let description4YShift = 0;       // Ajustement dynamique pour description4Y
+    let lineWidth2; // Pour descriptions2
+    let lineWidth3; // Pour descriptions3
+    let lineWidth4; // Pour descriptions4
+    let paragrapheSpacing2; // Pour descriptions2
+    let paragrapheSpacing3; // Pour descriptions3
+    let paragrapheSpacing4; // Pour descriptions4
 
     // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
     function calculateSizes() {
@@ -58,18 +70,32 @@ const sketch2 = (p) => {
         titleSize = p.max(16, 24 * scaleFactor);
         descriptionSize = p.max(14, 18 * scaleFactor);
         description2Size = p.max(10, 14 * scaleFactor);
+        description3Size = p.max(10, 14 * scaleFactor);
+        description4Size = p.max(10, 14 * scaleFactor);
 
         // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
         lineSpacing = p.max(14, 24 * scaleFactor);
         lineSpacing2 = p.max(14, 20 * scaleFactor);
+        lineSpacing3 = p.max(12, 18 * scaleFactor);
+        lineSpacing4 = p.max(12, 18 * scaleFactor);
 
         // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
         titleToDescriptionSpacing = p.max(20, 40 * scaleFactor);
 
-        // Ajuster l'écart pour description2Y, avec une augmentation jusqu'à 100px lorsque la fenêtre se rétrécit
+        // Ajuster l'écart pour description2Y, description3Y, et description4Y
         description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
 
+        // Calculer les largeurs de ligne
+        lineWidth2 = p.max(270, 370 * scaleFactor);
+        lineWidth3 = p.max(160, 230 * scaleFactor);
+        lineWidth4 = p.max(160, 230 * scaleFactor);
 
+        // Calculer les espacements des paragraphes
+        paragrapheSpacing2 = p.max(300, 500 * scaleFactor);
+        paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
+        paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
     }
 
     // Classe représentant un rectangle
@@ -144,29 +170,29 @@ const sketch2 = (p) => {
                     descriptions2: [
                         `LEGENDE`,
                         `Fig(1): a,a' point situé dans l'angle antérieur supérieur,`,
-                        `figuré par le coude d'une pièce de cuivre.`,
+                        `figuré par le coude d'une pièce de cuivre.         `,
                         `Fig(2): a,a' point situé sur le mur,  au dessus du sol, et`,
-                        `se confondant avec sa projection horizontale a`,
+                        `se confondant avec sa projection horizontale a         `,
                         `Fig(3): a,a' point situé sur le sol,  en avant  du mur, et`,
-                        `se confondant avec sa projection horizontale a`,
+                        `se confondant avec sa projection horizontale a         `,
                         `Fig(4): a,a' point situé sur la ligne de  terre  et se con-`,
-                        `fondant avec chacune de ses projections.`,
+                        `fondant avec chacune de ses projections.           `,
                         `Fig(5): a,a' point situé dans l'angle  antérieur inférieur`,
-                        `figuré par le coude d'une pièce de cuivre.`,
+                        `figuré par le coude d'une pièce de cuivre.         `,
                         `Fig(6): a,a' point situé  sur le mur,  au dessous  du sol.`,
                         `Le point vient en a'après le rabattement du plan verti-`,
                         `cal sur le plan horizontal. Dans l'espace,  il n'est autre `,
-                        `que le trou 5.`,
+                        `que le trou 5.                                       `,
                         `Fig(7): a,a' point situé dans l'angle postérieur supérieur`,
-                        `figuré par le coude d'une pièce de cuivre.`,
+                        `figuré par le coude d'une pièce de cuivre.             `,
                         `Fig(8): a,a' point sur  le sol derrière  le mur.  Ce point`,
                         `n'est  autre que le trou 2  avec lequel a coïncide après`,
-                        `le rabattement du plan vertical.`,
+                        `le rabattement du plan vertical.                       `,
                         `Fig(9): a,a' point situé dans l'angle postérieur inférieur,`,
-                        `figuré par le coude d'une pièce de cuivre.`,
+                        `figuré par le coude d'une pièce de cuivre.             `,
                         `Les projections sont les trous 1 et 4 avec lesquels a et `,
                         ` a' se confondent après le rabattement du plan vertical.`,
-                    ],
+                    ]
                 });
             }
             if (i === 2) {
@@ -176,6 +202,34 @@ const sketch2 = (p) => {
                         `Représentation de la droite. Tracés d'une droite.`,  // ligne 1
                         `Angle que fait une droite avec les plans de projection.`,  // ligne 2
                         `Distance de deux points.`  // ligne 3
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Représentation de la droite cd,c'd' droite représentée`,
+                        `par ses deux projections,figurée par un fil noir`,
+                        `Traces d'une droite d trace horizontale de la droite,`,
+                        `c' trace verticale.                                `,
+                        `Angles que fait une droite avec les plans de projection.`,
+                        `C1 rabattement du point c' sur le sol.             `,
+                        `C1 d rabattement de la droite sur le même plan.`,
+                        `cdC1 angle que fait le droite avec le plan horizontal.`,
+                        `Autre Méthode d1 rabattement du point d sur le mur, par`,
+                        `une rotation autour de c c'.                       `,
+                        `c'd1 rabattement de la droite sur le même plan.`,
+                        `c'd1c angle de la droite avec le plan horizontal.`,
+                        `Distance de deux points: a,a' point donné, figuré par le`,
+                        `coude d'une pièce de cuivre.                       `,
+                        `b,b' autre point donné, également figuré par le coude`,
+                        `d'une pièce de cuivre.                             `,
+                        `cd,c'd' droite passant par les deux points.        `,
+                        `A1 rabattement du point a,a' sur le sol par rotation`,
+                        `autour de cd.                                      `,
+                        `B1 rabattement du point bb' sur le même plan.`,
+                        `A1B1 distance des deux points.                     `,
+                        `Autre méthode. a'1 rabattement du point a,a' sur le mur,`,
+                        `par une rotation autour de cc'.                    `,
+                        `b'1 rabattement du point b,b' sur le même plan.`,
+                        `a'1 b'1 distance des deux points.                  `,
                     ]
                 });
             } 
@@ -184,6 +238,22 @@ const sketch2 = (p) => {
                     title: `Relief ${i}`,  // Texte pour le titre
                     descriptions: [
                         `Représentation de la droite (cas particulier).`  // ligne 1
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Représentation de la droite: ab,a'b' droite passant`,
+                        `par le point b de la ligne de terre, figurée par la`,
+                        `branche libre d'un fil de fer.                 `,
+                        `se confondant avec sa projection horizontale a`,
+                        `Angles d'une droite avec les plans de projection:`,
+                        `m,m' point pris sur la droite, figuré par le coude de`,
+                        `la pièce de cuivre.                            `,
+                        `M1 rabattement de ce point sur le plan horizontal.`,
+                        `bM1 rabattement de la droite sur ce plan.`,
+                        `mbM1 angle de la droite avec le même plan.`,
+                        `M2 rabattement du point m,m' sur le plan vertical.`,
+                        `bM2 rabattement de la droite sur ce plan.`,
+                        `m'bM2 angle de la droite avec le même plan.`,
                     ]
                 });
             } 
@@ -192,6 +262,79 @@ const sketch2 = (p) => {
                     title: `Relief ${i}`,  // Texte pour le titre
                     descriptions: [
                         `Représentation de la droite (cas particulier).`  // ligne 1
+                    ],
+                    descriptions3: [
+                        `LEGENDE`,
+                        `Fig(1): Droite perçant le mur au`, 
+                        `dessus du sol et  le sol derrière`,
+                        `le mur, figurée par une aiguille`,
+                        `droite.`,
+                        `a b,a'b' projections de la droite`,
+                        `b' trace verticale de la droite,`,
+                        `c trace horizontale ou plutôt la`,
+                        `trace horizontale est le point 3`,
+                        `avec laquel c coïncide, lorsqu'on`,
+                        `rabat le plan vertical sur le plan`,
+                        `horizontal.`,
+                        `Fig(2): Droite située dans un plan`,
+                        `de profil perçant le mur au dessus`,
+                        `du sol, et le sol en avant du mur,`,
+                        `figurée par une aiguille droite.`,
+                        `m,m' et n,n' points donnés dans un`,
+                        `plan de profil en déterminant la`,
+                        `droite.`,
+                        `M1 rabattement du point m,m' par`,
+                        `une rotation autour de la trace`,
+                        `horizontale du plan de profil`,
+                        `(mM1 = a'u = a'm').            `,
+                        `N1 rabattement du point n,n' par`,
+                        `une rotation autour de la trace`,
+                        `horizontale du plan de profil`,
+                        `(nN1 = a'v = a'n').            `,
+                        `M,N, rabattement de la droite`,
+                        `passant par les deux points.`,
+                        `a trace horizontale de la droite.`,
+                        `B1 rabattement de latrace verticale`,
+                        `de la droite.                   `,
+                        `b trace verticale relevée.      `,
+                        `a'aB1 angle de la droite et du plan`,
+                        `horizontal.                     `,
+                        `aB1a' angle de la droite et du plan`,
+                        `vertical.                       `,
+
+                    ],
+                    descriptions4: [
+                        `aa',a'b' projections de la droite`,
+                        `(partie visible).                `,
+                        `Fig(3): Droite située dans un plan`,
+                        `de profil, perçant le mur au dessous`,
+                        `du sol et le sol en avant du mur,`,
+                        `figurée par une aiguille droite.`,
+                        `a trace horizontale de la droite.`,
+                        `c' trace verticale de la droite ou`,
+                        `plutôt cette trace est le point 2 qui`,
+                        `vient s'appliquer en C', lorsqu'on`,
+                        `rabat le plan vertical sur le plan`,
+                        `horizontal.                      `,
+                        `Les deux traces a et c' determinent`,
+                        `la droite.                       `,
+                        `C'1 rabattement de la trace verticale`,
+                        `de la droite.                     `,
+                        `a'aC'1 angle de la droite et du plan`,
+                        `horizontal.                       `,
+                        `aC'1a' angle de la droite et du plan`,
+                        `vertical.                        `,
+                        `ab,a'b' projections de la droite`,
+                        `(partie visible).                `,
+                        `Fig(4): Droite perçant le sol en avant`,
+                        `du mur et le mur au dessous du sol,`,
+                        `figurée par une aiguille droite.`,
+                        `ab,a'b' projections de la droite.`,
+                        `a trace horizontale de la droite.`,
+                        `c' trace verticale, ou plutôt la trace`,
+                        `verticale est le point 1 qui vient`,
+                        `coïncider avec c' lorsqu'on rabat le`,
+                        `plan vertical sur le plan horizontal.`,
                     ]
                 });
             } 
@@ -200,11 +343,138 @@ const sketch2 = (p) => {
                     title: `Relief ${i}`,  // Texte pour le titre
                     descriptions: [
                         `Représentation du plan. Droite située dans un plan.`  // ligne 1
-                    ]
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Fig(1): APA' plan donné.                      `,
+                        `PA trace horizontale du plan.                 `,
+                        `cd,c'd' droite située dans le plan, figurée par`,
+                        `un fil noir.                                   `,
+                        `Fig(2) BQB', plan dont les traces sont en ligne`,
+                        `droite lorsque le plan vertical est rabattu.   `,
+                    ],
                 });
             } 
-
-           
+            if (i === 6) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Droites parallèles. Par un point faire passer un`,
+                        `plan parallèle à un plan donné.`, 
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Théorie: cd,c'd' et ef,e'f' droites parallèles.`,
+                        `Problème: APA' plan donné.                `,
+                        `mm' poins donné, figuré par le coude de la`,
+                        `pièce de cuivre.                            `,
+                        `cd,c'd' droite prise arbitrairement dans le plan`,
+                        `donné, figurée par un fil rouge              `,
+                        `ef,e'f' droite parallèle à la précédente et passant`,
+                        `par le point donné figurée par un fil rouge.`,
+                        `BQB' plan parallèle au plan donné.         `,
+                    ],
+                });
+            } 
+            if (i === 7) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Droites perpendiculaire à un plan`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `APA' plan donné.                           `,
+                        `mm' point donné, figuré par le coude de la pièce`,
+                        `de cuivre.                                 `,
+                        `bc,b'c' droite passant par le point et perpendiculaire`,
+                        `au plan donné figurée par le branche libre du`,
+                        `fil de fer.                                 `,
+                    ],
+                });
+            } 
+            if (i === 8) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Horizontale d'un plan. Par un point`,
+                        `mener un plan parallèle à un plan donné.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Théorie: dc,d'c' horizontal du plan BQB' figurée`,
+                        `par la branche libre du fil de fer.        `,
+                        `Problème APA' plan donné.                  `,
+                        `m,m' point donné, figuré par le coude de la pièce`,
+                        `dc,d'c' horizontale du plan cherché, passant par`,
+                        `le point donné.                            `,
+                        `BQB' plan parallèle au plan donné.         `,
+                    ],
+                });
+            } 
+            if (i === 9) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Ligne de plus grands pente.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `APA' plan donné                        `,
+                        `m, m' point quelconque pris dans le plan, figuré`,
+                        `par le coude de la pièce de cuivre.              `,
+                        `Le fil noir est la ligne de plus grande pente. On`,
+                        `veux démontrer qu'elle est perpendiculaire à PA.`,
+                        `Le fil rouge ayant sa trace en d est une droite`, 
+                        `quelconque prise dans le plan et passant par le`,
+                        `point m, m.'                              `,
+                        `Le fil rouge ayant se trace en d, et la même droite`,
+                        `après sa rotation autour de la branche libre du fil`,
+                        `de cuivre.                                  `,
+                        `On voit que la portion des fils rouges comprise entre`,
+                        `le point M de l'espace et le plan horizontal en plus`,
+                        `grande que la portion correspondante du fil noir,`,
+                        `ce qui démontre le théorème.               `,
+                    ],
+                    
+                });
+            } 
+            if (i === 10) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Rotation d'un point autour d'un axe perpendiculaire`,
+                        `au plan vertical de projection autour d'un axe vertical.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Fig(1): Rotation d'un point situé dans un plan de profil,`,
+                        `autour de la trace horizontale de celui-ci.`,
+                        `m, m' point donné dans le plan de profil, la trace`,
+                        `horizontale de ce plan se confond avec a b.`,
+                        `m2 point rabattu sur le plan horizontal`,
+                        `(mm2 = am2' = am').                          `,
+                        `Rotation d'un point situé dans un plan de profil, autour`, 
+                        `d'une horizontale de ce plan.                   `,
+                        `a' trace verticale de l'horizontale donnée figurée par`,
+                        `le fil de fer.                              `,
+                        `ab projection horizontale de la même droite.`,
+                        `m,m' point donné, figuré par le coude de la pièce`,
+                        `de cuivre                                  `,
+                        `m1,m1' projection nouvelles du point, après une`,
+                        `rotation de 90°.                               `,
+                        `Fig(2): Rotation d'un point autour d'un axe vertical.`,
+                        `a trace horizontale de l'axe; lequel est figuré par`,
+                        `le fil de fer.                                 `,
+                        `a'b' projections nouvelles du point quand il a tourné`,
+                        `de l'angle m a m1.                             `,
+                        `m2, m2' projection nouvelles du point quand il s'est`,
+                        `placé dans un plan parallèle au plan vertical et`,
+                        `passant par l'axe donné.                       `,
+                    ],
+                    
+                });
+            } 
         }
     }
 
@@ -235,8 +505,6 @@ const sketch2 = (p) => {
             }
         }
     };
-
-    
 
     // Fonction draw pour dessiner les rectangles, les images et gérer les interactions
     p.draw = function() {
@@ -270,7 +538,7 @@ const sketch2 = (p) => {
 
         // Définir les opacités cibles en fonction de l'état de survol
         if (hoveredRect !== null) {
-            bgTargetOpacity = 0;
+            bgTargetOpacity = 20;
             rectTargetOpacity = 20;
         } else {
             bgTargetOpacity = 200;
@@ -416,26 +684,157 @@ const sketch2 = (p) => {
             // Vérifier si descriptions2 existe et l'afficher
             if (currentText.descriptions2) {
                 p.textSize(description2Size);
-                // Définir une marge
-                const margin = 400;
-
-                // Calculer la position X pour descriptions2 (côté droit avec marge)
+                const margin = paragrapheSpacing2;
                 let description2X = p.width / 2 - margin;
 
-                // Réinitialiser la position Y pour descriptions2
-                let description2Y = titleY + titleToDescriptionSpacing + description2YShift;  // Aligner avec le début des descriptions et ajouter l'ajustement
+                let description2Y = titleY + titleToDescriptionSpacing + description2YShift ;
 
-
-                // Aligner le texte à droite
+                // Aligner le texte à gauche
                 p.textAlign(p.LEFT, p.TOP);
 
-                // Itérer sur le tableau des descriptions2 et les afficher
-                currentText.descriptions2.forEach(description2 => {
-                    p.text(description2, description2X, description2Y);  // Afficher chaque ligne
-                    description2Y += lineSpacing2;  // Ajouter de l'espace entre les lignes
+                currentText.descriptions2.forEach(line => {
+                    // Split the line into words
+                    let words = line.split(' ');
+
+                    // Calculate total width of words
+                    let totalWordsWidth = words.reduce((sum, word) => sum + p.textWidth(word), 0);
+
+                    // Calculate the number of spaces
+                    let numberOfSpaces = words.length - 1;
+
+                    // Maximum line width is lineWidth2
+                    let lineWidth = lineWidth2;
+
+                    // If total words width is greater than lineWidth, we need to handle it
+                    if (totalWordsWidth > lineWidth) {
+                        // Scale down the font size or wrap the text
+                        // For simplicity, we'll draw the text normally
+                        p.text(line, description2X, description2Y);
+                    } else {
+                        let extraSpace = lineWidth - totalWordsWidth;
+
+                        let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
+
+                        // Start drawing words
+                        let x = description2X;
+
+                        words.forEach((word, index) => {
+                            p.text(word, x, description2Y);
+                            x += p.textWidth(word);
+                            if (index < words.length - 1) {
+                                x += spaceWidth;
+                            }
+                        });
+                    }
+
+                    description2Y += lineSpacing2;
                 });
 
                 // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
+                p.textAlign(p.CENTER, p.TOP);
+            }
+
+            // Vérifier si descriptions3 existe et l'afficher
+            if (currentText.descriptions3) {
+                p.textSize(description3Size);
+                const margin = paragrapheSpacing3;
+                let description3X = p.width / 2 - margin;
+
+                let description3Y = titleY + titleToDescriptionSpacing + description3YShift;
+
+                // Aligner le texte à gauche
+                p.textAlign(p.LEFT, p.TOP);
+
+                currentText.descriptions3.forEach(line => {
+                    // Split the line into words
+                    let words = line.split(' ');
+
+                    // Calculate total width of words
+                    let totalWordsWidth = words.reduce((sum, word) => sum + p.textWidth(word), 0);
+
+                    // Calculate the number of spaces
+                    let numberOfSpaces = words.length - 1;
+
+                    // Maximum line width is lineWidth3
+                    let lineWidth = lineWidth3;
+
+                    // If total words width is greater than lineWidth, we need to handle it
+                    if (totalWordsWidth > lineWidth) {
+                        // Scale down the font size or wrap the text
+                        // For simplicity, we'll draw the text normally
+                        p.text(line, description3X, description3Y);
+                    } else {
+                        let extraSpace = lineWidth - totalWordsWidth;
+
+                        let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
+
+                        // Start drawing words
+                        let x = description3X;
+
+                        words.forEach((word, index) => {
+                            p.text(word, x, description3Y);
+                            x += p.textWidth(word);
+                            if (index < words.length - 1) {
+                                x += spaceWidth;
+                            }
+                        });
+                    }
+
+                    description3Y += lineSpacing3;
+                });
+
+                p.textAlign(p.CENTER, p.TOP);
+            }
+
+            // Vérifier si descriptions4 existe et l'afficher
+            if (currentText.descriptions4) {
+                p.textSize(description4Size);
+                const margin = paragrapheSpacing4;
+                let description4X = p.width / 2 - margin;
+
+                let description4Y = titleY + titleToDescriptionSpacing + description4YShift + lineSpacing3 - 1;
+
+                // Aligner le texte à gauche
+                p.textAlign(p.LEFT, p.TOP);
+
+                currentText.descriptions4.forEach(line => {
+                    // Split the line into words
+                    let words = line.split(' ');
+
+                    // Calculate total width of words
+                    let totalWordsWidth = words.reduce((sum, word) => sum + p.textWidth(word), 0);
+
+                    // Calculate the number of spaces
+                    let numberOfSpaces = words.length - 1;
+
+                    // Maximum line width is lineWidth4
+                    let lineWidth = lineWidth4;
+
+                    // If total words width is greater than lineWidth, we need to handle it
+                    if (totalWordsWidth > lineWidth) {
+                        // Scale down the font size or wrap the text
+                        // For simplicity, we'll draw the text normally
+                        p.text(line, description4X, description4Y);
+                    } else {
+                        let extraSpace = lineWidth - totalWordsWidth;
+
+                        let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
+
+                        // Start drawing words
+                        let x = description4X;
+
+                        words.forEach((word, index) => {
+                            p.text(word, x, description4Y);
+                            x += p.textWidth(word);
+                            if (index < words.length - 1) {
+                                x += spaceWidth;
+                            }
+                        });
+                    }
+
+                    description4Y += lineSpacing4;
+                });
+
                 p.textAlign(p.CENTER, p.TOP);
             }
 
