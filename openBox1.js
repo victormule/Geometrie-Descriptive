@@ -223,7 +223,7 @@ function triggerSketch2() {
   if (typeof sketch2Loaded === 'undefined') {
     // Charger le fichier sketch2.js dynamiquement
     let script = document.createElement('script');
-    script.src = 'sketch2.js';
+    script.src = 'paperModel1.js';
     document.body.appendChild(script);
     window.sketch2Loaded = true; // Marquer comme chargé
   }
@@ -234,4 +234,3 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   // Aucun recalcul supplémentaire nécessaire car les positions sont recalculées dynamiquement dans draw()
 }
-
