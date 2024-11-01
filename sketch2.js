@@ -98,6 +98,23 @@ const sketch2 = (p) => {
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
     }
 
+    function formatSpecialWords(text, p) {
+        const specialWords = ["APA'", "m'", "M1", "a", "a'","a,a'", "b", "b'","b,b'", 
+                              "c", "c'", "d", "d'", "BQB'", "mm'", "cd,c'd'", "ef,e'f'",
+                              "cd", "c'd'", "ef", "e'f'", "c'd1c", "c'd1", "cdC1", "C1d", "C1",
+                              "A1", "B1", "A1B1", "a'1b'1", "b1'", "cc'"];
+        let formattedText = [];
+        let words = text.split(' ');
+    
+        words.forEach(word => {
+            if (specialWords.includes(word)) {
+                formattedText.push({ text: word, color: [200, 200, 255] }); // Par exemple, rouge
+            } else {
+                formattedText.push({ text: word, color: [255, 255, 255] }); // Blanc par défaut
+            }
+        });
+        return formattedText;
+    }
     // Classe représentant un rectangle
     class Rectangle {
         constructor(row, col, number) {
@@ -191,7 +208,7 @@ const sketch2 = (p) => {
                         `Fig(9): a,a' point situé dans l'angle postérieur inférieur,`,
                         `figuré par le coude d'une pièce de cuivre.             `,
                         `Les projections sont les trous 1 et 4 avec lesquels a et `,
-                        ` a' se confondent après le rabattement du plan vertical.`,
+                        `a' se confondent après le rabattement du plan vertical.`,
                     ]
                 });
             }
@@ -211,10 +228,10 @@ const sketch2 = (p) => {
                         `c' trace verticale.                                `,
                         `Angles que fait une droite avec les plans de projection.`,
                         `C1 rabattement du point c' sur le sol.             `,
-                        `C1 d rabattement de la droite sur le même plan.`,
+                        `C1d rabattement de la droite sur le même plan.`,
                         `cdC1 angle que fait le droite avec le plan horizontal.`,
                         `Autre Méthode d1 rabattement du point d sur le mur, par`,
-                        `une rotation autour de c c'.                       `,
+                        `une rotation autour de cc'.                       `,
                         `c'd1 rabattement de la droite sur le même plan.`,
                         `c'd1c angle de la droite avec le plan horizontal.`,
                         `Distance de deux points: a,a' point donné, figuré par le`,
@@ -228,8 +245,8 @@ const sketch2 = (p) => {
                         `A1B1 distance des deux points.                     `,
                         `Autre méthode. a'1 rabattement du point a,a' sur le mur,`,
                         `par une rotation autour de cc'.                    `,
-                        `b'1 rabattement du point b,b' sur le même plan.`,
-                        `a'1 b'1 distance des deux points.                  `,
+                        `b1' rabattement du point b,b' sur le même plan.`,
+                        `a'1b'1 distance des deux points.                  `,
                     ]
                 });
             } 
@@ -346,7 +363,7 @@ const sketch2 = (p) => {
                     ],
                     descriptions2: [
                         `LEGENDE`,
-                        `Fig(1): APA' plan donné.                      `,
+                        `Fig(1): APA'   plan donné.               `,
                         `PA trace horizontale du plan.                 `,
                         `cd,c'd' droite située dans le plan, figurée par`,
                         `un fil noir.                                   `,
@@ -365,7 +382,7 @@ const sketch2 = (p) => {
                     descriptions2: [
                         `LEGENDE`,
                         `Théorie: cd,c'd' et ef,e'f' droites parallèles.`,
-                        `Problème: APA' plan donné.                `,
+                        `Problème: APA'   plan donné.              `,
                         `mm' poins donné, figuré par le coude de la`,
                         `pièce de cuivre.                            `,
                         `cd,c'd' droite prise arbitrairement dans le plan`,
@@ -384,7 +401,7 @@ const sketch2 = (p) => {
                     ],
                     descriptions2: [
                         `LEGENDE`,
-                        `APA' plan donné.                           `,
+                        `APA'   plan donné.                       `,
                         `mm' point donné, figuré par le coude de la pièce`,
                         `de cuivre.                                 `,
                         `bc,b'c' droite passant par le point et perpendiculaire`,
@@ -471,6 +488,81 @@ const sketch2 = (p) => {
                         `m2, m2' projection nouvelles du point quand il s'est`,
                         `placé dans un plan parallèle au plan vertical et`,
                         `passant par l'axe donné.                       `,
+                    ],
+                    
+                });
+            } 
+            if (i === 11) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Rotation d'un point autour d'un axe situé`,
+                        `dans le plan horizontal de projection.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `ab axe donné, situé dans leplan horizontal.`,
+                        `m, m' point donné, figuré par le coude de la`,
+                        `pièce de cuivre.                           `,
+                        `M1 rabattement du point sur le plan horizontal par`,
+                        `une rotation autour de mn perpendiculaire à`,
+                        `ab (mM1 = ms = uv = um').                       `,
+                        `M2 rabattement du point sur le plan horizontal,`, 
+                        `par une rotation autour de ab (nM2 = nM1).`,
+                    ],
+                    
+                });
+            } 
+            if (i === 12) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Rabattement d'un plan vertical.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `APA'  plan donné perpendiculaire au plan horizontal.`,
+                        `cP,c'd' projections d'une droite située dans le plan,`,
+                        `figurée par un fil noir.                       `,
+                        `cP,e'f' projections d'une horizontale du plan, figurée`,
+                        `par le fil de fer.                             `,
+                        `m,m' point situé dans le plan, figuré par le coude.`,
+                        `du fil de cuivre.                              `, 
+                        `PA1' rabattement de la trace verticale PA' du plan,`,
+                        `par une rotation autour de PA.             `,
+                        `M1 rabattement du point m,m' (mM1 = Ps = Pv = um')`,
+                        `cD1 rabattement de la droite dont les projections`,
+                        `sont cP,c'd'.                                  `,
+                        `E1F1 rabattement de l'horizontale du plan.     `,
+                    ],
+                    
+                });
+            } 
+            if (i === 13) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Rabattement d'un plan quelconque.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `APA' plan donné.                           `,
+                        `m,m' point du plan, figuré par le coude du`,
+                        `fil de cuivre.                            `,
+                        `bc,b'c' horizontale du plan, figurée par le de fer.`,
+                        `gd,g'd' droit située dans le plan, figurée par`,
+                        `le fil noir.                               `,
+                        `E1 rabattement du point e' par une rotation autour`, 
+                        `de ef perpendiculaire à PA (eE1 = ce'),`,
+                        `E2 rabattement du point e' par une rotation autour de`,
+                        `PA (fE2 = fE1).                            `,
+                        `PA1 rabattement de la trace verticale PA' du plan.`,
+                        `B1C1 rabattement de l'horizontale du plan.`,
+                        `M1 rabattement du point m,m' par une rotation autour de`,
+                        `m n perpendiculaire à PA (mM1 = mr =uv = um').`,
+                        `M2 rabattement du point m,m' par une rotation autour`,
+                        `de PA (nM2 = nM1).                            `,
+                        `G1d rabattement de la droite gd,g'd'.`,
                     ],
                     
                 });
@@ -682,57 +774,34 @@ const sketch2 = (p) => {
             });
 
             // Vérifier si descriptions2 existe et l'afficher
-            if (currentText.descriptions2) {
-                p.textSize(description2Size);
-                const margin = paragrapheSpacing2;
-                let description2X = p.width / 2 - margin;
+// Vérifier si descriptions2 existe et l'afficher
+if (currentText.descriptions2) {
+    p.textSize(description2Size);
+    const margin = paragrapheSpacing2;
+    let description2X = p.width / 2 - margin;
 
-                let description2Y = titleY + titleToDescriptionSpacing + description2YShift ;
+    let description2Y = titleY + titleToDescriptionSpacing + description2YShift;
 
-                // Aligner le texte à gauche
-                p.textAlign(p.LEFT, p.TOP);
+    // Aligner le texte à gauche
+    p.textAlign(p.LEFT, p.TOP);
 
-                currentText.descriptions2.forEach(line => {
-                    // Split the line into words
-                    let words = line.split(' ');
+    currentText.descriptions2.forEach(line => {
+        let formattedLine = formatSpecialWords(line, p); // Formate la ligne avec les mots spéciaux colorés
+        let x = description2X; // Position X de départ
 
-                    // Calculate total width of words
-                    let totalWordsWidth = words.reduce((sum, word) => sum + p.textWidth(word), 0);
+        // Affiche chaque mot avec la couleur définie
+        formattedLine.forEach(wordObj => {
+            p.fill(...wordObj.color); // Applique la couleur
+            p.text(wordObj.text + ' ', x, description2Y); // Ajoute un espace après chaque mot
+            x += p.textWidth(wordObj.text + ' '); // Ajuste la position X pour le mot suivant
+        });
 
-                    // Calculate the number of spaces
-                    let numberOfSpaces = words.length - 1;
+        description2Y += lineSpacing2; // Ajoute de l'espace entre les lignes
+    });
 
-                    // Maximum line width is lineWidth2
-                    let lineWidth = lineWidth2;
-
-                    // If total words width is greater than lineWidth, we need to handle it
-                    if (totalWordsWidth > lineWidth) {
-                        // Scale down the font size or wrap the text
-                        // For simplicity, we'll draw the text normally
-                        p.text(line, description2X, description2Y);
-                    } else {
-                        let extraSpace = lineWidth - totalWordsWidth;
-
-                        let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
-
-                        // Start drawing words
-                        let x = description2X;
-
-                        words.forEach((word, index) => {
-                            p.text(word, x, description2Y);
-                            x += p.textWidth(word);
-                            if (index < words.length - 1) {
-                                x += spaceWidth;
-                            }
-                        });
-                    }
-
-                    description2Y += lineSpacing2;
-                });
-
-                // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
-                p.textAlign(p.CENTER, p.TOP);
-            }
+    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
+    p.textAlign(p.CENTER, p.TOP);
+}
 
             // Vérifier si descriptions3 existe et l'afficher
             if (currentText.descriptions3) {
@@ -869,3 +938,4 @@ const sketch2 = (p) => {
 if (typeof p5 !== 'undefined') {
     new p5(sketch2);
 }
+
