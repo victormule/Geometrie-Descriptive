@@ -115,7 +115,7 @@ const sketch2 = (p) => {
 
             // Propriétés pour gérer le décalage vertical
             this.currentShiftY = 200; // Déplacement initial de 120 pixels vers le bas
-            this.targetShiftY = 70; // Position finale décalée de 70 pixels sur l'axe Y
+            this.targetShiftY = 100; // Position finale décalée de 70 pixels sur l'axe Y
         }
 
         // Méthode pour dessiner le rectangle avec une opacité dynamique
@@ -604,7 +604,7 @@ const sketch2 = (p) => {
                 let y = -((rows * (baseSize + spacing) - spacing) / 2) + baseSize / 2 + row * (baseSize + spacing);
 
                 // Garder le décalage +70 comme demandé
-                let d = p.dist(relMouseX, relMouseY, x + rect.currentShiftX, y + rect.currentShiftY + 70);
+                let d = p.dist(relMouseX, relMouseY, x + rect.currentShiftX, y + rect.currentShiftY + 100);
 
                 if (d < rect.currentSize / 2) { // Si la souris est sur le rectangle
                     hoveredRect = rect.number; // Stocker le numéro du rectangle survolé
@@ -642,13 +642,13 @@ const sketch2 = (p) => {
                     if (rect.number === hoveredRect) {
                         rect.targetSize = hoverSize; // Agrandir le rectangle survolé
                         if (rect.row === 0) {
-                            rect.targetShiftY = 70 - shiftAmount; // Déplacer légèrement vers le haut
+                            rect.targetShiftY = 100 - shiftAmount; // Déplacer légèrement vers le haut
                         } else if (rect.row === 1) {
-                            rect.targetShiftY = 70 + shiftAmount; // Déplacer légèrement vers le bas
+                            rect.targetShiftY = 100 + shiftAmount; // Déplacer légèrement vers le bas
                         }
                     } else {
                         rect.targetSize = baseSize; // Réinitialiser la taille des autres rectangles
-                        rect.targetShiftY = 70; // Réinitialiser le décalage vertical
+                        rect.targetShiftY = 100; // Réinitialiser le décalage vertical
                     }
 
                     // Mettre à jour les propriétés pour des transitions fluides
@@ -660,7 +660,7 @@ const sketch2 = (p) => {
             rectangles.forEach(rect => {
                 rect.targetSize = baseSize; // Réinitialiser la taille
                 rect.targetShiftX = 0; // Réinitialiser le décalage horizontal
-                rect.targetShiftY = 70; // Réinitialiser le décalage vertical
+                rect.targetShiftY = 100; // Réinitialiser le décalage vertical
 
                 // Mettre à jour les propriétés pour des transitions fluides
                 rect.update();
