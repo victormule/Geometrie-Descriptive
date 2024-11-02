@@ -99,7 +99,7 @@ let textOverlay = new p5(function(sketch) {
         sketch.textSize(18);
         sketch.textAlign(sketch.LEFT, sketch.TOP);
         drawJustifiedText(
-            "Cette boite date de 1880, elle fut très appréciée de son temps. Conçue pour les professeurs et étudiants en mathématiques, elle contient divers instruments de mesure et de géométrie qui ont résisté à l’épreuve du temps.\n\nOuvrez la boîte pour en savoir plus.",
+                        " Cette boîte contient une collection de reliefs à pièces mobiles, récompensée par un diplôme de mérite lors de l'Exposition Universelle de Vienne en 1873. Elle renferme 32 cartons, 118 pièces métalliques et une notice explicative destinée aux candidats au Baccalauréat des sciences, ainsi qu'aux aspirants aux Écoles Navale et des Beaux-Arts.\nCe matériel pédagogique témoigne d'un ancien savoir-faire et d'une grande précision dans sa réalisation.\n\nOuvrez la boîte pour en apprendre davantage",
             (sketch.width - maxWidthDesc) / 2, // Centrer horizontalement en ajustant x
             sketch.height / 1.6, // Positionner sous le centre de l'écran
             maxWidthDesc
