@@ -95,7 +95,7 @@ let textOverlay2 = new p5(function(sketch) {
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 32;
         sketch.subtitleY = sketch.height / 8;
-        sketch.descriptionY = sketch.height / 1.3;
+        sketch.descriptionY = sketch.height / 1.2;
     }
 
     // Fonction de rendu
@@ -145,7 +145,7 @@ let textOverlay2 = new p5(function(sketch) {
         if (isPortrait()) {
             maxWidthDesc = sketch.width * 0.9; // Plus large en portrait
         } else {
-            maxWidthDesc = sketch.width /2; // Limite la description à un tiers de la largeur en paysage
+            maxWidthDesc = sketch.width /1.6; // Limite la description à un tiers de la largeur en paysage
         }
 
         // Positionner la description sous le milieu de l'écran
