@@ -118,7 +118,7 @@ const sketch2 = (p) => {
             titleToDescriptionSpacing = p.max(40, 80 * scaleFactor);
 
             // Ajuster l'écart pour description2Y, description3Y, et description4Y
-            description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+            description2YShift = p.map(scaleFactor, 0, 1, 0, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
             description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
             description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
 
