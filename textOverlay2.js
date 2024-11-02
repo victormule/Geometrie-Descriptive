@@ -58,7 +58,7 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.noTint();
 
         // Définir les tailles de texte pour le portrait
-        titleFontSize = 44;
+        titleFontSize = 14;
         subtitleFontSize = 48;
         descriptionFontSize = 38;
         authorFontSize = 38;
