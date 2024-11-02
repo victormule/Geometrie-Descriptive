@@ -90,7 +90,7 @@ let textOverlay2 = new p5(function(sketch) {
         subtitle1Y = sketch.height / 10 + 100;
         subtitle2Y = subtitle1Y + subtitleSpacing;
         subtitle3Y = subtitle2Y + subtitleSpacing;
-        authorY = subtitle3Y + subtitleSpacing;
+        authorY = subtitle3Y ;
     }
 
     // Fonction pour définir le layout en mode paysage
