@@ -14,21 +14,24 @@
       return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
-    // Créer un élément script
-    var script = document.createElement('script');
-    
-    // Définir la source du script en fonction de l'appareil
+    // Charger les scripts en fonction de l'appareil
     if (isMobileDevice()) {
-      script.src = 'openBox2.js';
+      // Charger seulement openBox2.js pour mobile
+      let mobileScript = document.createElement('script');
+      mobileScript.src = 'openBox2.js';
+      document.head.appendChild(mobileScript);
     } else {
-      script.src = 'openBox1.js';
+      // Charger openBox1.js pour bureau
+      let openBoxScript = document.createElement('script');
+      openBoxScript.src = 'openBox1.js';
+      document.head.appendChild(openBoxScript);
+
+      // Charger textOverlay.js pour le texte superposé
+      let textOverlayScript = document.createElement('script');
+      textOverlayScript.src = 'textOverlay.js';
+      document.head.appendChild(textOverlayScript);
     }
-    
-    // Ajouter le script au head du document
-    document.head.appendChild(script);
   </script>
-  
-  <!-- Ne pas charger sketch2.js ici, il sera chargé dynamiquement par sketch1.js après l'animation (si applicable) -->
   
   <style>
     /* S'assurer que le body ne contient pas de marges */
@@ -37,15 +40,8 @@
       padding: 0;
       overflow: hidden; /* Empêcher les barres de défilement */
     }
-    
-    /* Optionnel : définir le z-index pour s'assurer que sketch2 est au-dessus */
-    canvas {
-      z-index: 1;
-    }
-
   </style>
 </head>
 <body>
 </body>
 </html>
-
