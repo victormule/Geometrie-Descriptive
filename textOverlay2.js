@@ -68,7 +68,7 @@ let textOverlay2 = new p5(function(sketch) {
         lineHeight = 40;
 
         // Positions des textes
-        sketch.titleY = sketch.height / 10 - 30;
+        sketch.titleY = sketch.height / 10 - 10;
         sketch.subtitleY = sketch.height / 8 + 20;
         
         // Espacement entre sous-titres
@@ -141,10 +141,11 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.text("MÉTHODE NOUVELLE", sketch.width / 2, sketch.titleY);
         
         // Sous-titre centré en haut de l'écran
-        sketch.textSize(subtitleFontSize);
+        sketch.textSize(authorFontSize);
         sketch.text("DE LA ", sketch.width / 2, sketch.subtitleY);
 
         // Sous-titre centré en haut de l'écran
+        sketch.textSize(subtitleFontSize);
         sketch.text("GÉOMÉTRIE DESCRIPTIVE", sketch.width / 2, sketch.subtitleY + subtileSpace1);
 
         // Autre sous-titre centré
