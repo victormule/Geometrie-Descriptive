@@ -66,7 +66,7 @@ let textOverlay2 = new p5(function(sketch) {
 
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 20;
-        sketch.subtitleY = sketch.height / 6 + 20;
+        sketch.subtitleY = sketch.height / 8 + 80;
         sketch.descriptionY = sketch.height / 1.6;
     }
 
@@ -94,7 +94,7 @@ let textOverlay2 = new p5(function(sketch) {
 
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 32;
-        sketch.subtitleY = sketch.height / 8 - 32;
+        sketch.subtitleY = sketch.height / 8- 8;
         sketch.descriptionY = sketch.height / 1.5;
     }
 
