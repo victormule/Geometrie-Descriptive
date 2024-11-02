@@ -66,7 +66,7 @@ let textOverlay = new p5(function(sketch) {
         sketch.text("MÉTHODE NOUVELLE", sketch.width / 2, sketch.height / 10 - 32);
         
         // Sous-titre centré en haut de l'écran
-        sketch.textSize(32);
+        sketch.textSize(22);
         sketch.textAlign(sketch.CENTER, sketch.TOP);
         sketch.text("DE LA ", sketch.width / 2, sketch.height / 10);
 
