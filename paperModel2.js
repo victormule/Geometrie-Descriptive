@@ -132,7 +132,7 @@ const sketch2 = (p) => {
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
 
         // Calculer les largeurs de ligne
-        lineWidth2 = p.max(400, 500 * scaleFactor);
+        lineWidth2 = p.max(360, 440 * scaleFactor);
         lineWidth3 = p.max(160, 230 * scaleFactor);
         lineWidth4 = p.max(160, 230 * scaleFactor);
 
