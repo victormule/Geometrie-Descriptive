@@ -6,6 +6,10 @@ let textOverlay2 = new p5(function(sketch) {
     let customFont; // Variable pour la police personnalisée
     let logo; // Variable pour l'image du logo
 
+    // Variables dynamiques pour les tailles de police et l'espacement des lignes
+    let titleFontSize, subtitleFontSize, descriptionFontSize, authorFontSize;
+    let lineHeight;
+
     // Précharger la police personnalisée et l'image du logo
     sketch.preload = function() {
         customFont = sketch.loadFont('fonts/OldNewspaperTypes.ttf');
@@ -19,11 +23,79 @@ let textOverlay2 = new p5(function(sketch) {
         textCanvas.style('z-index', '3'); // Assurer que ce canvas est au-dessus des autres
         textCanvas.style('pointer-events', 'none');
         sketch.textFont(customFont); // Appliquer la police une fois chargée
+
+        // Initialiser le layout en fonction de l'orientation initiale
+        adjustLayout();
     };
 
     // Fonction pour déterminer l'orientation
     function isPortrait() {
         return window.innerHeight > window.innerWidth;
+    }
+
+    // Fonction pour ajuster le layout en fonction de l'orientation
+    function adjustLayout() {
+        if (isPortrait()) {
+            setPortraitLayout();
+        } else {
+            setLandscapeLayout();
+        }
+    }
+
+    // Fonction pour définir le layout en mode portrait
+    function setPortraitLayout() {
+        // Taille et position du logo
+        let logoSizeX = sketch.map(sketch.width, 600, 1400, 100, 250); // Ajuster dynamiquement
+        let logoSizeY = sketch.map(sketch.width, 600, 1400, 75, 180);
+        let logoX = 60;
+        let logoY = 20;
+
+        // Appliquer le tint et dessiner le logo
+        let sizeRatio = sketch.map(sketch.width, 600, 1400, 0, 1);
+        let currentLogoOpacity = sketch.lerp(10, 200, sizeRatio);
+        sketch.tint(255, currentLogoOpacity);
+        sketch.image(logo, logoX, logoY, logoSizeX, logoSizeY); // Positionner et redimensionner le logo
+        sketch.noTint();
+
+        // Définir les tailles de texte pour le portrait
+        titleFontSize = 44;
+        subtitleFontSize = 48;
+        descriptionFontSize = 38;
+        authorFontSize = 38;
+        lineHeight = 40;
+
+        // Positions des textes
+        sketch.titleY = sketch.height / 10 - 20;
+        sketch.subtitleY = sketch.height / 10 + 10;
+        sketch.descriptionY = sketch.height / 1.3;
+    }
+
+    // Fonction pour définir le layout en mode paysage
+    function setLandscapeLayout() {
+        // Taille et position du logo
+        let logoSizeX = sketch.map(sketch.width, 600, 1400, 100, 250); // Ajuster dynamiquement
+        let logoSizeY = sketch.map(sketch.width, 600, 1400, 75, 180);
+        let logoX = 60;
+        let logoY = 20;
+
+        // Appliquer le tint et dessiner le logo
+        let sizeRatio = sketch.map(sketch.width, 600, 1400, 0, 1);
+        let currentLogoOpacity = sketch.lerp(10, 200, sizeRatio);
+        sketch.tint(255, currentLogoOpacity);
+        sketch.image(logo, logoX, logoY, logoSizeX, logoSizeY); // Positionner et redimensionner le logo
+        sketch.noTint();
+
+        // Définir les tailles de texte pour le paysage
+        titleFontSize = 32;
+        subtitleFontSize = 36;
+        descriptionFontSize = 22;
+        authorFontSize = 18;
+        lineHeight = 24;
+
+        // Positions des textes
+        sketch.titleY = sketch.height / 10 - 32;
+        sketch.subtitleY = sketch.height / 10;
+        sketch.descriptionY = sketch.height / 1.3;
     }
 
     // Fonction de rendu
@@ -32,11 +104,7 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.fill(255, 255, 255, opacity); // Appliquer l'opacité au texte
 
         // Définir les tailles et positions en fonction de l'orientation
-        if (isPortrait()) {
-            setPortraitLayout();
-        } else {
-            setLandscapeLayout();
-        }
+        adjustLayout();
 
         // Dessiner le texte
         drawTextContent();
@@ -50,70 +118,26 @@ let textOverlay2 = new p5(function(sketch) {
         }
     };
 
-    // Fonction pour définir le layout en mode portrait
-    function setPortraitLayout() {
-        // Taille et position du logo
-        let logoSizeX = sketch.lerp(100, 250, 0.5); // Exemple de taille ajustée
-        let logoSizeY = sketch.lerp(75, 180, 0.5);
-        let logoX = 60;
-        let logoY = 20;
-
-        // Appliquer le tint et dessiner le logo
-        let sizeRatio = 0.5; // Ajustez en fonction de vos besoins
-        let currentLogoOpacity = sketch.lerp(10, 200, sizeRatio);
-        sketch.tint(255, currentLogoOpacity);
-        sketch.image(logo, logoX, logoY, logoSizeX, logoSizeY); // Positionner et redimensionner le logo
-        sketch.noTint();
-
-        // Définir les tailles de texte pour le portrait
-        sketch.textSize(24);
-        // Positions des textes
-        sketch.titleY = sketch.height / 10 - 20;
-        sketch.subtitleY = sketch.height / 10 + 10;
-        sketch.descriptionY = sketch.height / 1.6;
-    }
-
-    // Fonction pour définir le layout en mode paysage
-    function setLandscapeLayout() {
-        // Taille et position du logo
-        let logoSizeX = sketch.lerp(100, 250, 0.8); // Exemple de taille ajustée
-        let logoSizeY = sketch.lerp(75, 180, 0.8);
-        let logoX = 60;
-        let logoY = 20;
-
-        // Appliquer le tint et dessiner le logo
-        let sizeRatio = 0.8; // Ajustez en fonction de vos besoins
-        let currentLogoOpacity = sketch.lerp(10, 200, sizeRatio);
-        sketch.tint(255, currentLogoOpacity);
-        sketch.image(logo, logoX, logoY, logoSizeX, logoSizeY); // Positionner et redimensionner le logo
-        sketch.noTint();
-
-        // Définir les tailles de texte pour le paysage
-        sketch.textSize(32);
-        // Positions des textes
-        sketch.titleY = sketch.height / 10 - 32;
-        sketch.subtitleY = sketch.height / 10;
-        sketch.descriptionY = sketch.height / 1.6;
-    }
-
     // Fonction pour dessiner le contenu textuel
     function drawTextContent() {
         // Titre centré en haut de l'écran
+        sketch.textSize(titleFontSize);
         sketch.textAlign(sketch.CENTER, sketch.TOP);
         sketch.text("MÉTHODE NOUVELLE", sketch.width / 2, sketch.titleY);
         
         // Sous-titre centré en haut de l'écran
+        sketch.textSize(subtitleFontSize);
         sketch.text("DE LA ", sketch.width / 2, sketch.subtitleY);
 
         // Sous-titre centré en haut de l'écran
         sketch.text("GÉOMÉTRIE DESCRIPTIVE", sketch.width / 2, sketch.subtitleY + 40);
 
         // Autre sous-titre centré
-        sketch.textSize(22);
+        sketch.textSize(descriptionFontSize);
         sketch.text("COLLECTION DE RELIEFS", sketch.width / 2, sketch.subtitleY + 80);
         
         // Auteur centré
-        sketch.textSize(18);
+        sketch.textSize(authorFontSize);
         sketch.text("A. JULLIEN", sketch.width / 2, sketch.subtitleY + 120);
 
         // Calculer la largeur maximale de la description en fonction de la taille de l'écran et de l'orientation
@@ -137,6 +161,7 @@ let textOverlay2 = new p5(function(sketch) {
     // Gestion du redimensionnement de la fenêtre
     sketch.windowResized = function() {
         sketch.resizeCanvas(window.innerWidth, window.innerHeight);
+        adjustLayout(); // Réajuster le layout après redimensionnement
     };
 
     // Fonction pour déclencher la réduction d'opacité depuis openBox1.js
@@ -147,7 +172,6 @@ let textOverlay2 = new p5(function(sketch) {
     // Fonction pour dessiner un texte justifié avec gestion des sauts de ligne
     function drawJustifiedText(text, x, y, maxWidth) {
         let paragraphs = text.split('\n');
-        let lineHeight = isPortrait() ? 30 : 24; // Ajuster le lineHeight selon l'orientation
         let currentY = y;
 
         paragraphs.forEach(paragraph => {
