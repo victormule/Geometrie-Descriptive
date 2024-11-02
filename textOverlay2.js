@@ -6,9 +6,15 @@ let textOverlay2 = new p5(function(sketch) {
     let customFont; // Variable pour la police personnalisée
     let logo; // Variable pour l'image du logo
 
-    // Variables dynamiques pour les tailles de police et l'espacement des lignes
+    // Variables dynamiques pour les tailles de police
     let titleFontSize, subtitleFontSize, descriptionFontSize, authorFontSize;
     let lineHeight;
+
+    // Variables dynamiques pour les positions Y des sous-titres
+    let subtitle1Y, subtitle2Y, subtitle3Y, authorY;
+
+    // Variable pour suivre l'orientation actuelle
+    let currentOrientation = 'portrait'; // Initialisation par défaut
 
     // Précharger la police personnalisée et l'image du logo
     sketch.preload = function() {
@@ -25,7 +31,12 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.textFont(customFont); // Appliquer la police une fois chargée
 
         // Initialiser le layout en fonction de l'orientation initiale
-        adjustLayout();
+        currentOrientation = isPortrait() ? 'portrait' : 'landscape';
+        if (currentOrientation === 'portrait') {
+            setPortraitLayout();
+        } else {
+            setLandscapeLayout();
+        }
     };
 
     // Fonction pour déterminer l'orientation
@@ -35,10 +46,14 @@ let textOverlay2 = new p5(function(sketch) {
 
     // Fonction pour ajuster le layout en fonction de l'orientation
     function adjustLayout() {
-        if (isPortrait()) {
-            setPortraitLayout();
-        } else {
-            setLandscapeLayout();
+        let newOrientation = isPortrait() ? 'portrait' : 'landscape';
+        if (newOrientation !== currentOrientation) {
+            currentOrientation = newOrientation;
+            if (currentOrientation === 'portrait') {
+                setPortraitLayout();
+            } else {
+                setLandscapeLayout();
+            }
         }
     }
 
@@ -64,10 +79,15 @@ let textOverlay2 = new p5(function(sketch) {
         authorFontSize = 38;
         lineHeight = 40;
 
+        // Définir l'espacement entre les sous-titres
+        let subtitleSpacing = 60;
+
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 20;
-        sketch.subtitleY = sketch.height / 10 + 100;
-        sketch.descriptionY = sketch.height / 1.6;
+        subtitle1Y = sketch.titleY + 80; // Espacement entre le titre et le premier sous-titre
+        subtitle2Y = subtitle1Y + subtitleSpacing; // Espacement entre les sous-titres
+        subtitle3Y = subtitle2Y + subtitleSpacing; // Espacement entre les sous-titres
+        authorY = subtitle3Y + subtitleSpacing;     // Espacement entre le dernier sous-titre et l'auteur
     }
 
     // Fonction pour définir le layout en mode paysage
@@ -86,16 +106,21 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.noTint();
 
         // Définir les tailles de texte pour le paysage
-        titleFontSize = 28;
-        subtitleFontSize = 30;
+        titleFontSize = 32;
+        subtitleFontSize = 36;
         descriptionFontSize = 18;
         authorFontSize = 14;
-        lineHeight = 20;
+        lineHeight = 24;
+
+        // Définir l'espacement entre les sous-titres
+        let subtitleSpacing = 40;
 
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 32;
-        sketch.subtitleY = sketch.height / 8;
-        sketch.descriptionY = sketch.height / 1.2;
+        subtitle1Y = sketch.height / 8;
+        subtitle2Y = subtitle1Y + subtitleSpacing;
+        subtitle3Y = subtitle2Y + subtitleSpacing;
+        authorY = subtitle3Y + subtitleSpacing;
     }
 
     // Fonction de rendu
@@ -103,7 +128,7 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.clear();
         sketch.fill(255, 255, 255, opacity); // Appliquer l'opacité au texte
 
-        // Définir les tailles et positions en fonction de l'orientation
+        // Définir les tailles et positions en fonction de l'orientation seulement si elle a changé
         adjustLayout();
 
         // Dessiner le texte
@@ -120,32 +145,32 @@ let textOverlay2 = new p5(function(sketch) {
 
     // Fonction pour dessiner le contenu textuel
     function drawTextContent() {
-        // Titre centré en haut de l'écran
+        // Titre principal centré en haut de l'écran
         sketch.textSize(titleFontSize);
         sketch.textAlign(sketch.CENTER, sketch.TOP);
         sketch.text("MÉTHODE NOUVELLE", sketch.width / 2, sketch.titleY);
         
-        // Sous-titre centré en haut de l'écran
+        // Sous-titre 1 centré en haut de l'écran
         sketch.textSize(subtitleFontSize);
-        sketch.text("DE LA ", sketch.width / 2, sketch.subtitleY);
+        sketch.text("DE LA ", sketch.width / 2, subtitle1Y);
 
-        // Sous-titre centré en haut de l'écran
-        sketch.text("GÉOMÉTRIE DESCRIPTIVE", sketch.width / 2, sketch.subtitleY + 40);
+        // Sous-titre 2 centré en haut de l'écran
+        sketch.text("GÉOMÉTRIE DESCRIPTIVE", sketch.width / 2, subtitle2Y);
 
         // Autre sous-titre centré
         sketch.textSize(descriptionFontSize);
-        sketch.text("COLLECTION DE RELIEFS", sketch.width / 2, sketch.subtitleY + 80);
+        sketch.text("COLLECTION DE RELIEFS", sketch.width / 2, subtitle3Y);
         
         // Auteur centré
         sketch.textSize(authorFontSize);
-        sketch.text("A. JULLIEN", sketch.width / 2, sketch.subtitleY + 120);
+        sketch.text("A. JULLIEN", sketch.width / 2, authorY);
 
         // Calculer la largeur maximale de la description en fonction de la taille de l'écran et de l'orientation
         let maxWidthDesc;
         if (isPortrait()) {
             maxWidthDesc = sketch.width * 0.9; // Plus large en portrait
         } else {
-            maxWidthDesc = sketch.width /1.6; // Limite la description à un tiers de la largeur en paysage
+            maxWidthDesc = sketch.width / 1.6; // Limite la description à 1.6ème de la largeur en paysage
         }
 
         // Positionner la description sous le milieu de l'écran
