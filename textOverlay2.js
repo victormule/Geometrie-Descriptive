@@ -62,12 +62,12 @@ let textOverlay2 = new p5(function(sketch) {
         subtitleFontSize = 50;
         descriptionFontSize = 40;
         authorFontSize = 38;
-        lineHeight = 50;
+        lineHeight = 46;
 
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 20;
-        sketch.subtitleY = sketch.height / 8 + 10;
-        sketch.descriptionY = sketch.height / 1.3;
+        sketch.subtitleY = sketch.height / 10 + 20;
+        sketch.descriptionY = sketch.height / 1.6;
     }
 
     // Fonction pour définir le layout en mode paysage
