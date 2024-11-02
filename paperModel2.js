@@ -51,12 +51,12 @@ const sketch2 = (p) => {
     let description3YShift = 0;       // Ajustement dynamique pour description3Y
     let description4YShift = 0;       // Ajustement dynamique pour description4Y
     let lineWidth2; // Pour descriptions2
-    let Width3; // Pour descriptions3
-    let Width4; // Pour descriptions4
+    let lineWidth3; // Pour descriptions3
+    let lineWidth4; // Pour descriptions4
     let paragrapheSpacing2; // Pour descriptions2
     let paragrapheSpacing3; // Pour descriptions3
     let paragrapheSpacing4; // Pour descriptions4
-    let description2X = p.width / 2 - margin;
+
     // Déclarer targetShiftY globalement
     let targetShiftY = 70; // Valeur par défaut
 
@@ -110,7 +110,7 @@ const sketch2 = (p) => {
             description3Size = p.max(10, 14 * scaleFactor);
             description4Size = p.max(10, 14 * scaleFactor);
             // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
-            Spacing = p.max(30, 40 * scaleFactor);
+            lineSpacing = p.max(30, 40 * scaleFactor);
             lineSpacing2 = p.max(30, 40 * scaleFactor);
             lineSpacing3 = p.max(12, 18 * scaleFactor);
             lineSpacing4 = p.max(12, 18 * scaleFactor);
@@ -121,7 +121,7 @@ const sketch2 = (p) => {
             description2YShift = p.map(scaleFactor, 0, 1, 0, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
             description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
             description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-
+            
             // Calculer les largeurs de ligne
             lineWidth2 = p.max(360, 440 * scaleFactor);
             lineWidth3 = p.max(160, 230 * scaleFactor);
@@ -131,7 +131,6 @@ const sketch2 = (p) => {
             paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
             paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
             paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
-            description2X = p.width - margin;
         } else {
             titleSize = p.max(18, 28 * scaleFactor); // Plus grand en paysage
             descriptionSize = p.max(16, 22 * scaleFactor); // Plus grand en paysage
@@ -139,7 +138,7 @@ const sketch2 = (p) => {
             description3Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
             description4Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
             // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
-            Spacing = p.max(14, 24 * scaleFactor);
+            lineSpacing = p.max(14, 24 * scaleFactor);
             lineSpacing2 = p.max(14, 20 * scaleFactor);
             lineSpacing3 = p.max(12, 18 * scaleFactor);
             lineSpacing4 = p.max(12, 18 * scaleFactor);
@@ -156,10 +155,10 @@ const sketch2 = (p) => {
             lineWidth3 = p.max(160, 230 * scaleFactor);
             lineWidth4 = p.max(160, 230 * scaleFactor);
 
-        // Calculer les espacements des paragraphes
-        paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
-        paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
-        paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
+            // Calculer les espacements des paragraphes
+            paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
+            paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
+            paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
         }
     }
 
@@ -233,13 +232,13 @@ const sketch2 = (p) => {
             this.row = row;
             this.col = col;
             this.number = number;
-    
+
             this.currentSize = baseSize;
             this.targetSize = baseSize;
-    
+
             this.currentShiftX = 0;
             this.targetShiftX = 0;
-    
+
             // Position de départ initiale pour l'animation de descente
             this.currentShiftY = 120;
             this.targetShiftY = targetShiftY; // Utilise la valeur définie selon l'orientation
@@ -274,8 +273,6 @@ const sketch2 = (p) => {
     p.preload = function() {
         myFont = p.loadFont('fonts/OldNewspaperTypes.ttf');
 
-
-
         // Charger les images de relief
         for (let i = 1; i <= 30; i++) {
             let img = p.loadImage(`assets/relief/relief(${i}).JPG`,  
@@ -286,7 +283,7 @@ const sketch2 = (p) => {
             imageOpacities.push(0);         // Initialiser l'opacité à 0
             imageTargetOpacities.push(0);   // Initialiser l'opacité cible à 0
         }
-
+        
         // Initialiser les textes (Lorem Ipsum)
         for (let i = 1; i <= 30; i++) {
 
@@ -683,7 +680,7 @@ const sketch2 = (p) => {
     }
 
      // Fonction setup pour initialiser le canvas et les rectangles
-     p.setup = function() {
+        p.setup = function() {
         // Créer un canvas en 2D qui couvre toute la fenêtre
         p.createCanvas(p.windowWidth, p.windowHeight);
         p.rectMode(p.CENTER); // Mode de dessin des rectangles centrés
@@ -694,6 +691,7 @@ const sketch2 = (p) => {
         // Calculer les tailles initiales en fonction de la largeur de la fenêtre
         calculateSizes();
         setTargetShiftYBasedOnOrientation(); // Ajuste le décalage vertical basé sur l'orientation
+
         // Positionner le canvas au-dessus du premier canvas
         p.canvas.style.position = 'absolute';
         p.canvas.style.top = '0';
@@ -702,16 +700,10 @@ const sketch2 = (p) => {
         p.canvas.style.zIndex = '2'; // Assurer que ce canvas est au-dessus
 
         // Initialiser les rectangles avec leurs numéros
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < cols; col++) {
-                let number = row * cols + col + 1; // Numérotation de 1 à 30
-                rectangles.push(new Rectangle(row, col, number));
-            }
-        }
-         initializeRectangles();
+        initializeRectangles();
     };
 
-    // Fonction  pour dessiner les rectangles, les images et gérer les interactions
+    // Fonction pour dessiner les rectangles, les images et gérer les interactions
     p.draw = function() {
         p.clear(); // Effacer le canvas tout en gardant la transparence
 
@@ -731,7 +723,7 @@ const sketch2 = (p) => {
                 let x = -((cols * (baseSize + spacing) - spacing) / 2) + baseSize / 2 + col * (baseSize + spacing);
                 let y = -((rows * (baseSize + spacing) - spacing) / 2) + baseSize / 2 + row * (baseSize + spacing);
 
-                // Garder le décalage +70 comme demandé
+                // Utiliser targetShiftY pour le décalage vertical
                 let d = p.dist(relMouseX, relMouseY, x + rect.currentShiftX, y + rect.currentShiftY + targetShiftY);
 
                 if (d < rect.currentSize / 2) { // Si la souris est sur le rectangle
@@ -774,6 +766,7 @@ const sketch2 = (p) => {
                         } else if (rect.row === 1) {
                             rect.targetShiftY = targetShiftY + shiftAmount; // Déplacer légèrement vers le bas
                         }
+                        // Si row == 2, ajustez si nécessaire
                     } else {
                         rect.targetSize = baseSize; // Réinitialiser la taille des autres rectangles
                         rect.targetShiftY = targetShiftY; // Réinitialiser le décalage vertical
@@ -882,82 +875,47 @@ const sketch2 = (p) => {
 
             // Itérer sur le tableau des descriptions et les afficher
             currentText.descriptions.forEach(description => {
-                p.text(description, 0, descriptionY);  // Afficher chaque ligne
+                drawColoredText(p, description, 0, descriptionY, p.width);  // Justification selon votre besoin
                 descriptionY += lineSpacing;  // Ajouter de l'espace entre les lignes
             });
 
-// Vérifier si descriptions2 existe et l'afficher
-if (currentText.descriptions2) {
-    p.textSize(description2Size);
-    const margin = paragrapheSpacing2;
+            // Vérifier si descriptions2 existe et l'afficher
+            if (currentText.descriptions2) {
+                p.textSize(description2Size);
+                const margin = paragrapheSpacing2;
+                let description2X = p.width / 2 - margin;
+                let description2Y = titleY + titleToDescriptionSpacing + description2YShift;
 
+                // Aligner le texte à gauche
+                p.textAlign(p.LEFT, p.TOP);
 
-    let description2Y = titleY + titleToDescriptionSpacing + description2YShift;
+                // Utiliser uniquement drawColoredText sans p.text
+                currentText.descriptions2.forEach(line => {
+                    drawColoredText(p, line, description2X, description2Y, lineWidth2);
+                    description2Y += lineSpacing2; // Ajouter l'espacement des lignes
+                });
 
-    // Aligner le texte à gauche
-    p.textAlign(p.LEFT, p.TOP);
-
-    // Utiliser uniquement drawColoredText sans p.text
-    currentText.descriptions2.forEach(line => {
-        drawColoredText(p, line, description2X, description2Y, lineWidth2);
-        description2Y += lineSpacing2; // Ajouter l'espacement des lignes
-    });
-
-    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
-    p.textAlign(p.CENTER, p.TOP);
-}
-
-            
+                // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
+                p.textAlign(p.CENTER, p.TOP);
+            }
 
             // Vérifier si descriptions3 existe et l'afficher
             if (currentText.descriptions3) {
                 p.textSize(description3Size);
                 const margin = paragrapheSpacing3;
                 let description3X = p.width / 2 - margin;
-
                 let description3Y = titleY + titleToDescriptionSpacing + description3YShift;
 
                 // Aligner le texte à gauche
                 p.textAlign(p.LEFT, p.TOP);
 
+                // Utiliser uniquement drawColoredText sans p.text
                 currentText.descriptions3.forEach(line => {
-                    // Split the line into words
-                    let words = line.split(' ');
-
-                    // Calculate total width of words
-                    let totalWordsWidth = words.reduce((sum, word) => sum + p.textWidth(word), 0);
-
-                    // Calculate the number of spaces
-                    let numberOfSpaces = words.length - 1;
-
-                    // Maximum line width is lineWidth3
-                    let lineWidth = lineWidth3;
-
-                    // If total words width is greater than lineWidth, we need to handle it
-                    if (totalWordsWidth > lineWidth) {
-                        // Scale down the font size or wrap the text
-                        // For simplicity, we'll draw the text normally
-                        p.text(line, description3X, description3Y);
-                    } else {
-                        let extraSpace = lineWidth - totalWordsWidth;
-
-                        let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
-
-                        // Start drawing words
-                        let x = description3X;
-
-                        words.forEach((word, index) => {
-                            p.text(word, x, description3Y);
-                            x += p.textWidth(word);
-                            if (index < words.length - 1) {
-                                x += spaceWidth;
-                            }
-                        });
-                    }
-
-                    description3Y += lineSpacing3;
+                    drawColoredText(p, line, description3X, description3Y, lineWidth3);
+                    description3Y += lineSpacing3; // Ajouter l'espacement des lignes
                 });
 
+                // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
                 p.textAlign(p.CENTER, p.TOP);
             }
 
@@ -966,50 +924,18 @@ if (currentText.descriptions2) {
                 p.textSize(description4Size);
                 const margin = paragrapheSpacing4;
                 let description4X = p.width / 2 - margin;
-
                 let description4Y = titleY + titleToDescriptionSpacing + description4YShift + lineSpacing3 - 1;
 
                 // Aligner le texte à gauche
                 p.textAlign(p.LEFT, p.TOP);
 
+                // Utiliser uniquement drawColoredText sans p.text
                 currentText.descriptions4.forEach(line => {
-                    // Split the line into words
-                    let words = line.split(' ');
-
-                    // Calculate total width of words
-                    let totalWordsWidth = words.reduce((sum, word) => sum + p.textWidth(word), 0);
-
-                    // Calculate the number of spaces
-                    let numberOfSpaces = words.length - 1;
-
-                    // Maximum line width is lineWidth4
-                    let lineWidth = lineWidth4;
-
-                    // If total words width is greater than lineWidth, we need to handle it
-                    if (totalWordsWidth > lineWidth) {
-                        // Scale down the font size or wrap the text
-                        // For simplicity, we'll draw the text normally
-                        p.text(line, description4X, description4Y);
-                    } else {
-                        let extraSpace = lineWidth - totalWordsWidth;
-
-                        let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
-
-                        // Start drawing words
-                        let x = description4X;
-
-                        words.forEach((word, index) => {
-                            p.text(word, x, description4Y);
-                            x += p.textWidth(word);
-                            if (index < words.length - 1) {
-                                x += spaceWidth;
-                            }
-                        });
-                    }
-
-                    description4Y += lineSpacing4;
+                    drawColoredText(p, line, description4X, description4Y, lineWidth4);
+                    description4Y += lineSpacing4; // Ajouter l'espacement des lignes
                 });
 
+                // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
                 p.textAlign(p.CENTER, p.TOP);
             }
 
