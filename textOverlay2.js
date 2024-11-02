@@ -86,15 +86,15 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.noTint();
 
         // Définir les tailles de texte pour le paysage
-        titleFontSize = 32;
-        subtitleFontSize = 36;
-        descriptionFontSize = 22;
-        authorFontSize = 18;
-        lineHeight = 24;
+        titleFontSize = 28;
+        subtitleFontSize = 30;
+        descriptionFontSize = 18;
+        authorFontSize = 14;
+        lineHeight = 20;
 
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 32;
-        sketch.subtitleY = sketch.height / 10;
+        sketch.subtitleY = sketch.height / 8;
         sketch.descriptionY = sketch.height / 1.3;
     }
 
