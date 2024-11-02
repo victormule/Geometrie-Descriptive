@@ -106,13 +106,13 @@ const sketch2 = (p) => {
         if (isPortrait()) {
             titleSize = p.max(16, 24 * scaleFactor);
             descriptionSize = p.max(14, 18 * scaleFactor);
-            description2Size = p.max(10, 14 * scaleFactor);
+            description2Size = p.max(20, 24 * scaleFactor);
             description3Size = p.max(10, 14 * scaleFactor);
             description4Size = p.max(10, 14 * scaleFactor);
         } else {
             titleSize = p.max(18, 28 * scaleFactor); // Plus grand en paysage
             descriptionSize = p.max(16, 22 * scaleFactor); // Plus grand en paysage
-            description2Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
+            description2Size = p.max(12, 16 * scaleFactor); // Plus grand en paysage
             description3Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
             description4Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
         }
@@ -137,7 +137,7 @@ const sketch2 = (p) => {
         lineWidth4 = p.max(160, 230 * scaleFactor);
 
         // Calculer les espacements des paragraphes
-        paragrapheSpacing2 = p.max(300, 500 * scaleFactor);
+        paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
         paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
     }
