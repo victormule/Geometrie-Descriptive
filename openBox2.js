@@ -227,6 +227,10 @@ function mousePressed() {
       } else {
         targetAngle = angle - angleMod;
       }
+            // Démarrer la réduction de l'opacité du texte
+      if (textOverlay && typeof textOverlay.startFading === 'function') {
+        textOverlay.startFading();
+      }
     }
   }
 }
