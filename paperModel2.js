@@ -39,7 +39,7 @@ const sketch2 = (p) => {
     // Variables pour les tailles de police, l'espacement des lignes et l'écart titre-descriptions
     let titleSize = 24;               // Taille initiale du titre
     let descriptionSize = 18;         // Taille initiale des descriptions
-    let description2Size = 14;        // Taille initiale des descriptions2
+    let description2Size = 12;        // Taille initiale des descriptions2
     let description3Size = 14;        // Taille initiale des descriptions3
     let description4Size = 14;        // Taille initiale des descriptions4
     let lineSpacing = 24;             // Espacement initial entre les lignes
@@ -51,8 +51,8 @@ const sketch2 = (p) => {
     let description3YShift = 0;       // Ajustement dynamique pour description3Y
     let description4YShift = 0;       // Ajustement dynamique pour description4Y
     let lineWidth2; // Pour descriptions2
-    let lineWidth3; // Pour descriptions3
-    let lineWidth4; // Pour descriptions4
+    let Width3; // Pour descriptions3
+    let Width4; // Pour descriptions4
     let paragrapheSpacing2; // Pour descriptions2
     let paragrapheSpacing3; // Pour descriptions3
     let paragrapheSpacing4; // Pour descriptions4
@@ -118,7 +118,7 @@ const sketch2 = (p) => {
         }
 
         // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
-        lineSpacing = p.max(14, 24 * scaleFactor);
+        Spacing = p.max(14, 24 * scaleFactor);
         lineSpacing2 = p.max(14, 20 * scaleFactor);
         lineSpacing3 = p.max(12, 18 * scaleFactor);
         lineSpacing4 = p.max(12, 18 * scaleFactor);
@@ -132,7 +132,7 @@ const sketch2 = (p) => {
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
 
         // Calculer les largeurs de ligne
-        lineWidth2 = p.max(320, 420 * scaleFactor);
+        lineWidth2 = p.max(400, 500 * scaleFactor);
         lineWidth3 = p.max(160, 230 * scaleFactor);
         lineWidth4 = p.max(160, 230 * scaleFactor);
 
