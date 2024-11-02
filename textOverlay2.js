@@ -23,7 +23,7 @@ let textOverlay2 = new p5(function(sketch) {
     sketch.setup = function() {
         textCanvas = sketch.createCanvas(window.innerWidth, window.innerHeight);
         textCanvas.position(0, 0);
-        textCanvas.style('z-index', '3'); // Assurer que ce canvas est au-dessus des autres
+        textCanvas.style('z-index', '2'); // Assurer que ce canvas est au-dessus des autres
         textCanvas.style('pointer-events', 'none');
         sketch.textFont(customFont); // Appliquer la police une fois chargée
 
@@ -48,8 +48,8 @@ let textOverlay2 = new p5(function(sketch) {
     // Fonction pour définir le layout en mode portrait
     function setPortraitLayout() {
         // Taille et position du logo
-        let logoSizeX = sketch.map(sketch.width, 600, 1400, 100, 250); // Ajuster dynamiquement
-        let logoSizeY = sketch.map(sketch.width, 600, 1400, 75, 180);
+        let logoSizeX = sketch.map(sketch.width, 600, 1400, 140, 250); // Ajuster dynamiquement
+        let logoSizeY = sketch.map(sketch.width, 600, 1400, 100, 180);
         let logoX = 40;
         let logoY = 40;
 
@@ -95,11 +95,11 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.noTint();
 
         // Définir les tailles de texte pour le paysage
-        titleFontSize = 28;
-        subtitleFontSize = 30;
+        titleFontSize = 24;
+        subtitleFontSize = 26;
         descriptionFontSize = 22;
-        authorFontSize = 18;
-        lineHeight = 20;
+        authorFontSize = 20;
+        lineHeight = 18;
 
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 32;
@@ -110,7 +110,7 @@ let textOverlay2 = new p5(function(sketch) {
         subtileSpace2 = 80;
         subtileSpace3 = 120;
 
-        sketch.descriptionY = sketch.height / 1.5;
+        sketch.descriptionY = sketch.height / 1.6;
     }
 
     // Fonction de rendu
