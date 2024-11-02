@@ -877,10 +877,43 @@ function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
                 // Aligner le texte à gauche
                 p.textAlign(p.LEFT, p.TOP);
 
-    currentText.descriptions2.forEach(line => {
-        drawColoredText(p, line, description2X, description2Y, lineWidth2);
-        description2Y += lineSpacing2; // Ajouter l'espacement des lignes
-    });
+                currentText.descriptions2.forEach(line => {
+                    // Split the line into words
+                    let words = line.split(' ');
+
+                    // Calculate total width of words
+                    let totalWordsWidth = words.reduce((sum, word) => sum + p.textWidth(word), 0);
+
+                    // Calculate the number of spaces
+                    let numberOfSpaces = words.length - 1;
+
+                    // Maximum line width is lineWidth2
+                    let lineWidth = lineWidth2;
+
+                    // If total words width is greater than lineWidth, we need to handle it
+                    if (totalWordsWidth > lineWidth) {
+                        // Scale down the font size or wrap the text
+                        // For simplicity, we'll draw the text normally
+                        p.text(line, description2X, description2Y);
+                    } else {
+                        let extraSpace = lineWidth - totalWordsWidth;
+
+                        let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
+
+                        // Start drawing words
+                        let x = description2X;
+
+                        words.forEach((word, index) => {
+                            p.text(word, x, description2Y);
+                            x += p.textWidth(word);
+                            if (index < words.length - 1) {
+                                x += spaceWidth;
+                            }
+                        });
+                    }
+
+                    description2Y += lineSpacing2;
+                });
 
                 // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
                 p.textAlign(p.CENTER, p.TOP);
