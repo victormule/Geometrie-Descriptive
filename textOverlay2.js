@@ -113,7 +113,7 @@ let textOverlay2 = new p5(function(sketch) {
         subtitle1FontSize = 36;
         subtitle2FontSize = 28;
         subtitle3FontSize = 24;
-        authorFontSize = 18;
+        authorFontSize = 24;
         lineHeight = 24;
 
         // Définir l'espacement entre les sous-titres
