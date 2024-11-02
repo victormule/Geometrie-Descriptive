@@ -258,7 +258,7 @@ function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
 
         // Charger les images de relief
         for (let i = 1; i <= 30; i++) {
-            let img = p.loadImage(assets/relief/relief(${i}).JPG, 
+            let img = p.loadImage(`assets/relief/relief(${i}).JPG`,  
                 () => { /* Image chargée avec succès */ }, 
                 () => { console.error(`Erreur de chargement de l'image assets/relief/relief(${i}).JPG`); }
             );
@@ -691,7 +691,7 @@ function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
          initializeRectangles();
     };
 
-    // Fonction draw pour dessiner les rectangles, les images et gérer les interactions
+    // Fonction  pour dessiner les rectangles, les images et gérer les interactions
     p.draw = function() {
         p.clear(); // Effacer le canvas tout en gardant la transparence
 
