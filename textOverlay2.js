@@ -62,7 +62,7 @@ let textOverlay2 = new p5(function(sketch) {
         subtitleFontSize = 50;
         descriptionFontSize = 40;
         authorFontSize = 38;
-        lineHeight = 46;
+        lineHeight = 54;
 
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 20;
