@@ -20,6 +20,10 @@
       let mobileScript = document.createElement('script');
       mobileScript.src = 'openBox2.js';
       document.head.appendChild(mobileScript);
+      // Charger textOverlay.js pour le texte superposé
+      let textOverlayScript = document.createElement('script');
+      textOverlayScript.src = 'textOverlay.js';
+      document.head.appendChild(textOverlayScript);  
     } else {
       // Charger openBox1.js pour bureau
       let openBoxScript = document.createElement('script');
