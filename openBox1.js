@@ -11,7 +11,7 @@ let mouseIncline = 0;       // Inclinaison basée sur la souris
 
 // Variables de zoom et déplacement vertical
 let zoomFactor = 100;       // Distance initiale de la caméra (plus grand = plus éloigné)
-let maxZoom = -300;         // Distance minimale de zoom (plus petit = plus proche)
+let maxZoom = -200;         // Distance minimale de zoom (plus petit = plus proche)
 let zoomSpeed = 5;          // Vitesse du zoom pendant l'animation
 let yOffset = 0;            // Déplacement vertical du coffre
 let ySpeed = 2;             // Vitesse de déplacement vertical
@@ -51,7 +51,7 @@ function setup() {
 }
 
 function draw() {
-  background(180, 120, 0, 50); // Fond coloré avec transparence
+  background(130, 100, 0, 80); // Fond coloré avec transparence
 
   // Calculer la distance de la souris par rapport au centre de l'écran
   let centerX = width / 2;
@@ -201,22 +201,32 @@ function drawBox() {
 
 function mousePressed() {
   if (!isAnimating && !animationComplete) {
-   if (mouseX > windowWidth / 3 && mouseX < windowWidth - windowWidth / 3 && mouseY > windowHeight / 3 && mouseY < windowHeight - windowHeight / 3) {
-    isRotating = false;        // Arrêter la rotation automatique
-    isAnimating = true;        // Démarrer l'animation
-    zoomFactor = 100;           // Réinitialiser le zoomFactor pour commencer le zoom avant
-    yOffset = 0;                // Réinitialiser le décalage vertical
+    if (
+      mouseX > windowWidth / 3 &&
+      mouseX < windowWidth - windowWidth / 3 &&
+      mouseY > windowHeight / 3 &&
+      mouseY < windowHeight - windowHeight / 3
+    ) {
+      isRotating = false; // Arrêter la rotation automatique
+      isAnimating = true; // Démarrer l'animation
+      zoomFactor = 100; // Réinitialiser le zoomFactor pour commencer le zoom avant
+      yOffset = 0; // Réinitialiser le décalage vertical
 
-    // Calculer l'angle cible pour aligner la boîte face à nous
-    let angleMod = angle % TWO_PI;
-    if (angleMod > PI) {
-      targetAngle = angle - angleMod + TWO_PI;
-    } else {
-      targetAngle = angle - angleMod;
+      // Calculer l'angle cible pour aligner la boîte face à nous
+      let angleMod = angle % TWO_PI;
+      if (angleMod > PI) {
+        targetAngle = angle - angleMod + TWO_PI;
+      } else {
+        targetAngle = angle - angleMod;
+      }
+
+      // Démarrer la réduction de l'opacité du texte
+      if (textOverlay && typeof textOverlay.startFading === 'function') {
+        textOverlay.startFading();
+      }
     }
-  }}
+  }
 }
-
 // Fonction pour lancer le second sketch
 function triggerSketch2() {
   // Vérifier si le second sketch est déjà chargé
