@@ -50,7 +50,7 @@ let textOverlay2 = new p5(function(sketch) {
         // Taille et position du logo
         let logoSizeX = sketch.map(sketch.width, 600, 1400, 100, 250); // Ajuster dynamiquement
         let logoSizeY = sketch.map(sketch.width, 600, 1400, 75, 180);
-        let logoX = 100;
+        let logoX = 40;
         let logoY = 40;
 
         // Appliquer le tint et dessiner le logo
@@ -84,7 +84,7 @@ let textOverlay2 = new p5(function(sketch) {
         // Taille et position du logo
         let logoSizeX = sketch.map(sketch.width, 600, 1400, 100, 250); // Ajuster dynamiquement
         let logoSizeY = sketch.map(sketch.width, 600, 1400, 75, 180);
-        let logoX = 60;
+        let logoX = 20;
         let logoY = 20;
 
         // Appliquer le tint et dessiner le logo
@@ -97,9 +97,9 @@ let textOverlay2 = new p5(function(sketch) {
         // Définir les tailles de texte pour le paysage
         titleFontSize = 28;
         subtitleFontSize = 30;
-        descriptionFontSize = 20;
-        authorFontSize = 16;
-        lineHeight = 18;
+        descriptionFontSize = 22;
+        authorFontSize = 18;
+        lineHeight = 20;
 
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 32;
