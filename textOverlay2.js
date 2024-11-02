@@ -107,8 +107,8 @@ let textOverlay2 = new p5(function(sketch) {
         
         // Espacement entre sous-titres
         subtileSpace1 = 20;
-        subtileSpace2 = 60;
-        subtileSpace3 = 100;
+        subtileSpace2 = 40;
+        subtileSpace3 = 80;
 
         sketch.descriptionY = sketch.height / 1.6;
     }
@@ -138,7 +138,7 @@ let textOverlay2 = new p5(function(sketch) {
         // Titre centré en haut de l'écran
         sketch.textSize(titleFontSize);
         sketch.textAlign(sketch.CENTER, sketch.TOP);
-        sketch.text("MÉTHODE NOUVELLE", sketch.width / 2, sketch.titleY);
+        sketch.text("MÉTHODE NOUVELLE", sketch.width / 2, sketch.titleY );
         
         // Sous-titre centré en haut de l'écran
         sketch.textSize(authorFontSize);
@@ -161,13 +161,13 @@ let textOverlay2 = new p5(function(sketch) {
         if (isPortrait()) {
             maxWidthDesc = sketch.width * 0.9; // Plus large en portrait
         } else {
-            maxWidthDesc = sketch.width /1.1; // Limite la description à un tiers de la largeur en paysage
+            maxWidthDesc = sketch.width /1.3; // Limite la description à un tiers de la largeur en paysage
         }
 
         // Positionner la description sous le milieu de l'écran
         sketch.textAlign(sketch.LEFT, sketch.TOP);
         drawJustifiedText(
-                        " Cette boîte contient une collection de reliefs à pièces mobiles, récompensée par un diplôme de mérite lors de l'Exposition Universelle de Vienne en 1873. Elle renferme 32 cartons, 118 pièces métalliques et une notice explicative destinée aux candidats au Baccalauréat des sciences, ainsi qu'aux aspirants aux Écoles Navale et des Beaux-Arts.\nCe matériel pédagogique témoigne d'un ancien savoir-faire et d'une grande précision dans sa réalisation.\n\nOuvrez la boîte pour en apprendre davantage",
+                        " Cette boîte contient une collection de reliefs à pièces mobiles, récompensée par un diplôme de mérite lors de l'Exposition Universelle de Vienne en 1873. Elle renferme 32 cartons, 118 pièces métalliques et une notice explicative destinée aux candidats au Baccalauréat des sciences, ainsi qu'aux aspirants aux Écoles Navale et des Beaux-Arts.\n\nOuvrez la boîte pour en apprendre davantage",
             (sketch.width - maxWidthDesc) / 2, // Centrer horizontalement en ajustant x
             sketch.descriptionY, // Positionner sous le centre de l'écran
             maxWidthDesc
