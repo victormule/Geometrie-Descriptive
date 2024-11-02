@@ -6,7 +6,6 @@ let textOverlay2 = new p5(function(sketch) {
     let customFont; // Variable pour la police personnalisée
     let logo; // Variable pour l'image du logo
 
-
     // Précharger la police personnalisée et l'image du logo
     sketch.preload = function() {
         customFont = sketch.loadFont('fonts/OldNewspaperTypes.ttf');
@@ -22,87 +21,25 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.textFont(customFont); // Appliquer la police une fois chargée
     };
 
+    // Fonction pour déterminer l'orientation
+    function isPortrait() {
+        return window.innerHeight > window.innerWidth;
+    }
+
     // Fonction de rendu
     sketch.draw = function() {
         sketch.clear();
         sketch.fill(255, 255, 255, opacity); // Appliquer l'opacité au texte
 
-        // Calculer les paramètres du logo en fonction de la taille de l'écran
-        let minWidth = 600;
-        let maxWidth = 1400;
-        let logoMinSizeX = 100;
-        let logoMaxSizeX = 250;
-        let logoMinSizeY = 75;
-        let logoMaxSizeY = 180;
-        let logoMinOpacity = 10;
-        let logoMaxOpacity = 200;
-
-        let currentWidth = sketch.width;
-        // Limiter la largeur actuelle entre minWidth et maxWidth
-        if (currentWidth > maxWidth) currentWidth = maxWidth;
-        if (currentWidth < minWidth) currentWidth = minWidth;
-
-        // Calculer le ratio de taille basé sur la largeur actuelle
-        let sizeRatio = sketch.map(currentWidth, minWidth, maxWidth, 0, 1);
-
-        // Calculer la taille actuelle du logo
-        let currentLogoSizeX = sketch.lerp(logoMinSizeX, logoMaxSizeX, sizeRatio);
-        let currentLogoSizeY = sketch.lerp(logoMinSizeY, logoMaxSizeY, sizeRatio);
-
-        // Calculer l'opacité actuelle du logo
-        let currentLogoOpacity = sketch.lerp(logoMinOpacity, logoMaxOpacity, sizeRatio);
-
-        // Appliquer l'opacité au logo en utilisant tint
-        sketch.tint(255, currentLogoOpacity);
-        // Afficher le logo en haut à gauche avec les dimensions spécifiées
-        sketch.image(logo, 60, 20, currentLogoSizeX, currentLogoSizeY); // Positionner et redimensionner le logo
-        // Réinitialiser le tint pour éviter d'affecter d'autres éléments
-        sketch.noTint();
-
-        // Titre centré en haut de l'écran
-        sketch.textSize(28);
-        sketch.textAlign(sketch.CENTER, sketch.TOP);
-        sketch.text("MÉTHODE NOUVELLE", sketch.width / 2, sketch.height / 10 - 32);
-        
-        // Sous-titre centré en haut de l'écran
-        sketch.textSize(32);
-        sketch.textAlign(sketch.CENTER, sketch.TOP);
-        sketch.text("DE LA ", sketch.width / 2, sketch.height / 10);
-
-        // Sous-titre centré en haut de l'écran
-        sketch.textSize(32);
-        sketch.textAlign(sketch.CENTER, sketch.TOP);
-        sketch.text("GÉOMÉTRIE DESCRIPTIVE", sketch.width / 2, sketch.height / 10 + 40);
-
-        // Autre sous-titre centré
-        sketch.textSize(22);
-        sketch.textAlign(sketch.CENTER, sketch.TOP);
-        sketch.text("COLLECTION DE RELIEFS", sketch.width / 2, sketch.height / 10 + 80);
-        
-        // Auteur centré
-        sketch.textSize(18);
-        sketch.textAlign(sketch.CENTER, sketch.TOP);
-        sketch.text("A. JULLIEN", sketch.width / 2, sketch.height / 10 + 120);
-
-        // Calculer la largeur maximale de la description en fonction de la taille de l'écran
-        let maxWidthDesc;
-        if (sketch.width > 1400) {
-            maxWidthDesc = sketch.width / 3; // Limite la description à un tiers de la largeur
-        } else if (sketch.width < 600) {
-            maxWidthDesc = sketch.width * 0.9; // Étend la description pour presque toute la largeur
+        // Définir les tailles et positions en fonction de l'orientation
+        if (isPortrait()) {
+            setPortraitLayout();
         } else {
-            maxWidthDesc = sketch.map(sketch.width, 600, 1400, sketch.width * 0.9, sketch.width / 3);
+            setLandscapeLayout();
         }
 
-        // Positionner la description sous le milieu de l'écran
-        sketch.textSize(18);
-        sketch.textAlign(sketch.LEFT, sketch.TOP);
-        drawJustifiedText(
-            "Cette boite date de 1880, elle fut très appréciée de son temps. Conçue pour les professeurs et étudiants en mathématiques, elle contient divers instruments de mesure et de géométrie qui ont résisté à l’épreuve du temps.\n\nOuvrez la boîte pour en savoir plus.",
-            (sketch.width - maxWidthDesc) / 2, // Centrer horizontalement en ajustant x
-            sketch.height / 1.6, // Positionner sous le centre de l'écran
-            maxWidthDesc
-        );
+        // Dessiner le texte
+        drawTextContent();
 
         // Réduire l'opacité si le fading est activé
         if (fading && opacity > 0) {
@@ -112,6 +49,90 @@ let textOverlay2 = new p5(function(sketch) {
             }
         }
     };
+
+    // Fonction pour définir le layout en mode portrait
+    function setPortraitLayout() {
+        // Taille et position du logo
+        let logoSizeX = sketch.lerp(100, 250, 0.5); // Exemple de taille ajustée
+        let logoSizeY = sketch.lerp(75, 180, 0.5);
+        let logoX = 60;
+        let logoY = 20;
+
+        // Appliquer le tint et dessiner le logo
+        let sizeRatio = 0.5; // Ajustez en fonction de vos besoins
+        let currentLogoOpacity = sketch.lerp(10, 200, sizeRatio);
+        sketch.tint(255, currentLogoOpacity);
+        sketch.image(logo, logoX, logoY, logoSizeX, logoSizeY); // Positionner et redimensionner le logo
+        sketch.noTint();
+
+        // Définir les tailles de texte pour le portrait
+        sketch.textSize(24);
+        // Positions des textes
+        sketch.titleY = sketch.height / 10 - 20;
+        sketch.subtitleY = sketch.height / 10 + 10;
+        sketch.descriptionY = sketch.height / 1.6;
+    }
+
+    // Fonction pour définir le layout en mode paysage
+    function setLandscapeLayout() {
+        // Taille et position du logo
+        let logoSizeX = sketch.lerp(100, 250, 0.8); // Exemple de taille ajustée
+        let logoSizeY = sketch.lerp(75, 180, 0.8);
+        let logoX = 60;
+        let logoY = 20;
+
+        // Appliquer le tint et dessiner le logo
+        let sizeRatio = 0.8; // Ajustez en fonction de vos besoins
+        let currentLogoOpacity = sketch.lerp(10, 200, sizeRatio);
+        sketch.tint(255, currentLogoOpacity);
+        sketch.image(logo, logoX, logoY, logoSizeX, logoSizeY); // Positionner et redimensionner le logo
+        sketch.noTint();
+
+        // Définir les tailles de texte pour le paysage
+        sketch.textSize(32);
+        // Positions des textes
+        sketch.titleY = sketch.height / 10 - 32;
+        sketch.subtitleY = sketch.height / 10;
+        sketch.descriptionY = sketch.height / 1.6;
+    }
+
+    // Fonction pour dessiner le contenu textuel
+    function drawTextContent() {
+        // Titre centré en haut de l'écran
+        sketch.textAlign(sketch.CENTER, sketch.TOP);
+        sketch.text("MÉTHODE NOUVELLE", sketch.width / 2, sketch.titleY);
+        
+        // Sous-titre centré en haut de l'écran
+        sketch.text("DE LA ", sketch.width / 2, sketch.subtitleY);
+
+        // Sous-titre centré en haut de l'écran
+        sketch.text("GÉOMÉTRIE DESCRIPTIVE", sketch.width / 2, sketch.subtitleY + 40);
+
+        // Autre sous-titre centré
+        sketch.textSize(22);
+        sketch.text("COLLECTION DE RELIEFS", sketch.width / 2, sketch.subtitleY + 80);
+        
+        // Auteur centré
+        sketch.textSize(18);
+        sketch.text("A. JULLIEN", sketch.width / 2, sketch.subtitleY + 120);
+
+        // Calculer la largeur maximale de la description en fonction de la taille de l'écran et de l'orientation
+        let maxWidthDesc;
+        if (isPortrait()) {
+            maxWidthDesc = sketch.width * 0.9; // Plus large en portrait
+        } else {
+            maxWidthDesc = sketch.width / 3; // Limite la description à un tiers de la largeur en paysage
+        }
+
+        // Positionner la description sous le milieu de l'écran
+        sketch.textAlign(sketch.LEFT, sketch.TOP);
+        drawJustifiedText(
+            "Cette boite date de 1880, elle fut très appréciée de son temps. Conçue pour les professeurs et étudiants en mathématiques, elle contient divers instruments de mesure et de géométrie qui ont résisté à l’épreuve du temps.\n\nOuvrez la boîte pour en savoir plus.",
+            (sketch.width - maxWidthDesc) / 2, // Centrer horizontalement en ajustant x
+            sketch.descriptionY, // Positionner sous le centre de l'écran
+            maxWidthDesc
+        );
+    }
 
     // Gestion du redimensionnement de la fenêtre
     sketch.windowResized = function() {
@@ -126,7 +147,7 @@ let textOverlay2 = new p5(function(sketch) {
     // Fonction pour dessiner un texte justifié avec gestion des sauts de ligne
     function drawJustifiedText(text, x, y, maxWidth) {
         let paragraphs = text.split('\n');
-        let lineHeight = 30;
+        let lineHeight = isPortrait() ? 30 : 24; // Ajuster le lineHeight selon l'orientation
         let currentY = y;
 
         paragraphs.forEach(paragraph => {
@@ -183,3 +204,4 @@ let textOverlay2 = new p5(function(sketch) {
         });
     }
 });
+
