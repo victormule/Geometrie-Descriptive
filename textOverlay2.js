@@ -5,7 +5,9 @@ let textOverlay2 = new p5(function(sketch) {
     let textCanvas;
     let customFont; // Variable pour la police personnalisée
     let logo; // Variable pour l'image du logo
-
+    let subtileSpace1 = 40;
+    let subtileSpace2 = 80;
+    let subtileSpace3 = 120;
     // Variables dynamiques pour les tailles de police et l'espacement des lignes
     let titleFontSize, subtitleFontSize, descriptionFontSize, authorFontSize;
     let lineHeight;
@@ -66,7 +68,10 @@ let textOverlay2 = new p5(function(sketch) {
 
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 20;
-        sketch.subtitleY = sketch.height / 8 + 80;
+        sketch.subtitleY = sketch.height / 8 + 20;
+        sketch.subtileSpace1 = 60
+        sketch.subtileSpace2 = 120
+        skecth.subtileSpace3 = 180
         sketch.descriptionY = sketch.height / 1.6;
     }
 
@@ -130,15 +135,15 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.text("DE LA ", sketch.width / 2, sketch.subtitleY);
 
         // Sous-titre centré en haut de l'écran
-        sketch.text("GÉOMÉTRIE DESCRIPTIVE", sketch.width / 2, sketch.subtitleY + 40);
+        sketch.text("GÉOMÉTRIE DESCRIPTIVE", sketch.width / 2, sketch.subtitleY + sketch.subtileSpace1);
 
         // Autre sous-titre centré
         sketch.textSize(descriptionFontSize);
-        sketch.text("COLLECTION DE RELIEFS", sketch.width / 2, sketch.subtitleY + 80);
+        sketch.text("COLLECTION DE RELIEFS", sketch.width / 2, sketch.subtitleY + sketch.subtileSpace2);
         
         // Auteur centré
         sketch.textSize(authorFontSize);
-        sketch.text("A. JULLIEN", sketch.width / 2, sketch.subtitleY + 120);
+        sketch.text("A. JULLIEN", sketch.width / 2, sketch.subtitleY + sketch.subtileSpace3);
 
         // Calculer la largeur maximale de la description en fonction de la taille de l'écran et de l'orientation
         let maxWidthDesc;
