@@ -138,7 +138,7 @@ let textOverlay2 = new p5(function(sketch) {
         // Titre centré en haut de l'écran
         sketch.textSize(titleFontSize);
         sketch.textAlign(sketch.CENTER, sketch.TOP);
-        sketch.text("MÉTHODE NOUVELLE", sketch.width / 2, sketch.titleY );
+        sketch.text("MÉTHODE NOUVELLE", sketch.width / 2, sketch.titleY + subtileSpace1 / 2 );
         
         // Sous-titre centré en haut de l'écran
         sketch.textSize(authorFontSize);
