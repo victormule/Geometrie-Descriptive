@@ -127,7 +127,7 @@ let textOverlay = new p5(function(sketch) {
     // Fonction pour dessiner un texte justifié avec gestion des sauts de ligne
     function drawJustifiedText(text, x, y, maxWidth) {
         let paragraphs = text.split('\n');
-        let lineHeight = 30;
+        let lineHeight = 20;
         let currentY = y;
 
         paragraphs.forEach(paragraph => {
