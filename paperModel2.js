@@ -135,7 +135,7 @@ const sketch2 = (p) => {
 
         // Calculer description2X et description2Y
         description2X = p.width / 2 - margin;
-        description2Y = titleY + titleToDescriptionSpacing + description2YShift + 10;
+        
     } else {
         baseSize = p.max(40, 50 * scaleFactor);
         spacing = p.max(14, 20 * scaleFactor);
@@ -176,7 +176,6 @@ const sketch2 = (p) => {
 
         // Calculer description2X et description2Y
         description2X = p.width / 2 + margin;
-        description2Y = titleY + titleToDescriptionSpacing + description2YShift + 10;
     }
 }
 
@@ -899,6 +898,7 @@ const sketch2 = (p) => {
 
             // Vérifier si descriptions2 existe et l'afficher
             if (currentText.descriptions2) {
+                let description2Y = titleY + titleToDescriptionSpacing + description2YShift;
     p.textSize(description2Size);
     
     // description2X et description2Y sont déjà calculés dans calculateSizes
