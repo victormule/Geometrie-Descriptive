@@ -94,7 +94,7 @@ const sketch2 = (p) => {
         // Ajout d'ajustements basés sur l'orientation
         if (isPortrait()) {
             baseSize = p.max(70, 80 * scaleFactor);
-            spacing = p.max(18, 24 * scaleFactor);
+            spacing = p.max(30, 40 * scaleFactor);
             hoverSize = 90;
         } else {
             baseSize = p.max(40, 50 * scaleFactor); // Exemple: plus grand en paysage
@@ -104,8 +104,8 @@ const sketch2 = (p) => {
 
         // Ajuster les tailles de police proportionnellement, avec des minima
         if (isPortrait()) {
-            titleSize = p.max(16, 24 * scaleFactor);
-            descriptionSize = p.max(14, 18 * scaleFactor);
+            titleSize = p.max(36, 44 * scaleFactor);
+            descriptionSize = p.max(26, 34 * scaleFactor);
             description2Size = p.max(20, 24 * scaleFactor);
             description3Size = p.max(10, 14 * scaleFactor);
             description4Size = p.max(10, 14 * scaleFactor);
