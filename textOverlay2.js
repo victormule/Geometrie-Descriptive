@@ -106,9 +106,9 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.subtitleY = sketch.height / 8 - 8;
         
         // Espacement entre sous-titres
-        subtileSpace1 = 40;
-        subtileSpace2 = 80;
-        subtileSpace3 = 120;
+        subtileSpace1 = 20;
+        subtileSpace2 = 60;
+        subtileSpace3 = 100;
 
         sketch.descriptionY = sketch.height / 1.6;
     }
