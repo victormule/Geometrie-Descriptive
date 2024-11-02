@@ -57,12 +57,15 @@ const sketch2 = (p) => {
     let paragrapheSpacing3; // Pour descriptions3
     let paragrapheSpacing4; // Pour descriptions4
 
-        // Fonction pour déterminer l'orientation
+    // Déclarer targetShiftY globalement
+    let targetShiftY = 70; // Valeur par défaut
+
+    // Fonction pour déterminer l'orientation
     function isPortrait() {
         return p.windowHeight > p.windowWidth;
     }
 
-function setGridBasedOnOrientation() {
+    function setGridBasedOnOrientation() {
         if (isPortrait()) {
             rows = 3;
             cols = 10;
@@ -72,7 +75,7 @@ function setGridBasedOnOrientation() {
         }
     }
 
-function setTargetShiftYBasedOnOrientation() {
+    function setTargetShiftYBasedOnOrientation() {
         if (isPortrait()) {
             targetShiftY = 280; // Déplace les rectangles plus vers le bas en mode portrait
         } else {
@@ -86,7 +89,7 @@ function setTargetShiftYBasedOnOrientation() {
         let scaleFactor = p.width / initialWidth;
         // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
 
-         setGridBasedOnOrientation();
+        setGridBasedOnOrientation();
         
         // Ajout d'ajustements basés sur l'orientation
         if (isPortrait()) {
@@ -98,7 +101,6 @@ function setTargetShiftYBasedOnOrientation() {
             spacing = p.max(14, 20 * scaleFactor);  // Exemple: plus grand en paysage
             hoverSize = 60;
         }
-
 
         // Ajuster les tailles de police proportionnellement, avec des minima
         if (isPortrait()) {
@@ -140,7 +142,7 @@ function setTargetShiftYBasedOnOrientation() {
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
     }
 
- // Fonction pour initialiser ou réinitialiser les rectangles
+    // Fonction pour initialiser ou réinitialiser les rectangles
     function initializeRectangles() {
         rectangles = []; // Réinitialiser le tableau des rectangles
         for (let row = 0; row < rows; row++) {
@@ -150,60 +152,59 @@ function setTargetShiftYBasedOnOrientation() {
             }
         }
     }
- // Constantes en dehors de la fonction pour éviter de recréer l'objet à chaque appel
-const specialWords = {
-    "a,a'": [255, 150, 150], // Rouge
-    "a'": [255, 150, 150],   // Rouge
-    "a": [255, 150, 150],    // Rouge
-    "c": [150, 255, 150],    // Vert
-    "c'": [150, 255, 150],   // Vert
-    "c,c'": [150, 255, 150],   // Vert
-    "cd,c'd'": [150, 255, 150],   // Vert
-    "APA'": [150, 255, 150],   // Vert
-    "mm'": [150, 150, 255], // Bleu
-    "C1": [0, 0, 255], // Bleu
-    "C1d": [255, 165, 0], // Orange
-    "bc,b'c'": [255, 150, 150],
-};
 
-function drawColoredText(p, line, x, y, lineWidth) {
-    let words = line.split(" ");
-    let currentLine = [];
-    let lineWidthAccumulated = 0;
-    let lineY = y;
+    // Constantes en dehors de la fonction pour éviter de recréer l'objet à chaque appel
+    const specialWords = {
+        "a,a'": [255, 150, 150], // Rouge
+        "a'": [255, 150, 150],   // Rouge
+        "a": [255, 150, 150],    // Rouge
+        "c": [150, 255, 150],    // Vert
+        "c'": [150, 255, 150],   // Vert
+        "c,c'": [150, 255, 150], // Vert
+        "cd,c'd'": [150, 255, 150], // Vert
+        "APA'": [150, 255, 150], // Vert
+        "mm'": [150, 150, 255], // Bleu
+        "C1": [0, 0, 255], // Bleu
+        "C1d": [255, 165, 0], // Orange
+        "bc,b'c'": [255, 150, 150],
+    };
 
-    words.forEach((word) => {
-        let wordWidth = p.textWidth(word + " ");
-        if (lineWidthAccumulated + wordWidth > lineWidth && currentLine.length > 0) {
+    function drawColoredText(p, line, x, y, lineWidth) {
+        let words = line.split(" ");
+        let currentLine = [];
+        let lineWidthAccumulated = 0;
+        let lineY = y;
+
+        words.forEach((word) => {
+            let wordWidth = p.textWidth(word + " ");
+            if (lineWidthAccumulated + wordWidth > lineWidth && currentLine.length > 0) {
+                justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
+                currentLine = [];
+                lineWidthAccumulated = 0;
+                lineY += lineSpacing2;
+            }
+            currentLine.push(word);
+            lineWidthAccumulated += wordWidth;
+        });
+
+        if (currentLine.length > 0) {
             justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
-            currentLine = [];
-            lineWidthAccumulated = 0;
-            lineY += lineSpacing2;
         }
-        currentLine.push(word);
-        lineWidthAccumulated += wordWidth;
-    });
-
-    if (currentLine.length > 0) {
-        justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
     }
-}
 
-function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
-    let totalWordsWidth = lineWords.reduce((sum, word) => sum + p.textWidth(word), 0);
-    let extraSpace = lineWidth - totalWordsWidth;
-    let spaceWidth = lineWords.length > 1 ? extraSpace / (lineWords.length - 1) : 0;
-    let currentX = x;
+    function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
+        let totalWordsWidth = lineWords.reduce((sum, word) => sum + p.textWidth(word), 0);
+        let extraSpace = lineWidth - totalWordsWidth;
+        let spaceWidth = lineWords.length > 1 ? extraSpace / (lineWords.length - 1) : 0;
+        let currentX = x;
 
-    lineWords.forEach((word) => {
-        let color = specialWords[word] || [255, 255, 255]; // Blanc par défaut
-        p.fill(...color);
-        p.text(word, currentX, y);
-        currentX += p.textWidth(word) + spaceWidth;
-    });
-}
-
-
+        lineWords.forEach((word) => {
+            let color = specialWords[word] || [255, 255, 255]; // Blanc par défaut
+            p.fill(...color);
+            p.text(word, currentX, y);
+            currentX += p.textWidth(word) + spaceWidth;
+        });
+    }
 
     // Classe représentant un rectangle
     class Rectangle {
@@ -218,12 +219,10 @@ function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
             this.currentShiftX = 0;
             this.targetShiftX = 0;
     
-        // Position de départ initiale pour l'animation de descente
-        this.currentShiftY = 120;
-        this.targetShiftY = targetShiftY; // Utilise la valeur définie selon l'orientation
+            // Position de départ initiale pour l'animation de descente
+            this.currentShiftY = 120;
+            this.targetShiftY = targetShiftY; // Utilise la valeur définie selon l'orientation
         }
-    
-    
 
         // Méthode pour dessiner le rectangle avec une opacité dynamique
         draw(x, y, opacity) {
@@ -866,8 +865,8 @@ function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
                 descriptionY += lineSpacing;  // Ajouter de l'espace entre les lignes
             });
 
-            // Vérifier si descriptions2 existe et l'afficher
-            if (currentText.descriptions2) {
+// Vérifier si descriptions2 existe et l'afficher
+if (currentText.descriptions2) {
     p.textSize(description2Size);
     const margin = paragrapheSpacing2;
     let description2X = p.width / 2 - margin;
@@ -886,12 +885,7 @@ function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
     // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
     p.textAlign(p.CENTER, p.TOP);
 }
-                // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
-                p.textAlign(p.CENTER, p.TOP);
-                 currentText.descriptions2.forEach(line => {
-                    drawColoredText(p, line, description2X, description2Y, lineWidth2);
-                    description2Y += lineSpacing2; // Ajouter l'espacement des lignes
-                });
+
             
 
             // Vérifier si descriptions3 existe et l'afficher
