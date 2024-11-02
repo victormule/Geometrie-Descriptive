@@ -98,7 +98,7 @@ let textOverlay2 = new p5(function(sketch) {
         titleFontSize = 24;
         subtitleFontSize = 26;
         descriptionFontSize = 22;
-        authorFontSize = 18;
+        authorFontSize = 20;
         lineHeight = 18;
 
         // Positions des textes
@@ -167,7 +167,7 @@ let textOverlay2 = new p5(function(sketch) {
         // Positionner la description sous le milieu de l'écran
         sketch.textAlign(sketch.LEFT, sketch.TOP);
         drawJustifiedText(
-                        " Cette boîte contient une collection de reliefs à pièces mobiles, récompensée par un diplôme de mérite lors de l'Exposition Universelle de Vienne en 1873. Elle renferme 32 cartons, 118 pièces métalliques et une notice explicative destinée aux candidats au Baccalauréat des sciences, ainsi qu'aux aspirants aux Écoles Navale et des Beaux-Arts.\n\nOuvrez la boîte pour en apprendre davantage",
+                        " Cette boîte contient une collection de reliefs à pièces mobiles, récompensée par un diplôme de mérite lors de l'Exposition Universelle de Vienne en 1873. Elle renferme 32 cartons, 118 pièces métalliques et une notice explicative destinée aux candidats au Baccalauréat des sciences, ainsi qu'aux aspirants aux Écoles Navale et des Beaux-Arts.\nOuvrez la boîte pour en apprendre davantage",
             (sketch.width - maxWidthDesc) / 2, // Centrer horizontalement en ajustant x
             sketch.descriptionY, // Positionner sous le centre de l'écran
             maxWidthDesc
