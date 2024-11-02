@@ -917,6 +917,10 @@ function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
 
                 // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
                 p.textAlign(p.CENTER, p.TOP);
+                 currentText.descriptions2.forEach(line => {
+                    drawColoredText(p, line, description2X, description2Y, lineWidth2);
+                    description2Y += lineSpacing2; // Ajouter l'espacement des lignes
+                });
             }
 
             // Vérifier si descriptions3 existe et l'afficher
