@@ -59,7 +59,7 @@ function setup() {
 }
 
 function draw() {
-  background(180, 120, 0, 50); // Fond coloré avec transparence
+  background(130, 100, 0, 80); // Fond coloré avec transparence
 
   // Calculer la distance du touch par rapport au centre de l'écran
   let centerX = width / 2;
