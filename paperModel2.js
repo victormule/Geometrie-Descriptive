@@ -260,7 +260,7 @@ function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
         for (let i = 1; i <= 30; i++) {
             let img = p.loadImage(assets/relief/relief(${i}).JPG, 
                 () => { /* Image chargée avec succès */ }, 
-                () => { console.error(Erreur de chargement de l'image assets/relief/relief(${i}).JPG); }
+                () => { console.error(`Erreur de chargement de l'image assets/relief/relief(${i}).JPG`); }
             );
             reliefImages.push(img);
             imageOpacities.push(0);         // Initialiser l'opacité à 0
