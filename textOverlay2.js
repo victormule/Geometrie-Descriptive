@@ -68,7 +68,7 @@ let textOverlay2 = new p5(function(sketch) {
         lineHeight = 40;
 
         // Positions des textes
-        sketch.titleY = sketch.height / 10 - 20;
+        sketch.titleY = sketch.height / 10 - 30;
         sketch.subtitleY = sketch.height / 8 + 20;
         
         // Espacement entre sous-titres
@@ -76,7 +76,7 @@ let textOverlay2 = new p5(function(sketch) {
         subtileSpace2 = 120;
         subtileSpace3 = 180;
 
-        sketch.descriptionY = sketch.height / 1.6;
+        sketch.descriptionY = sketch.height / 1.5;
     }
 
     // Fonction pour définir le layout en mode paysage
