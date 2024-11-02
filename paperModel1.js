@@ -88,7 +88,7 @@ const sketch2 = (p) => {
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
 
         // Calculer les largeurs de ligne
-        lineWidth2 = p.max(270, 370 * scaleFactor);
+        lineWidth2 = p.max(270, 380 * scaleFactor);
         lineWidth3 = p.max(160, 230 * scaleFactor);
         lineWidth4 = p.max(160, 230 * scaleFactor);
 
@@ -97,6 +97,59 @@ const sketch2 = (p) => {
         paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
     }
+
+   // Constantes en dehors de la fonction pour éviter de recréer l'objet à chaque appel
+const specialWords = {
+    "a,a'": [255, 150, 150], // Rouge
+    "a'": [255, 150, 150],   // Rouge
+    "a": [255, 150, 150],    // Rouge
+    "c": [150, 255, 150],    // Vert
+    "c'": [150, 255, 150],   // Vert
+    "c,c'": [150, 255, 150],   // Vert
+    "cd,c'd'": [150, 255, 150],   // Vert
+    "APA'": [150, 255, 150],   // Vert
+    "mm'": [150, 150, 255], // Bleu
+    "C1": [0, 0, 255], // Bleu
+    "C1d": [255, 165, 0], // Orange
+    "bc,b'c'": [255, 150, 150],
+};
+
+function drawColoredText(p, line, x, y, lineWidth) {
+    let words = line.split(" ");
+    let currentLine = [];
+    let lineWidthAccumulated = 0;
+    let lineY = y;
+
+    words.forEach((word) => {
+        let wordWidth = p.textWidth(word + " ");
+        if (lineWidthAccumulated + wordWidth > lineWidth && currentLine.length > 0) {
+            justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
+            currentLine = [];
+            lineWidthAccumulated = 0;
+            lineY += lineSpacing2;
+        }
+        currentLine.push(word);
+        lineWidthAccumulated += wordWidth;
+    });
+
+    if (currentLine.length > 0) {
+        justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
+    }
+}
+
+function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
+    let totalWordsWidth = lineWords.reduce((sum, word) => sum + p.textWidth(word), 0);
+    let extraSpace = lineWidth - totalWordsWidth;
+    let spaceWidth = lineWords.length > 1 ? extraSpace / (lineWords.length - 1) : 0;
+    let currentX = x;
+
+    lineWords.forEach((word) => {
+        let color = specialWords[word] || [255, 255, 255]; // Blanc par défaut
+        p.fill(...color);
+        p.text(word, currentX, y);
+        currentX += p.textWidth(word) + spaceWidth;
+    });
+}
 
     // Classe représentant un rectangle
     class Rectangle {
@@ -114,8 +167,8 @@ const sketch2 = (p) => {
             this.targetShiftX = 0; // Décalage horizontal cible
 
             // Propriétés pour gérer le décalage vertical
-            this.currentShiftY = 200; // Déplacement initial de 120 pixels vers le bas
-            this.targetShiftY = 120; // Position finale décalée de 70 pixels sur l'axe Y
+            this.currentShiftY = 120; // Déplacement initial de 120 pixels vers le bas
+            this.targetShiftY = 70; // Position finale décalée de 70 pixels sur l'axe Y
         }
 
         // Méthode pour dessiner le rectangle avec une opacité dynamique
@@ -178,9 +231,9 @@ const sketch2 = (p) => {
                         `Fig(3): a,a' point situé sur le sol,  en avant  du mur, et`,
                         `se confondant avec sa projection horizontale a         `,
                         `Fig(4): a,a' point situé sur la ligne de  terre  et se con-`,
-                        `fondant avec chacune de ses projections.           `,
+                        `fondant avec chacune de ses projections.            `,
                         `Fig(5): a,a' point situé dans l'angle  antérieur inférieur`,
-                        `figuré par le coude d'une pièce de cuivre.         `,
+                        `figuré par le coude d'une pièce de cuivre.          `,
                         `Fig(6): a,a' point situé  sur le mur,  au dessous  du sol.`,
                         `Le point vient en a'après le rabattement du plan verti-`,
                         `cal sur le plan horizontal. Dans l'espace,  il n'est autre `,
@@ -215,12 +268,12 @@ const sketch2 = (p) => {
                         `C1 rabattement du point c' sur le sol.             `,
                         `C1d rabattement de la droite sur le même plan.`,
                         `cdC1 angle que fait le droite avec le plan horizontal.`,
-                        `Autre Méthode d1 rabattement du point d sur le mur, par`,
-                        `une rotation autour de cc'.                       `,
+                        `Autre Méthode d1 rabattement du point d sur le mur,`,
+                        `par une rotation autour de cc'.                   `,
                         `c'd1 rabattement de la droite sur le même plan.`,
                         `c'd1c angle de la droite avec le plan horizontal.`,
-                        `Distance de deux points: a,a' point donné, figuré par le`,
-                        `coude d'une pièce de cuivre.                       `,
+                        `Distance de deux points: a,a' point donné, figuré par`,
+                        `le coude d'une pièce de cuivre.                       `,
                         `b,b' autre point donné, également figuré par le coude`,
                         `d'une pièce de cuivre.                             `,
                         `cd,c'd' droite passant par les deux points.        `,
@@ -228,8 +281,8 @@ const sketch2 = (p) => {
                         `autour de cd.                                      `,
                         `B1 rabattement du point bb' sur le même plan.`,
                         `A1B1 distance des deux points.                     `,
-                        `Autre méthode. a'1 rabattement du point a,a' sur le mur,`,
-                        `par une rotation autour de cc'.                    `,
+                        `Autre méthode. a'1 rabattement du point a,a' sur le`,
+                        `mur, par une rotation autour de cc'.                    `,
                         `b1' rabattement du point b,b' sur le même plan.`,
                         `a'1b'1 distance des deux points.                  `,
                     ]
@@ -390,7 +443,7 @@ const sketch2 = (p) => {
                         `mm' point donné, figuré par le coude de la pièce`,
                         `de cuivre.                                 `,
                         `bc,b'c' droite passant par le point et perpendiculaire`,
-                        `au plan donné figurée par le branche libre du`,
+                        `au plan donné figurée par la branche libre du`,
                         `fil de fer.                                 `,
                     ],
                 });
@@ -604,7 +657,7 @@ const sketch2 = (p) => {
                 let y = -((rows * (baseSize + spacing) - spacing) / 2) + baseSize / 2 + row * (baseSize + spacing);
 
                 // Garder le décalage +70 comme demandé
-                let d = p.dist(relMouseX, relMouseY, x + rect.currentShiftX, y + rect.currentShiftY + 120);
+                let d = p.dist(relMouseX, relMouseY, x + rect.currentShiftX, y + rect.currentShiftY + 70);
 
                 if (d < rect.currentSize / 2) { // Si la souris est sur le rectangle
                     hoveredRect = rect.number; // Stocker le numéro du rectangle survolé
@@ -616,7 +669,7 @@ const sketch2 = (p) => {
         // Définir les opacités cibles en fonction de l'état de survol
         if (hoveredRect !== null) {
             bgTargetOpacity = 20;
-            rectTargetOpacity = 20;
+            rectTargetOpacity = 10;
         } else {
             bgTargetOpacity = 200;
             rectTargetOpacity = 200;
@@ -642,13 +695,13 @@ const sketch2 = (p) => {
                     if (rect.number === hoveredRect) {
                         rect.targetSize = hoverSize; // Agrandir le rectangle survolé
                         if (rect.row === 0) {
-                            rect.targetShiftY = 120 - shiftAmount; // Déplacer légèrement vers le haut
+                            rect.targetShiftY = 70 - shiftAmount; // Déplacer légèrement vers le haut
                         } else if (rect.row === 1) {
-                            rect.targetShiftY = 120 + shiftAmount; // Déplacer légèrement vers le bas
+                            rect.targetShiftY = 70 + shiftAmount; // Déplacer légèrement vers le bas
                         }
                     } else {
                         rect.targetSize = baseSize; // Réinitialiser la taille des autres rectangles
-                        rect.targetShiftY = 120; // Réinitialiser le décalage vertical
+                        rect.targetShiftY = 70; // Réinitialiser le décalage vertical
                     }
 
                     // Mettre à jour les propriétés pour des transitions fluides
@@ -660,7 +713,7 @@ const sketch2 = (p) => {
             rectangles.forEach(rect => {
                 rect.targetSize = baseSize; // Réinitialiser la taille
                 rect.targetShiftX = 0; // Réinitialiser le décalage horizontal
-                rect.targetShiftY = 120; // Réinitialiser le décalage vertical
+                rect.targetShiftY = 70; // Réinitialiser le décalage vertical
 
                 // Mettre à jour les propriétés pour des transitions fluides
                 rect.update();
@@ -668,39 +721,24 @@ const sketch2 = (p) => {
         }
 
         // Interpoler les opacités vers les cibles
-        bgOpacity = p.lerp(bgOpacity, bgTargetOpacity, fadeSpeed);
-        rectOpacity = p.lerp(rectOpacity, rectTargetOpacity, fadeSpeed);
-
+        const targetOpacity = hoveredRect !== null ? 10 : 200;
+        bgOpacity = p.lerp(bgOpacity, targetOpacity, fadeSpeed);
+        rectOpacity = p.lerp(rectOpacity, targetOpacity, fadeSpeed);
         // Gestion des images avec fade-in uniquement
-        if (hoveredRect !== null) {
-            let newImageIndex = hoveredRect - 1;
-
-            if (currentImageIndex !== newImageIndex) {
-                // Réinitialiser l'opacité de l'image précédente
-                if (currentImageIndex !== -1) {
-                    imageOpacities[currentImageIndex] = 0;
-                }
-
-                // Mettre à jour l'index de l'image actuelle
-                currentImageIndex = newImageIndex;
-
-                // Définir l'opacité cible pour l'image actuelle
-                imageTargetOpacities[currentImageIndex] = 255;
-
-                // Mettre à jour le texte actuel
-                currentText = texts[currentImageIndex];
-            }
-        } else {
-            // Aucune image n'est survolée, réinitialiser l'image actuelle
+        if (hoveredRect !== null && currentImageIndex !== hoveredRect - 1) {
+            // Nouvelle image et texte à afficher
             if (currentImageIndex !== -1) {
                 imageOpacities[currentImageIndex] = 0;
-                currentImageIndex = -1;
             }
-
-            // Réinitialiser le texte
+            currentImageIndex = hoveredRect - 1;
+            imageTargetOpacities[currentImageIndex] = 255;
+            currentText = texts[currentImageIndex];
+        } else if (hoveredRect === null && currentImageIndex !== -1) {
+            // Réinitialiser l'image et le texte
+            imageOpacities[currentImageIndex] = 0;
+            currentImageIndex = -1;
             currentText = null;
         }
-
         // Mettre à jour les opacités des images en fonction des cibles
         for (let i = 0; i < imageOpacities.length; i++) {
             imageOpacities[i] = p.lerp(imageOpacities[i], imageTargetOpacities[i], 0.1);
@@ -768,45 +806,11 @@ const sketch2 = (p) => {
 
                 // Aligner le texte à gauche
                 p.textAlign(p.LEFT, p.TOP);
-
                 currentText.descriptions2.forEach(line => {
-                    // Split the line into words
-                    let words = line.split(' ');
-
-                    // Calculate total width of words
-                    let totalWordsWidth = words.reduce((sum, word) => sum + p.textWidth(word), 0);
-
-                    // Calculate the number of spaces
-                    let numberOfSpaces = words.length - 1;
-
-                    // Maximum line width is lineWidth2
-                    let lineWidth = lineWidth2;
-
-                    // If total words width is greater than lineWidth, we need to handle it
-                    if (totalWordsWidth > lineWidth) {
-                        // Scale down the font size or wrap the text
-                        // For simplicity, we'll draw the text normally
-                        p.text(line, description2X, description2Y);
-                    } else {
-                        let extraSpace = lineWidth - totalWordsWidth;
-
-                        let spaceWidth = numberOfSpaces > 0 ? extraSpace / numberOfSpaces : 0;
-
-                        // Start drawing words
-                        let x = description2X;
-
-                        words.forEach((word, index) => {
-                            p.text(word, x, description2Y);
-                            x += p.textWidth(word);
-                            if (index < words.length - 1) {
-                                x += spaceWidth;
-                            }
-                        });
-                    }
-
-                    description2Y += lineSpacing2;
+                    drawColoredText(p, line, description2X, description2Y, lineWidth2);
+                    description2Y += lineSpacing2; // Ajouter l'espacement des lignes
                 });
-
+            
                 // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
                 p.textAlign(p.CENTER, p.TOP);
             }
@@ -941,6 +945,11 @@ const sketch2 = (p) => {
         // Aucun recalcul supplémentaire nécessaire car les positions sont recalculées dynamiquement dans draw()
     };
 };
+
+// Initialiser le second sketch après le chargement de p5.js
+if (typeof p5 !== 'undefined') {
+    new p5(sketch2);
+}
 
 // Initialiser le second sketch après le chargement de p5.js
 if (typeof p5 !== 'undefined') {
