@@ -56,6 +56,9 @@ const sketch2 = (p) => {
     let paragrapheSpacing2; // Pour descriptions2
     let paragrapheSpacing3; // Pour descriptions3
     let paragrapheSpacing4; // Pour descriptions4
+    let description2X; // Position X pour descriptions2
+    let description2Y; // Position Y pour descriptions2
+    let margin;        // Marge utilisée pour les descriptions2
 
     // Déclarer targetShiftY globalement
     let targetShiftY = 70; // Valeur par défaut
@@ -84,83 +87,98 @@ const sketch2 = (p) => {
     }
     
     // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
-    function calculateSizes() {
-        const initialWidth = 1600; // Largeur de référence pour baseSize et spacing
-        let scaleFactor = p.width / initialWidth;
-        // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
+   function calculateSizes() {
+    const initialWidth = 1600; // Largeur de référence pour baseSize et spacing
+    let scaleFactor = p.width / initialWidth;
+    // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
 
-        setGridBasedOnOrientation();
+    setGridBasedOnOrientation();
+    
+    // Ajout d'ajustements basés sur l'orientation
+    if (isPortrait()) {
+        baseSize = p.max(70, 80 * scaleFactor);
+        spacing = p.max(18, 24 * scaleFactor);
+        hoverSize = 90;
+
+        titleSize = p.max(36, 44 * scaleFactor);
+        descriptionSize = p.max(26, 34 * scaleFactor);
+        description2Size = p.max(20, 24 * scaleFactor);
+        description3Size = p.max(10, 14 * scaleFactor);
+        description4Size = p.max(10, 14 * scaleFactor);
+
+        // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
+        lineSpacing = p.max(30, 40 * scaleFactor);
+        lineSpacing2 = p.max(30, 40 * scaleFactor);
+        lineSpacing3 = p.max(12, 18 * scaleFactor);
+        lineSpacing4 = p.max(12, 18 * scaleFactor);
+
+        // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
+        titleToDescriptionSpacing = p.max(40, 80 * scaleFactor);
+
+        // Ajuster l'écart pour description2Y, description3Y, et description4Y
+        description2YShift = p.map(scaleFactor, 0, 1, 0, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         
-        // Ajout d'ajustements basés sur l'orientation
-        if (isPortrait()) {
-            baseSize = p.max(70, 80 * scaleFactor);
-            spacing = p.max(18, 24 * scaleFactor);
-            hoverSize = 90;
-        } else {
-            baseSize = p.max(40, 50 * scaleFactor); // Exemple: plus grand en paysage
-            spacing = p.max(14, 20 * scaleFactor);  // Exemple: plus grand en paysage
-            hoverSize = 60;
-        }
+        // Calculer les largeurs de ligne
+        lineWidth2 = p.max(360, 440 * scaleFactor);
+        lineWidth3 = p.max(160, 230 * scaleFactor);
+        lineWidth4 = p.max(160, 230 * scaleFactor);
 
-        // Ajuster les tailles de police proportionnellement, avec des minima
-        if (isPortrait()) {
-            titleSize = p.max(36, 44 * scaleFactor);
-            descriptionSize = p.max(26, 34 * scaleFactor);
-            description2Size = p.max(20, 24 * scaleFactor);
-            description3Size = p.max(10, 14 * scaleFactor);
-            description4Size = p.max(10, 14 * scaleFactor);
-            // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
-            lineSpacing = p.max(30, 40 * scaleFactor);
-            lineSpacing2 = p.max(30, 40 * scaleFactor);
-            lineSpacing3 = p.max(12, 18 * scaleFactor);
-            lineSpacing4 = p.max(12, 18 * scaleFactor);
-            // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
-            titleToDescriptionSpacing = p.max(40, 80 * scaleFactor);
+        // Calculer les espacements des paragraphes
+        paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
+        paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
+        paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
 
-            // Ajuster l'écart pour description2Y, description3Y, et description4Y
-            description2YShift = p.map(scaleFactor, 0, 1, 0, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-            description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-            description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-            
-            // Calculer les largeurs de ligne
-            lineWidth2 = p.max(360, 440 * scaleFactor);
-            lineWidth3 = p.max(160, 230 * scaleFactor);
-            lineWidth4 = p.max(160, 230 * scaleFactor);
+        // Définir la marge pour descriptions2
+        margin = paragrapheSpacing2;
 
-            // Calculer les espacements des paragraphes
-            paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
-            paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
-            paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
-        } else {
-            titleSize = p.max(18, 28 * scaleFactor); // Plus grand en paysage
-            descriptionSize = p.max(16, 22 * scaleFactor); // Plus grand en paysage
-            description2Size = p.max(12, 16 * scaleFactor); // Plus grand en paysage
-            description3Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
-            description4Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
-            // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
-            lineSpacing = p.max(14, 24 * scaleFactor);
-            lineSpacing2 = p.max(14, 20 * scaleFactor);
-            lineSpacing3 = p.max(12, 18 * scaleFactor);
-            lineSpacing4 = p.max(12, 18 * scaleFactor);
-            // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
-            titleToDescriptionSpacing = p.max(20, 40 * scaleFactor);
+        // Calculer description2X et description2Y
+        description2X = p.width / 2 - margin;
+        description2Y = titleY + titleToDescriptionSpacing + description2YShift + 10;
+    } else {
+        baseSize = p.max(40, 50 * scaleFactor);
+        spacing = p.max(14, 20 * scaleFactor);
+        hoverSize = 60;
 
-            // Ajuster l'écart pour description2Y, description3Y, et description4Y
-            description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-            description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-            description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        titleSize = p.max(18, 28 * scaleFactor); // Plus grand en paysage
+        descriptionSize = p.max(16, 22 * scaleFactor); // Plus grand en paysage
+        description2Size = p.max(12, 16 * scaleFactor); // Plus grand en paysage
+        description3Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
+        description4Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
 
-            // Calculer les largeurs de ligne
-            lineWidth2 = p.max(320, 440 * scaleFactor);
-            lineWidth3 = p.max(160, 230 * scaleFactor);
-            lineWidth4 = p.max(160, 230 * scaleFactor);
+        // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
+        lineSpacing = p.max(14, 24 * scaleFactor);
+        lineSpacing2 = p.max(14, 20 * scaleFactor);
+        lineSpacing3 = p.max(12, 18 * scaleFactor);
+        lineSpacing4 = p.max(12, 18 * scaleFactor);
 
-            // Calculer les espacements des paragraphes
-            paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
-            paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
-            paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
-        }
+        // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
+        titleToDescriptionSpacing = p.max(20, 40 * scaleFactor);
+
+        // Ajuster l'écart pour description2Y, description3Y, et description4Y
+        description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+
+        // Calculer les largeurs de ligne
+        lineWidth2 = p.max(320, 440 * scaleFactor);
+        lineWidth3 = p.max(160, 230 * scaleFactor);
+        lineWidth4 = p.max(160, 230 * scaleFactor);
+
+        // Calculer les espacements des paragraphes
+        paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
+        paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
+        paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
+
+        // Définir la marge pour descriptions2
+        margin = paragrapheSpacing2;
+
+        // Calculer description2X et description2Y
+        description2X = p.width / 2 + margin;
+        description2Y = titleY + titleToDescriptionSpacing + description2YShift + 10;
     }
+}
 
     // Fonction pour initialiser ou réinitialiser les rectangles
     function initializeRectangles() {
@@ -881,24 +899,23 @@ const sketch2 = (p) => {
 
             // Vérifier si descriptions2 existe et l'afficher
             if (currentText.descriptions2) {
-                p.textSize(description2Size);
-                const margin = paragrapheSpacing2;
-                let description2X = p.width / 2 - margin;
-                let description2Y = titleY + titleToDescriptionSpacing + description2YShift;
+    p.textSize(description2Size);
+    
+    // description2X et description2Y sont déjà calculés dans calculateSizes
+    // Utiliser les variables globales description2X et description2Y
+    
+    // Aligner le texte à gauche
+    p.textAlign(p.LEFT, p.TOP);
 
-                // Aligner le texte à gauche
-                p.textAlign(p.LEFT, p.TOP);
+    // Utiliser uniquement drawColoredText sans p.text
+    currentText.descriptions2.forEach(line => {
+        drawColoredText(p, line, description2X, description2Y, lineWidth2);
+        description2Y += lineSpacing2; // Ajouter l'espacement des lignes
+    });
 
-                // Utiliser uniquement drawColoredText sans p.text
-                currentText.descriptions2.forEach(line => {
-                    drawColoredText(p, line, description2X, description2Y, lineWidth2);
-                    description2Y += lineSpacing2; // Ajouter l'espacement des lignes
-                });
-
-                // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
-                p.textAlign(p.CENTER, p.TOP);
-            }
-
+    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
+    p.textAlign(p.CENTER, p.TOP);
+}
             // Vérifier si descriptions3 existe et l'afficher
             if (currentText.descriptions3) {
                 p.textSize(description3Size);
