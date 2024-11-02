@@ -47,8 +47,8 @@ let textOverlay2 = new p5(function(sketch) {
         // Taille et position du logo
         let logoSizeX = sketch.map(sketch.width, 600, 1400, 100, 250); // Ajuster dynamiquement
         let logoSizeY = sketch.map(sketch.width, 600, 1400, 75, 180);
-        let logoX = 60;
-        let logoY = 20;
+        let logoX = 100;
+        let logoY = 40;
 
         // Appliquer le tint et dessiner le logo
         let sizeRatio = sketch.map(sketch.width, 600, 1400, 0, 1);
@@ -58,15 +58,15 @@ let textOverlay2 = new p5(function(sketch) {
         sketch.noTint();
 
         // Définir les tailles de texte pour le portrait
-        titleFontSize = 14;
-        subtitleFontSize = 48;
-        descriptionFontSize = 38;
+        titleFontSize = 46;
+        subtitleFontSize = 50;
+        descriptionFontSize = 40;
         authorFontSize = 38;
-        lineHeight = 40;
+        lineHeight = 50;
 
         // Positions des textes
         sketch.titleY = sketch.height / 10 - 20;
-        sketch.subtitleY = sketch.height / 10 + 10;
+        sketch.subtitleY = sketch.height / 8 + 10;
         sketch.descriptionY = sketch.height / 1.3;
     }
 
