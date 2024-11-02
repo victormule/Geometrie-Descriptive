@@ -1,5 +1,5 @@
 // Initialiser le sketch textOverlay et le rendre globalement accessible
-let textOverlay = new p5(function(sketch) {
+let textOverlay2 = new p5(function(sketch) {
     let opacity = 255; // Valeur initiale de l'opacité du texte
     let fading = false; // Indicateur de démarrage de la réduction d'opacité
     let textCanvas;
