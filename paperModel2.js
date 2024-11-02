@@ -56,7 +56,7 @@ const sketch2 = (p) => {
     let paragrapheSpacing2; // Pour descriptions2
     let paragrapheSpacing3; // Pour descriptions3
     let paragrapheSpacing4; // Pour descriptions4
-
+    let description2X = p.width / 2 - margin;
     // Déclarer targetShiftY globalement
     let targetShiftY = 70; // Valeur par défaut
 
@@ -131,6 +131,7 @@ const sketch2 = (p) => {
             paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
             paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
             paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
+            description2X = p.width - margin;
         } else {
             titleSize = p.max(18, 28 * scaleFactor); // Plus grand en paysage
             descriptionSize = p.max(16, 22 * scaleFactor); // Plus grand en paysage
@@ -889,7 +890,7 @@ const sketch2 = (p) => {
 if (currentText.descriptions2) {
     p.textSize(description2Size);
     const margin = paragrapheSpacing2;
-    let description2X = p.width / 2 - margin;
+
 
     let description2Y = titleY + titleToDescriptionSpacing + description2YShift;
 
