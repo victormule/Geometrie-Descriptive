@@ -150,6 +150,58 @@ function setTargetShiftYBasedOnOrientation() {
             }
         }
     }
+ // Constantes en dehors de la fonction pour éviter de recréer l'objet à chaque appel
+const specialWords = {
+    "a,a'": [255, 150, 150], // Rouge
+    "a'": [255, 150, 150],   // Rouge
+    "a": [255, 150, 150],    // Rouge
+    "c": [150, 255, 150],    // Vert
+    "c'": [150, 255, 150],   // Vert
+    "c,c'": [150, 255, 150],   // Vert
+    "cd,c'd'": [150, 255, 150],   // Vert
+    "APA'": [150, 255, 150],   // Vert
+    "mm'": [150, 150, 255], // Bleu
+    "C1": [0, 0, 255], // Bleu
+    "C1d": [255, 165, 0], // Orange
+    "bc,b'c'": [255, 150, 150],
+};
+
+function drawColoredText(p, line, x, y, lineWidth) {
+    let words = line.split(" ");
+    let currentLine = [];
+    let lineWidthAccumulated = 0;
+    let lineY = y;
+
+    words.forEach((word) => {
+        let wordWidth = p.textWidth(word + " ");
+        if (lineWidthAccumulated + wordWidth > lineWidth && currentLine.length > 0) {
+            justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
+            currentLine = [];
+            lineWidthAccumulated = 0;
+            lineY += lineSpacing2;
+        }
+        currentLine.push(word);
+        lineWidthAccumulated += wordWidth;
+    });
+
+    if (currentLine.length > 0) {
+        justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
+    }
+}
+
+function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
+    let totalWordsWidth = lineWords.reduce((sum, word) => sum + p.textWidth(word), 0);
+    let extraSpace = lineWidth - totalWordsWidth;
+    let spaceWidth = lineWords.length > 1 ? extraSpace / (lineWords.length - 1) : 0;
+    let currentX = x;
+
+    lineWords.forEach((word) => {
+        let color = specialWords[word] || [255, 255, 255]; // Blanc par défaut
+        p.fill(...color);
+        p.text(word, currentX, y);
+        currentX += p.textWidth(word) + spaceWidth;
+    });
+}
 
 
 
