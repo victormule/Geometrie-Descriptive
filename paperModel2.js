@@ -1,68 +1,72 @@
-// sketch2.js
-
 const sketch2 = (p) => {
-    let myFont; // Variable pour stocker la police
-    let rectangles = []; // Tableau pour stocker les objets rectangles
-    let rows = 3; // Nombre de lignes
-    let cols = 10; // Nombre de colonnes
-    let baseSize = 80; // Taille de base des rectangles (modifiable)
-    let hoverSize = 90; // Taille des rectangles au survol
-    let spacing = 24; // Espacement entre les rectangles (modifiable)
-    const shiftAmount = 5; // Décalage vertical lors du survol
-    const shiftOffsetX = 5; // Décalage horizontal pour maintenir l'espacement
+    let myFont;
+    let rectangles = [];
+    let rows = 3;
+    let cols = 10;
+    let baseSize = 80;
+    let hoverSize = 90;
+    let spacing = 24;
+    const shiftAmount = 5;
+    const shiftOffsetX = 5;
+    let targetShiftY;  // Déclare targetShiftY globalement
 
-    // Variables pour l'animation de fade-in
-    let bgOpacity = 0; // Opacité initiale du fond noir (modifié à 0 pour fade-in)
-    let rectOpacity = 0; // Opacité initiale des rectangles blancs et des nombres (modifié à 0 pour fade-in)
-    const fadeSpeed = 0.05; // Vitesse de l'interpolation
+    let bgOpacity = 0;
+    let rectOpacity = 0;
+    const fadeSpeed = 0.05;
 
-    // Variables pour les images de relief
-    let reliefImages = [];          // Tableau pour stocker les images de relief
-    let imageOpacities = [];        // Tableau pour stocker l'opacité actuelle des images
-    let imageTargetOpacities = [];  // Tableau pour stocker l'opacité cible des images
+    let reliefImages = [];
+    let imageOpacities = [];
+    let imageTargetOpacities = [];
 
-    // Tableau de textes pour chaque rectangle
-    let texts = []; // Array de 30 textes
+    let texts = [];
+    let currentText = null;
+    let textOpacity = 0;
+    let textTargetOpacity = 0;
+    let currentImageIndex = -1;
 
-    // Variables pour la gestion du texte dynamique
-    let currentText = null;           // Texte actuellement affiché (objet avec title et descriptions)
-    let textOpacity = 0;              // Opacité actuelle du texte
-    let textTargetOpacity = 0;        // Opacité cible du texte
+    let bgTargetOpacity = 200;
+    let rectTargetOpacity = 200;
 
-    // Variable pour stocker l'image actuellement affichée
-    let currentImageIndex = -1;       // -1 signifie aucune image affichée
+    let titleSize = 24;
+    let descriptionSize = 18;
+    let description2Size = 14;
+    let description3Size = 14;
+    let description4Size = 14;
+    let lineSpacing = 24;
+    let lineSpacing2 = 20;
+    let lineSpacing3 = 18;
+    let lineSpacing4 = 18;
+    let titleToDescriptionSpacing = 40;
+    let description2YShift = 0;
+    let description3YShift = 0;
+    let description4YShift = 0;
+    let lineWidth2;
+    let lineWidth3;
+    let lineWidth4;
+    let paragrapheSpacing2;
+    let paragrapheSpacing3;
+    let paragrapheSpacing4;
 
-    // Variables pour gérer les opacités cibles
-    let bgTargetOpacity = 200;        // Opacité cible du fond noir
-    let rectTargetOpacity = 200;      // Opacité cible des rectangles blancs
+    const specialWords = {
+        "a,a'": [255, 150, 150],
+        "a'": [255, 150, 150],
+        "a": [255, 150, 150],
+        "c": [150, 255, 150],
+        "c'": [150, 255, 150],
+        "c,c'": [150, 255, 150],
+        "cd,c'd'": [150, 255, 150],
+        "APA'": [150, 255, 150],
+        "mm'": [150, 150, 255],
+        "C1": [0, 0, 255],
+        "C1d": [255, 165, 0],
+        "bc,b'c'": [255, 150, 150],
+    };
 
-    // Variables pour les tailles de police, l'espacement des lignes et l'écart titre-descriptions
-    let titleSize = 24;               // Taille initiale du titre
-    let descriptionSize = 18;         // Taille initiale des descriptions
-    let description2Size = 14;        // Taille initiale des descriptions2
-    let description3Size = 14;        // Taille initiale des descriptions3
-    let description4Size = 14;        // Taille initiale des descriptions4
-    let lineSpacing = 24;             // Espacement initial entre les lignes
-    let lineSpacing2 = 20;            // Espacement initial entre les lignes pour descriptions2
-    let lineSpacing3 = 18;            // Espacement initial entre les lignes pour descriptions3
-    let lineSpacing4 = 18;            // Espacement initial entre les lignes pour descriptions4
-    let titleToDescriptionSpacing = 40; // Ecart initial entre le titre et les descriptions
-    let description2YShift = 0;       // Ajustement dynamique pour description2Y
-    let description3YShift = 0;       // Ajustement dynamique pour description3Y
-    let description4YShift = 0;       // Ajustement dynamique pour description4Y
-    let lineWidth2; // Pour descriptions2
-    let lineWidth3; // Pour descriptions3
-    let lineWidth4; // Pour descriptions4
-    let paragrapheSpacing2; // Pour descriptions2
-    let paragrapheSpacing3; // Pour descriptions3
-    let paragrapheSpacing4; // Pour descriptions4
-
-        // Fonction pour déterminer l'orientation
     function isPortrait() {
         return p.windowHeight > p.windowWidth;
     }
 
-function setGridBasedOnOrientation() {
+    function setGridBasedOnOrientation() {
         if (isPortrait()) {
             rows = 3;
             cols = 10;
@@ -72,35 +76,29 @@ function setGridBasedOnOrientation() {
         }
     }
 
-function setTargetShiftYBasedOnOrientation() {
+    function setTargetShiftYBasedOnOrientation() {
         if (isPortrait()) {
-            targetShiftY = 280; // Déplace les rectangles plus vers le bas en mode portrait
+            targetShiftY = 280;
         } else {
-            targetShiftY = 70; // Valeur par défaut pour le mode paysage
+            targetShiftY = 70;
         }
     }
-    
-    // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
-    function calculateSizes() {
-        const initialWidth = 1600; // Largeur de référence pour baseSize et spacing
-        let scaleFactor = p.width / initialWidth;
-        // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
 
-         setGridBasedOnOrientation();
+    function calculateSizes() {
+        const initialWidth = 1600;
+        let scaleFactor = p.width / initialWidth;
+        setGridBasedOnOrientation();
         
-        // Ajout d'ajustements basés sur l'orientation
         if (isPortrait()) {
             baseSize = p.max(70, 80 * scaleFactor);
             spacing = p.max(18, 24 * scaleFactor);
             hoverSize = 90;
         } else {
-            baseSize = p.max(40, 50 * scaleFactor); // Exemple: plus grand en paysage
-            spacing = p.max(14, 20 * scaleFactor);  // Exemple: plus grand en paysage
+            baseSize = p.max(40, 50 * scaleFactor);
+            spacing = p.max(14, 20 * scaleFactor);
             hoverSize = 60;
         }
 
-
-        // Ajuster les tailles de police proportionnellement, avec des minima
         if (isPortrait()) {
             titleSize = p.max(16, 24 * scaleFactor);
             descriptionSize = p.max(14, 18 * scaleFactor);
@@ -108,147 +106,79 @@ function setTargetShiftYBasedOnOrientation() {
             description3Size = p.max(10, 14 * scaleFactor);
             description4Size = p.max(10, 14 * scaleFactor);
         } else {
-            titleSize = p.max(18, 28 * scaleFactor); // Plus grand en paysage
-            descriptionSize = p.max(16, 22 * scaleFactor); // Plus grand en paysage
-            description2Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
-            description3Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
-            description4Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
+            titleSize = p.max(18, 28 * scaleFactor);
+            descriptionSize = p.max(16, 22 * scaleFactor);
+            description2Size = p.max(12, 18 * scaleFactor);
+            description3Size = p.max(12, 18 * scaleFactor);
+            description4Size = p.max(12, 18 * scaleFactor);
         }
 
-        // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
         lineSpacing = p.max(14, 24 * scaleFactor);
         lineSpacing2 = p.max(14, 20 * scaleFactor);
         lineSpacing3 = p.max(12, 18 * scaleFactor);
         lineSpacing4 = p.max(12, 18 * scaleFactor);
 
-        // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
         titleToDescriptionSpacing = p.max(20, 40 * scaleFactor);
 
-        // Ajuster l'écart pour description2Y, description3Y, et description4Y
-        description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-        description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-        description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true);
+        description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true);
+        description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true);
 
-        // Calculer les largeurs de ligne
         lineWidth2 = p.max(270, 370 * scaleFactor);
         lineWidth3 = p.max(160, 230 * scaleFactor);
         lineWidth4 = p.max(160, 230 * scaleFactor);
 
-        // Calculer les espacements des paragraphes
         paragrapheSpacing2 = p.max(300, 500 * scaleFactor);
         paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
     }
 
- // Fonction pour initialiser ou réinitialiser les rectangles
     function initializeRectangles() {
-        rectangles = []; // Réinitialiser le tableau des rectangles
+        rectangles = [];
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
-                let number = row * cols + col + 1; // Numérotation de 1 à (rows * cols)
+                let number = row * cols + col + 1;
                 rectangles.push(new Rectangle(row, col, number));
             }
         }
     }
- // Constantes en dehors de la fonction pour éviter de recréer l'objet à chaque appel
-const specialWords = {
-    "a,a'": [255, 150, 150], // Rouge
-    "a'": [255, 150, 150],   // Rouge
-    "a": [255, 150, 150],    // Rouge
-    "c": [150, 255, 150],    // Vert
-    "c'": [150, 255, 150],   // Vert
-    "c,c'": [150, 255, 150],   // Vert
-    "cd,c'd'": [150, 255, 150],   // Vert
-    "APA'": [150, 255, 150],   // Vert
-    "mm'": [150, 150, 255], // Bleu
-    "C1": [0, 0, 255], // Bleu
-    "C1d": [255, 165, 0], // Orange
-    "bc,b'c'": [255, 150, 150],
-};
 
-function drawColoredText(p, line, x, y, lineWidth) {
-    let words = line.split(" ");
-    let currentLine = [];
-    let lineWidthAccumulated = 0;
-    let lineY = y;
-
-    words.forEach((word) => {
-        let wordWidth = p.textWidth(word + " ");
-        if (lineWidthAccumulated + wordWidth > lineWidth && currentLine.length > 0) {
-            justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
-            currentLine = [];
-            lineWidthAccumulated = 0;
-            lineY += lineSpacing2;
-        }
-        currentLine.push(word);
-        lineWidthAccumulated += wordWidth;
-    });
-
-    if (currentLine.length > 0) {
-        justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
-    }
-}
-
-function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
-    let totalWordsWidth = lineWords.reduce((sum, word) => sum + p.textWidth(word), 0);
-    let extraSpace = lineWidth - totalWordsWidth;
-    let spaceWidth = lineWords.length > 1 ? extraSpace / (lineWords.length - 1) : 0;
-    let currentX = x;
-
-    lineWords.forEach((word) => {
-        let color = specialWords[word] || [255, 255, 255]; // Blanc par défaut
-        p.fill(...color);
-        p.text(word, currentX, y);
-        currentX += p.textWidth(word) + spaceWidth;
-    });
-}
-
-
-
-    // Classe représentant un rectangle
     class Rectangle {
         constructor(row, col, number) {
             this.row = row;
             this.col = col;
             this.number = number;
-    
+
             this.currentSize = baseSize;
             this.targetSize = baseSize;
-    
+
             this.currentShiftX = 0;
             this.targetShiftX = 0;
-    
-        // Position de départ initiale pour l'animation de descente
-        this.currentShiftY = 120;
-        this.targetShiftY = targetShiftY; // Utilise la valeur définie selon l'orientation
-        }
-    
-    
 
-        // Méthode pour dessiner le rectangle avec une opacité dynamique
+            this.currentShiftY = 120;
+            this.targetShiftY = targetShiftY;
+        }
+
         draw(x, y, opacity) {
-            p.stroke(0, 0, 0, opacity); // Bordure noire avec opacité
-            p.fill(255, 255, 255, opacity); // Blanc semi-transparent avec opacité dynamique
+            p.stroke(0, 0, 0, opacity);
+            p.fill(255, 255, 255, opacity);
             p.rect(x + this.currentShiftX, y + this.currentShiftY, this.currentSize, this.currentSize);
 
-            // Dessiner le numéro au centre du rectangle avec opacité dynamique
             p.noStroke();
-            p.fill(0, opacity + 30); // Texte noir avec opacité dynamique
+            p.fill(0, opacity + 30);
             p.textFont(myFont);
             p.textAlign(p.CENTER, p.CENTER);
-            p.textSize(this.currentSize / 3); // Taille du texte proportionnelle à la taille du rectangle
+            p.textSize(this.currentSize / 3);
             p.text(this.number, x + this.currentShiftX, y + this.currentShiftY);
         }
 
-        // Méthode pour mettre à jour les propriétés pour des transitions fluides
         update() {
-            // Interpoler la taille actuelle vers la taille cible
             this.currentSize = p.lerp(this.currentSize, this.targetSize, 0.1);
-            // Interpoler le décalage actuel vers le décalage cible
             this.currentShiftX = p.lerp(this.currentShiftX, this.targetShiftX, 0.1);
             this.currentShiftY = p.lerp(this.currentShiftY, this.targetShiftY, 0.1);
         }
     }
+
 
     // Fonction preload pour charger la police et les images avant le setup
     p.preload = function() {
