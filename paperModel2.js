@@ -125,7 +125,7 @@ const sketch2 = (p) => {
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         
         // Calculer les largeurs de ligne
-        lineWidth = p.max(450, 600 * scaleFactor);
+        lineWidth = p.max(550, 650 * scaleFactor);
         lineWidth2 = p.max(500, 600 * scaleFactor);
         lineWidth3 = p.max(160, 230 * scaleFactor);
         lineWidth4 = p.max(160, 230 * scaleFactor);
@@ -140,8 +140,8 @@ const sketch2 = (p) => {
         margin = paragrapheSpacing2;
 
         // Calculer description2X et description2Y
-        descriptionX = - 200 ;
-        description2X = p.width / 2 - margin +200;
+        descriptionX = - 220 ;
+        description2X = p.width / 2 - margin -80;
         
     } else {
         baseSize = p.max(40, 50 * scaleFactor);
