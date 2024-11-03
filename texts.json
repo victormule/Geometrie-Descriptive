@@ -1,0 +1,175 @@
+{
+    "texts": [
+      {
+        "title": "Relief 1",
+        "descriptions": [
+          "Description du point."
+        ],
+             "descriptions2": [
+                "LEGENDE",
+                "Fig(1): a,a' point situé dans l'angle antérieur supérieur,",
+                "figuré par le coude d'une pièce de cuivre.",
+                "Fig(2): a,a' point situé sur le mur, au dessus du sol, et",
+                "se confondant avec sa projection horizontale a",
+                "Fig(3): a,a' point situé sur le sol, en avant du mur, et",
+                "se confondant avec sa projection horizontale a",
+                "Fig(4): a,a' point situé sur la ligne de terre et se con-",
+                "fondant avec chacune de ses projections.",
+                "Fig(5): a,a' point situé dans l'angle antérieur inférieur",
+                "figuré par le coude d'une pièce de cuivre.",
+                "Fig(6): a,a' point situé sur le mur, au dessous du sol.",
+                "Le point vient en a'après le rabattement du plan verti-",
+                "cal sur le plan horizontal. Dans l'espace, il n'est autre que le trou 5.",
+                "Fig(7): a,a' point situé dans l'angle postérieur supérieur",
+                "figuré par le coude d'une pièce de cuivre.",
+                "Fig(8): a,a' point sur le sol derrière le mur. Ce point",
+                "n'est autre que le trou 2 avec lequel a coïncide après",
+                "le rabattement du plan vertical.",
+                "Fig(9): a,a' point situé dans l'angle postérieur inférieur,",
+                "figuré par le coude d'une pièce de cuivre.",
+                "Les projections sont les trous 1 et 4 avec lesquels a et",
+                "a' se confondent après le rabattement du plan vertical."
+            ]
+        },
+        {
+          "title": "Relief 2",
+          "descriptions": [
+            "Représentation de la droite. Tracés d'une droite.",
+            "Angle que fait une droite avec les plans de projection.",
+            "Distance de deux points."
+          ],
+          "descriptions2": [
+            "LEGENDE",
+
+                        "Représentation de la droite cd,c'd' droite représentée",
+                        "par ses deux projections,figurée par un fil noir",
+                        "Traces d'une droite d trace horizontale de la droite,",
+                        "c' trace verticale.                                ",
+                        "Angles que fait une droite avec les plans de projection.",
+                        "C1 rabattement du point c' sur le sol.             ",
+                        "C1d rabattement de la droite sur le même plan.",
+                        "cdC1 angle que fait le droite avec le plan horizontal.",
+                        "Autre Méthode d1 rabattement du point d sur le mur, par",
+                        "une rotation autour de cc'.                       ",
+                        "c'd1 rabattement de la droite sur le même plan.",
+                        "c'd1c angle de la droite avec le plan horizontal.",
+                        "Distance de deux points: a,a' point donné, figuré par le",
+                        "coude d'une pièce de cuivre.                       ",
+                        "b,b' autre point donné, également figuré par le coude",
+                        "d'une pièce de cuivre.                             ",
+                        "cd,c'd' droite passant par les deux points.        ",
+                        "A1 rabattement du point a,a' sur le sol par rotation",
+                        "autour de cd.                                      ",
+                        "B1 rabattement du point bb' sur le même plan.",
+                        "A1B1 distance des deux points.                     ",
+                        "Autre méthode. a'1 rabattement du point a,a' sur le mur,",
+                        "par une rotation autour de cc'.                    ",
+                        "b1' rabattement du point b,b' sur le même plan.",
+                        "a'1b'1 distance des deux points.                  "
+                    ]
+                },
+                {
+                  "title": "Relief 3",
+                  "descriptions": [
+                 
+                        "Représentation de la droite (cas particulier)." 
+                    ],
+                    "descriptions2": [
+                        "LEGENDE",
+                        "Représentation de la droite: ab,a'b' droite passant",
+                        "par le point b de la ligne de terre, figurée par la",
+                        "branche libre d'un fil de fer.                 ",
+                        "se confondant avec sa projection horizontale a",
+                        "Angles d'une droite avec les plans de projection:",
+                        "m,m' point pris sur la droite, figuré par le coude de",
+                        "la pièce de cuivre.                            ",
+                        "M1 rabattement de ce point sur le plan horizontal.",
+                        "bM1 rabattement de la droite sur ce plan.",
+                        "mbM1 angle de la droite avec le même plan.",
+                        "M2 rabattement du point m,m' sur le plan vertical.",
+                        "bM2 rabattement de la droite sur ce plan.",
+                        "m'bM2 angle de la droite avec le même plan."
+                    ]
+                },
+                {
+                  "title": "Relief 4",
+                  "descriptions": [
+                        "Représentation de la droite (cas particulier)."  
+                    ],
+                    "descriptions3": [
+                        "LEGENDE",
+                        "Fig(1): Droite perçant le mur au", 
+                        "dessus du sol et  le sol derrière",
+                        "le mur, figurée par une aiguille",
+                        "droite.",
+                        "a b,a'b' projections de la droite",
+                        "b' trace verticale de la droite,",
+                        "c trace horizontale ou plutôt la",
+                        "trace horizontale est le point 3",
+                        "avec laquel c coïncide, lorsqu'on",
+                        "rabat le plan vertical sur le plan",
+                        "horizontal.",
+                        "Fig(2): Droite située dans un plan",
+                        "de profil perçant le mur au dessus",
+                        "du sol, et le sol en avant du mur,",
+                        "figurée par une aiguille droite.",
+                        "m,m' et n,n' points donnés dans un",
+                        "plan de profil en déterminant la",
+                        "droite.",
+                        "M1 rabattement du point m,m' par",
+                        "une rotation autour de la trace",
+                        "horizontale du plan de profil",
+                        "(mM1 = a'u = a'm').            ",
+                        "N1 rabattement du point n,n' par",
+                        "une rotation autour de la trace",
+                        "horizontale du plan de profil",
+                        "(nN1 = a'v = a'n').            ",
+                        "M,N, rabattement de la droite",
+                        "passant par les deux points.",
+                        "a trace horizontale de la droite.",
+                        "B1 rabattement de latrace verticale",
+                        "de la droite.                   ",
+                        "b trace verticale relevée.      ",
+                        "a'aB1 angle de la droite et du plan",
+                        "horizontal.                     ",
+                        "aB1a' angle de la droite et du plan",
+                        "vertical.                       "
+
+                    ],
+                    "descriptions4": [
+                        "aa',a'b' projections de la droite",
+                        "(partie visible).                ",
+                        "Fig(3): Droite située dans un plan",
+                        "de profil, perçant le mur au dessous",
+                        "du sol et le sol en avant du mur,",
+                        "figurée par une aiguille droite.",
+                        "a trace horizontale de la droite.",
+                        "c' trace verticale de la droite ou",
+                        "plutôt cette trace est le point 2 qui",
+                        "vient s'appliquer en C', lorsqu'on",
+                        "rabat le plan vertical sur le plan",
+                        "horizontal.                      ",
+                        "Les deux traces a et c' determinent",
+                        "la droite.                       ",
+                        "C'1 rabattement de la trace verticale",
+                        "de la droite.                     ",
+                        "a'aC'1 angle de la droite et du plan",
+                        "horizontal.                       ",
+                        "aC'1a' angle de la droite et du plan",
+                        "vertical.                        ",
+                        "ab,a'b' projections de la droite",
+                        "(partie visible).                ",
+                        "Fig(4): Droite perçant le sol en avant",
+                        "du mur et le mur au dessous du sol,",
+                        "figurée par une aiguille droite.",
+                        "ab,a'b' projections de la droite.",
+                        "a trace horizontale de la droite.",
+                        "c' trace verticale, ou plutôt la trace",
+                        "verticale est le point 1 qui vient",
+                        "coïncider avec c' lorsqu'on rabat le",
+                        "plan vertical sur le plan horizontal."
+                    ]
+                }
+              
+              ]
+            }
