@@ -126,7 +126,7 @@ const sketch2 = (p) => {
         lineWidth4 = p.max(160, 230 * scaleFactor);
 
         // Calculer les espacements des paragraphes
-        paragrapheSpacing2 = p.max(300, 500 * scaleFactor);
+        paragrapheSpacing2 = p.max(800, 1000 * scaleFactor);
         paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
 
