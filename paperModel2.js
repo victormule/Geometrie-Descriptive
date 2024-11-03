@@ -185,8 +185,8 @@ const sketch2 = (p) => {
         margin = paragrapheSpacing2;
 
         // Calculer description2X et description2Y
-        descriptionX = p.width / 2 - margin;
-        description2X = p.width / 2 - margin;
+        descriptionX =  - 60;
+        description2X = p.width / 2 - margin - 60;
     }
 }
 
