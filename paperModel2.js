@@ -902,10 +902,16 @@ const sketch2 = (p) => {
     // Utiliser les variables globales descriptionX et descriptionY
     
     // Aligner le texte à gauche
-    p.textAlign(p.CENTER, p.TOP);
+    p.textAlign(p.LEFT, p.TOP);
 
-    let titleY = -p.height / 2 + 20; // Positionner le titre
-    p.text(currentText.title, 0, titleY);  
+    // Utiliser uniquement drawColoredText sans p.text
+    currentText.descriptions.forEach(line => {
+        drawColoredText(p, line, descriptionX, descriptionY, lineWidth);
+        descriptionY += lineSpacing; // Ajouter l'espacement des lignes
+    });
+
+    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
+    p.textAlign(p.CENTER, p.TOP);
 }
             // Vérifier si descriptions2 existe et l'afficher
             if (currentText.descriptions2) {
