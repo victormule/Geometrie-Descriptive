@@ -104,7 +104,7 @@ const sketch2 = (p) => {
         hoverSize = 90;
 
         titleSize = p.max(36, 44 * scaleFactor);
-        descriptionSize = p.max(32, 40 * scaleFactor);
+        descriptionSize = p.max(28, 34 * scaleFactor);
         description2Size = p.max(20, 24 * scaleFactor);
         description3Size = p.max(10, 14 * scaleFactor);
         description4Size = p.max(10, 14 * scaleFactor);
@@ -120,12 +120,12 @@ const sketch2 = (p) => {
 
         // Ajuster l'écart pour description2Y, description3Y, et description4Y
         descriptionYShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-        description2YShift = p.map(scaleFactor, 0, 1, 200, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description2YShift = p.map(scaleFactor, 0, 1, 260, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         
         // Calculer les largeurs de ligne
-        lineWidth = p.max(550, 650 * scaleFactor);
+        lineWidth = p.max(500, 650 * scaleFactor);
         lineWidth2 = p.max(500, 600 * scaleFactor);
         lineWidth3 = p.max(160, 230 * scaleFactor);
         lineWidth4 = p.max(160, 230 * scaleFactor);
@@ -140,7 +140,7 @@ const sketch2 = (p) => {
         margin = paragrapheSpacing2;
 
         // Calculer description2X et description2Y
-        descriptionX = - 220 ;
+        descriptionX = - 260 ;
         description2X = p.width / 2 - margin -80;
         
     } else {
