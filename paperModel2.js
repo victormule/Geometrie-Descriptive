@@ -134,7 +134,7 @@ const sketch2 = (p) => {
         margin = paragrapheSpacing2;
 
         // Calculer description2X et description2Y
-        description2X = 0;
+        description2X = - p.width / 2 ;
         
     } else {
         baseSize = p.max(40, 50 * scaleFactor);
