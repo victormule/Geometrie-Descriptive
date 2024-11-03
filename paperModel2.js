@@ -88,7 +88,7 @@ const sketch2 = (p) => {
     
     // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
    function calculateSizes() {
-    const initialWidth = 900; // Largeur de référence pour baseSize et spacing
+    const initialWidth = 1600; // Largeur de référence pour baseSize et spacing
     let scaleFactor = p.width / initialWidth;
     // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
 
@@ -880,7 +880,7 @@ const sketch2 = (p) => {
             // Partie pour le titre (en gras italique et taille dynamique)
             p.textSize(titleSize);
             p.textStyle(p.BOLDITALIC);
-            let titleY = -p.height / 6 + 20; // Positionner le titre
+            let titleY = -p.height / 2 + 20; // Positionner le titre
             p.text(currentText.title, 0, titleY);  
 
             // Partie pour les descriptions (en normal et taille dynamique)
