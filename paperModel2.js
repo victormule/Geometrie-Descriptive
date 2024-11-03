@@ -149,13 +149,13 @@ const sketch2 = (p) => {
         hoverSize = 60;
 
         titleSize = p.max(18, 28 * scaleFactor); // Plus grand en paysage
-        descriptionSize = p.max(16, 22 * scaleFactor); // Plus grand en paysage
+        descriptionSize = p.max(28, 32 * scaleFactor); // Plus grand en paysage
         description2Size = p.max(12, 16 * scaleFactor); // Plus grand en paysage
         description3Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
         description4Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
 
         // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
-        lineSpacing = p.max(14, 24 * scaleFactor);
+        lineSpacing = p.max(22, 26 * scaleFactor);
         lineSpacing2 = p.max(14, 20 * scaleFactor);
         lineSpacing3 = p.max(12, 18 * scaleFactor);
         lineSpacing4 = p.max(12, 18 * scaleFactor);
@@ -165,7 +165,7 @@ const sketch2 = (p) => {
 
         // Ajuster l'écart pour description2Y, description3Y, et description4Y
         descriptionYShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-        description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description2YShift = p.map(scaleFactor, 0, 1, 60, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
 
