@@ -88,7 +88,7 @@ const sketch2 = (p) => {
     
     // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
    function calculateSizes() {
-    const initialWidth = 1600; // Largeur de référence pour baseSize et spacing
+    const initialWidth = 900; // Largeur de référence pour baseSize et spacing
     let scaleFactor = p.width / initialWidth;
     // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
 
@@ -134,7 +134,7 @@ const sketch2 = (p) => {
         margin = paragrapheSpacing2;
 
         // Calculer description2X et description2Y
-        description2X = - p.width / 2 + margin;
+        description2X = - p.width / 2 - margin;
         
     } else {
         baseSize = p.max(40, 50 * scaleFactor);
