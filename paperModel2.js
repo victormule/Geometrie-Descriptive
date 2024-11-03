@@ -47,6 +47,7 @@ const sketch2 = (p) => {
     let lineSpacing3 = 18;            // Espacement initial entre les lignes pour descriptions3
     let lineSpacing4 = 18;            // Espacement initial entre les lignes pour descriptions4
     let titleToDescriptionSpacing = 40; // Ecart initial entre le titre et les descriptions
+    let descriptionYShift = 0;       // Ajustement dynamique pour description2Y
     let description2YShift = 0;       // Ajustement dynamique pour description2Y
     let description3YShift = 0;       // Ajustement dynamique pour description3Y
     let description4YShift = 0;       // Ajustement dynamique pour description4Y
@@ -56,6 +57,8 @@ const sketch2 = (p) => {
     let paragrapheSpacing2; // Pour descriptions2
     let paragrapheSpacing3; // Pour descriptions3
     let paragrapheSpacing4; // Pour descriptions4
+    let descriptionX; // Position X pour descriptions2
+    let descriptionY; // Position Y pour descriptions2
     let description2X; // Position X pour descriptions2
     let description2Y; // Position Y pour descriptions2
     let margin;        // Marge utilisée pour les descriptions2
@@ -116,16 +119,19 @@ const sketch2 = (p) => {
         titleToDescriptionSpacing = p.max(40, 80 * scaleFactor);
 
         // Ajuster l'écart pour description2Y, description3Y, et description4Y
+        descriptionYShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         
         // Calculer les largeurs de ligne
+        lineWidth = p.max(500, 600 * scaleFactor);
         lineWidth2 = p.max(500, 600 * scaleFactor);
         lineWidth3 = p.max(160, 230 * scaleFactor);
         lineWidth4 = p.max(160, 230 * scaleFactor);
 
         // Calculer les espacements des paragraphes
+        paragrapheSpacing = p.max(800, 1000 * scaleFactor);
         paragrapheSpacing2 = p.max(800, 1000 * scaleFactor);
         paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
@@ -134,6 +140,7 @@ const sketch2 = (p) => {
         margin = paragrapheSpacing2;
 
         // Calculer description2X et description2Y
+        descriptionX = p.width / 2 - margin -200;
         description2X = p.width / 2 - margin -200;
         
     } else {
@@ -157,16 +164,19 @@ const sketch2 = (p) => {
         titleToDescriptionSpacing = p.max(20, 40 * scaleFactor);
 
         // Ajuster l'écart pour description2Y, description3Y, et description4Y
+        descriptionYShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
 
         // Calculer les largeurs de ligne
+        lineWidth = p.max(320, 440 * scaleFactor);
         lineWidth2 = p.max(320, 440 * scaleFactor);
         lineWidth3 = p.max(160, 230 * scaleFactor);
         lineWidth4 = p.max(160, 230 * scaleFactor);
 
         // Calculer les espacements des paragraphes
+        paragrapheSpacing = p.max(360, 500 * scaleFactor);
         paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
         paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
@@ -175,6 +185,7 @@ const sketch2 = (p) => {
         margin = paragrapheSpacing2;
 
         // Calculer description2X et description2Y
+        descriptionX = p.width / 2 - margin;
         description2X = p.width / 2 - margin;
     }
 }
@@ -883,20 +894,25 @@ const sketch2 = (p) => {
             let titleY = -p.height / 2 + 20; // Positionner le titre
             p.text(currentText.title, 0, titleY);  
 
-            // Partie pour les descriptions (en normal et taille dynamique)
-            p.textSize(descriptionSize);
-            p.textStyle(p.NORMAL);
+ if (currentText.descriptions) {
+                let descriptionY = titleY + titleToDescriptionSpacing + descriptionYShift;
+    p.textSize(description2Size);
+    
+    // descriptionX et descriptionY sont déjà calculés dans calculateSizes
+    // Utiliser les variables globales descriptionX et descriptionY
+    
+    // Aligner le texte à gauche
+    p.textAlign(p.CENTER, p.TOP);
 
-            // Calculer la position Y initiale pour les descriptions
-            let descriptionY = titleY + titleToDescriptionSpacing;  // Commencer après l'écart défini
+    // Utiliser uniquement drawColoredText sans p.text
+    currentText.descriptions.forEach(line => {
+        drawColoredText(p, line, descriptionX, descriptionY, lineWidth);
+        descriptionY += lineSpacing; // Ajouter l'espacement des lignes
+    });
 
-            // Itérer sur le tableau des descriptions et les afficher
-            currentText.descriptions.forEach(description => {
-                drawColoredText(p, line,0, descriptionY, lineWidth2);  // Justification selon votre besoin
-                descriptionY += lineSpacing;  // Ajouter de l'espace entre les lignes
-                
-            });
-
+    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
+    p.textAlign(p.CENTER, p.TOP);
+}
             // Vérifier si descriptions2 existe et l'afficher
             if (currentText.descriptions2) {
                 let description2Y = titleY + titleToDescriptionSpacing + description2YShift;
