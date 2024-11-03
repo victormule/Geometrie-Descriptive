@@ -121,12 +121,12 @@ const sketch2 = (p) => {
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         
         // Calculer les largeurs de ligne
-        lineWidth2 = p.max(360, 440 * scaleFactor);
+        lineWidth2 = p.max(500, 600 * scaleFactor);
         lineWidth3 = p.max(160, 230 * scaleFactor);
         lineWidth4 = p.max(160, 230 * scaleFactor);
 
         // Calculer les espacements des paragraphes
-        paragrapheSpacing2 = p.max(900, 1200 * scaleFactor);
+        paragrapheSpacing2 = p.max(300, 500 * scaleFactor);
         paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
         paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
 
