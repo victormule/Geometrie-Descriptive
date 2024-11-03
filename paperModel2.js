@@ -140,7 +140,7 @@ const sketch2 = (p) => {
         margin = paragrapheSpacing2;
 
         // Calculer description2X et description2Y
-        descriptionX = p.width / 2;
+        descriptionX = 0;
         description2X = p.width / 2 - margin -50;
         
     } else {
@@ -896,7 +896,7 @@ const sketch2 = (p) => {
 
  if (currentText.descriptions) {
                 let descriptionY = titleY + descriptionYShift;
-    p.textSize(description2Size);
+    p.textSize(descriptionSize);
     
     // descriptionX et descriptionY sont déjà calculés dans calculateSizes
     // Utiliser les variables globales descriptionX et descriptionY
