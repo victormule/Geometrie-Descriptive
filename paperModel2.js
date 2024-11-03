@@ -892,7 +892,7 @@ const sketch2 = (p) => {
 
             // Itérer sur le tableau des descriptions et les afficher
             currentText.descriptions.forEach(description => {
-                drawColoredText(p, description, 0, descriptionY, p.width);  // Justification selon votre besoin
+                drawColoredText(p, description, 0, descriptionY, p.width/2);  // Justification selon votre besoin
                 descriptionY += lineSpacing;  // Ajouter de l'espace entre les lignes
             });
 
