@@ -880,7 +880,7 @@ const sketch2 = (p) => {
             // Partie pour le titre (en gras italique et taille dynamique)
             p.textSize(titleSize);
             p.textStyle(p.BOLDITALIC);
-            let titleY = -p.height / 2 + 20; // Positionner le titre
+            let titleY = -p.height / 6 + 20; // Positionner le titre
             p.text(currentText.title, 0, titleY);  
 
             // Partie pour les descriptions (en normal et taille dynamique)
