@@ -120,7 +120,7 @@ const sketch2 = (p) => {
 
         // Ajuster l'écart pour description2Y, description3Y, et description4Y
         descriptionYShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-        description2YShift = p.map(scaleFactor, 0, 1, 160, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description2YShift = p.map(scaleFactor, 0, 1, 200, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         
