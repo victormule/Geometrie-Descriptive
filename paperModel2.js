@@ -1,71 +1,73 @@
 // sketch2.js
 
 const sketch2 = (p) => {
-    // Variables globales
     let myFont; // Variable pour stocker la police
     let rectangles = []; // Tableau pour stocker les objets rectangles
     let rows = 3; // Nombre de lignes
     let cols = 10; // Nombre de colonnes
-    let targetShiftY = 70; // Valeur par défaut
+    let baseSize = 80; // Taille de base des rectangles (modifiable)
+    let hoverSize = 90; // Taille des rectangles au survol
+    let spacing = 24; // Espacement entre les rectangles (modifiable)
+    const shiftAmount = 5; // Décalage vertical lors du survol
+    const shiftOffsetX = 5; // Décalage horizontal pour maintenir l'espacement
 
-    // Layout configuration encapsulée
-    let layout = {
-        baseSize: 80,
-        hoverSize: 90,
-        spacing: 24,
-        shiftAmount: 5,
-        shiftOffsetX: 5,
-        titleSize: 24,
-        descriptionSize: 18,
-        description2Size: 12,
-        description3Size: 14,
-        description4Size: 14,
-        lineSpacing: 24,
-        lineSpacing2: 20,
-        lineSpacing3: 18,
-        lineSpacing4: 18,
-        titleToDescriptionSpacing: 40,
-        description2YShift: 0,
-        description3YShift: 0,
-        description4YShift: 0,
-        lineWidth2: 0,
-        lineWidth3: 0,
-        lineWidth4: 0,
-        paragrapheSpacing2: 0,
-        paragrapheSpacing3: 0,
-        paragrapheSpacing4: 0,
-        description2X: 0,
-        description2Y: 0,
-        margin: 0
-    };
-
-    // Gestionnaire de textes et d'images
-    let textManager;
-    let imageManager;
-
-    // Opacités
-    let bgOpacity = 0; // Opacité initiale du fond noir
-    let rectOpacity = 0; // Opacité initiale des rectangles
+    // Variables pour l'animation de fade-in
+    let bgOpacity = 0; // Opacité initiale du fond noir (modifié à 0 pour fade-in)
+    let rectOpacity = 0; // Opacité initiale des rectangles blancs et des nombres (modifié à 0 pour fade-in)
     const fadeSpeed = 0.05; // Vitesse de l'interpolation
 
-    // Variables pour le texte dynamique
-    let currentText = null; // Texte actuellement affiché
-    let textOpacityCurrent = 0; // Opacité actuelle du texte
-    let textTargetOpacity = 0; // Opacité cible du texte
+    // Variables pour les images de relief
+    let reliefImages = [];          // Tableau pour stocker les images de relief
+    let imageOpacities = [];        // Tableau pour stocker l'opacité actuelle des images
+    let imageTargetOpacities = [];  // Tableau pour stocker l'opacité cible des images
+
+    // Tableau de textes pour chaque rectangle
+    let texts = []; // Array de 30 textes
+
+    // Variables pour la gestion du texte dynamique
+    let currentText = null;           // Texte actuellement affiché (objet avec title et descriptions)
+    let textOpacity = 0;              // Opacité actuelle du texte
+    let textTargetOpacity = 0;        // Opacité cible du texte
 
     // Variable pour stocker l'image actuellement affichée
-    let currentImageIndex = -1; // -1 signifie aucune image affichée
+    let currentImageIndex = -1;       // -1 signifie aucune image affichée
 
-    // Opacités cibles
-    let bgTargetOpacity = 200; // Opacité cible du fond noir
-    let rectTargetOpacity = 200; // Opacité cible des rectangles
+    // Variables pour gérer les opacités cibles
+    let bgTargetOpacity = 200;        // Opacité cible du fond noir
+    let rectTargetOpacity = 200;      // Opacité cible des rectangles blancs
+
+    // Variables pour les tailles de police, l'espacement des lignes et l'écart titre-descriptions
+    let titleSize = 24;               // Taille initiale du titre
+    let descriptionSize = 18;         // Taille initiale des descriptions
+    let description2Size = 12;        // Taille initiale des descriptions2
+    let description3Size = 14;        // Taille initiale des descriptions3
+    let description4Size = 14;        // Taille initiale des descriptions4
+    let lineSpacing = 24;             // Espacement initial entre les lignes
+    let lineSpacing2 = 20;            // Espacement initial entre les lignes pour descriptions2
+    let lineSpacing3 = 18;            // Espacement initial entre les lignes pour descriptions3
+    let lineSpacing4 = 18;            // Espacement initial entre les lignes pour descriptions4
+    let titleToDescriptionSpacing = 40; // Ecart initial entre le titre et les descriptions
+    let description2YShift = 0;       // Ajustement dynamique pour description2Y
+    let description3YShift = 0;       // Ajustement dynamique pour description3Y
+    let description4YShift = 0;       // Ajustement dynamique pour description4Y
+    let lineWidth2; // Pour descriptions2
+    let lineWidth3; // Pour descriptions3
+    let lineWidth4; // Pour descriptions4
+    let paragrapheSpacing2; // Pour descriptions2
+    let paragrapheSpacing3; // Pour descriptions3
+    let paragrapheSpacing4; // Pour descriptions4
+    let description2X; // Position X pour descriptions2
+    let description2Y; // Position Y pour descriptions2
+    let margin;        // Marge utilisée pour les descriptions2
+
+    // Déclarer targetShiftY globalement
+    let targetShiftY = 70; // Valeur par défaut
 
     // Fonction pour déterminer l'orientation
     function isPortrait() {
         return p.windowHeight > p.windowWidth;
     }
 
-    // Fonction pour définir la grille basée sur l'orientation
     function setGridBasedOnOrientation() {
         if (isPortrait()) {
             rows = 3;
@@ -76,7 +78,6 @@ const sketch2 = (p) => {
         }
     }
 
-    // Fonction pour définir le décalage vertical basé sur l'orientation
     function setTargetShiftYBasedOnOrientation() {
         if (isPortrait()) {
             targetShiftY = 280; // Déplace les rectangles plus vers le bas en mode portrait
@@ -84,16 +85,170 @@ const sketch2 = (p) => {
             targetShiftY = 70; // Valeur par défaut pour le mode paysage
         }
     }
+    
+    // Fonction pour calculer baseSize, spacing, les tailles de police, l'espacement des lignes et l'écart titre-descriptions en fonction de la largeur de la fenêtre
+   function calculateSizes() {
+    const initialWidth = 1600; // Largeur de référence pour baseSize et spacing
+    let scaleFactor = p.width / initialWidth;
+    // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
+
+    setGridBasedOnOrientation();
+    
+    // Ajout d'ajustements basés sur l'orientation
+    if (isPortrait()) {
+        baseSize = p.max(70, 80 * scaleFactor);
+        spacing = p.max(18, 24 * scaleFactor);
+        hoverSize = 90;
+
+        titleSize = p.max(36, 44 * scaleFactor);
+        descriptionSize = p.max(26, 34 * scaleFactor);
+        description2Size = p.max(20, 24 * scaleFactor);
+        description3Size = p.max(10, 14 * scaleFactor);
+        description4Size = p.max(10, 14 * scaleFactor);
+
+        // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
+        lineSpacing = p.max(30, 40 * scaleFactor);
+        lineSpacing2 = p.max(30, 40 * scaleFactor);
+        lineSpacing3 = p.max(12, 18 * scaleFactor);
+        lineSpacing4 = p.max(12, 18 * scaleFactor);
+
+        // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
+        titleToDescriptionSpacing = p.max(40, 80 * scaleFactor);
+
+        // Ajuster l'écart pour description2Y, description3Y, et description4Y
+        description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        
+        // Calculer les largeurs de ligne
+        lineWidth2 = p.max(360, 440 * scaleFactor);
+        lineWidth3 = p.max(160, 230 * scaleFactor);
+        lineWidth4 = p.max(160, 230 * scaleFactor);
+
+        // Calculer les espacements des paragraphes
+        paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
+        paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
+        paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
+
+        // Définir la marge pour descriptions2
+        margin = paragrapheSpacing2;
+
+        // Calculer description2X et description2Y
+        description2X = p.width/ 6;
+        
+    } else {
+        baseSize = p.max(40, 50 * scaleFactor);
+        spacing = p.max(14, 20 * scaleFactor);
+        hoverSize = 60;
+
+        titleSize = p.max(18, 28 * scaleFactor); // Plus grand en paysage
+        descriptionSize = p.max(16, 22 * scaleFactor); // Plus grand en paysage
+        description2Size = p.max(12, 16 * scaleFactor); // Plus grand en paysage
+        description3Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
+        description4Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
+
+        // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
+        lineSpacing = p.max(14, 24 * scaleFactor);
+        lineSpacing2 = p.max(14, 20 * scaleFactor);
+        lineSpacing3 = p.max(12, 18 * scaleFactor);
+        lineSpacing4 = p.max(12, 18 * scaleFactor);
+
+        // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
+        titleToDescriptionSpacing = p.max(20, 40 * scaleFactor);
+
+        // Ajuster l'écart pour description2Y, description3Y, et description4Y
+        description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+        description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
+
+        // Calculer les largeurs de ligne
+        lineWidth2 = p.max(320, 440 * scaleFactor);
+        lineWidth3 = p.max(160, 230 * scaleFactor);
+        lineWidth4 = p.max(160, 230 * scaleFactor);
+
+        // Calculer les espacements des paragraphes
+        paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
+        paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
+        paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
+
+        // Définir la marge pour descriptions2
+        margin = paragrapheSpacing2;
+
+        // Calculer description2X et description2Y
+        description2X = p.width / 2 - margin;
+    }
+}
+
+    // Fonction pour initialiser ou réinitialiser les rectangles
+    function initializeRectangles() {
+        rectangles = []; // Réinitialiser le tableau des rectangles
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                let number = row * cols + col + 1; // Numérotation de 1 à (rows * cols)
+                rectangles.push(new Rectangle(row, col, number));
+            }
+        }
+    }
+
+    // Constantes en dehors de la fonction pour éviter de recréer l'objet à chaque appel
+    const specialWords = {
+        "a,a'": [255, 150, 150], // Rouge
+        "a'": [255, 150, 150],   // Rouge
+        "a": [255, 150, 150],    // Rouge
+        "c": [150, 255, 150],    // Vert
+        "c'": [150, 255, 150],   // Vert
+        "c,c'": [150, 255, 150], // Vert
+        "cd,c'd'": [150, 255, 150], // Vert
+        "APA'": [150, 255, 150], // Vert
+        "mm'": [150, 150, 255], // Bleu
+        "C1": [0, 0, 255], // Bleu
+        "C1d": [255, 165, 0], // Orange
+        "bc,b'c'": [255, 150, 150],
+    };
+
+    function drawColoredText(p, line, x, y, lineWidth) {
+        let words = line.split(" ");
+        let currentLine = [];
+        let lineWidthAccumulated = 0;
+        let lineY = y;
+
+        words.forEach((word) => {
+            let wordWidth = p.textWidth(word + " ");
+            if (lineWidthAccumulated + wordWidth > lineWidth && currentLine.length > 0) {
+                justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
+                currentLine = [];
+                lineWidthAccumulated = 0;
+                lineY += lineSpacing2;
+            }
+            currentLine.push(word);
+            lineWidthAccumulated += wordWidth;
+        });
+
+        if (currentLine.length > 0) {
+            justifyAndDrawLine(p, currentLine, x, lineY, lineWidth);
+        }
+    }
+
+    function justifyAndDrawLine(p, lineWords, x, y, lineWidth) {
+        let totalWordsWidth = lineWords.reduce((sum, word) => sum + p.textWidth(word), 0);
+        let extraSpace = lineWidth - totalWordsWidth;
+        let spaceWidth = lineWords.length > 1 ? extraSpace / (lineWords.length - 1) : 0;
+        let currentX = x;
+
+        lineWords.forEach((word) => {
+            let color = specialWords[word] || [255, 255, 255]; // Blanc par défaut
+            p.fill(...color);
+            p.text(word, currentX, y);
+            currentX += p.textWidth(word) + spaceWidth;
+        });
+    }
 
     // Classe représentant un rectangle
     class Rectangle {
-        constructor(row, col, number, baseSize, hoverSize) {
+        constructor(row, col, number) {
             this.row = row;
             this.col = col;
             this.number = number;
-
-            this.baseSize = baseSize;
-            this.hoverSize = hoverSize;
 
             this.currentSize = baseSize;
             this.targetSize = baseSize;
@@ -101,8 +256,9 @@ const sketch2 = (p) => {
             this.currentShiftX = 0;
             this.targetShiftX = 0;
 
+            // Position de départ initiale pour l'animation de descente
             this.currentShiftY = 120;
-            this.targetShiftY = targetShiftY;
+            this.targetShiftY = targetShiftY; // Utilise la valeur définie selon l'orientation
         }
 
         // Méthode pour dessiner le rectangle avec une opacité dynamique
@@ -130,485 +286,418 @@ const sketch2 = (p) => {
         }
     }
 
-    // Classe pour gérer les textes
-    class TextManager {
-        constructor(textsData, specialWords) {
-            this.texts = textsData.texts; // Assurez-vous que le JSON a une clé "texts"
-            this.specialWords = specialWords;
-        }
-
-        // Méthode pour obtenir le texte associé à un rectangle donné
-        getText(rectNumber) {
-            return this.texts[rectNumber - 1] || null;
-        }
-
-        // Méthode pour dessiner du texte coloré avec justification
-        drawColoredText(line, x, y, lineWidth, lineSpacing) {
-            let words = line.split(" ");
-            let currentLine = [];
-            let lineWidthAccumulated = 0;
-            let lineY = y;
-
-            words.forEach((word) => {
-                let wordWidth = p.textWidth(word + " ");
-                if (lineWidthAccumulated + wordWidth > lineWidth && currentLine.length > 0) {
-                    this.justifyAndDrawLine(currentLine, x, lineY, lineWidth);
-                    currentLine = [];
-                    lineWidthAccumulated = 0;
-                    lineY += lineSpacing;
-                }
-                currentLine.push(word);
-                lineWidthAccumulated += wordWidth;
-            });
-
-            if (currentLine.length > 0) {
-                this.justifyAndDrawLine(currentLine, x, lineY, lineWidth);
-            }
-        }
-
-        // Méthode pour justifier et dessiner une ligne
-        justifyAndDrawLine(lineWords, x, y, lineWidth) {
-            let totalWordsWidth = lineWords.reduce((sum, word) => sum + p.textWidth(word), 0);
-            let extraSpace = lineWidth - totalWordsWidth;
-            let spaceWidth = lineWords.length > 1 ? extraSpace / (lineWords.length - 1) : 0;
-            let currentX = x;
-
-            lineWords.forEach((word) => {
-                let color = this.specialWords[word] || [255, 255, 255]; // Blanc par défaut
-                p.fill(...color);
-                p.text(word, currentX, y);
-                currentX += p.textWidth(word) + spaceWidth;
-            });
-        }
-    }
-
-    // Classe pour gérer les images
-    class ImageManager {
-        constructor(reliefImages) {
-            this.reliefImages = reliefImages;
-            this.imageOpacities = Array(reliefImages.length).fill(0);
-            this.imageTargetOpacities = Array(reliefImages.length).fill(0);
-        }
-
-        // Méthode pour mettre à jour l'opacité des images
-        updateOpacities() {
-            for (let i = 0; i < this.imageOpacities.length; i++) {
-                this.imageOpacities[i] = p.lerp(this.imageOpacities[i], this.imageTargetOpacities[i], 0.1);
-            }
-        }
-
-        // Méthode pour dessiner l'image avec une opacité donnée
-        drawImage(index, x, y, width, height) {
-            if (index !== -1 && this.imageOpacities[index] > 0) {
-                p.push();
-                p.noStroke();
-                p.tint(255, this.imageOpacities[index]); // Appliquer l'opacité
-                p.imageMode(p.CENTER);
-                p.image(this.reliefImages[index], x, y, width, height); // Étendre l'image pour couvrir le fond
-                p.pop();
-            }
-        }
-
-        // Méthode pour définir l'opacité cible d'une image
-        setTargetOpacity(index, opacity) {
-            if (index >= 0 && index < this.imageTargetOpacities.length) {
-                this.imageTargetOpacities[index] = opacity;
-            }
-        }
-    }
-
-    // Classe pour gérer les interactions et le rendu
-    class InteractionManager {
-        constructor(rectangles, textManager, imageManager) {
-            this.rectangles = rectangles;
-            this.textManager = textManager;
-            this.imageManager = imageManager;
-            this.hoveredRect = null;
-        }
-
-        // Méthode pour détecter le rectangle survolé
-        detectHoveredRect(relMouseX, relMouseY) {
-            this.hoveredRect = null;
-
-            outerLoop:
-            for (let rect of this.rectangles) {
-                let totalWidth = cols * (layout.baseSize + layout.spacing) - layout.spacing;
-                let totalHeight = rows * (layout.baseSize + layout.spacing) - layout.spacing;
-                let startX = -totalWidth / 2 + layout.baseSize / 2;
-                let startY = -totalHeight / 2 + layout.baseSize / 2;
-                let x = startX + rect.col * (layout.baseSize + layout.spacing) + rect.currentShiftX;
-                let y = startY + rect.row * (layout.baseSize + layout.spacing) + rect.currentShiftY;
-
-                let d = p.dist(relMouseX, relMouseY, x, y + targetShiftY);
-
-                if (d < rect.currentSize / 2) { // Si la souris est sur le rectangle
-                    this.hoveredRect = rect.number; // Stocker le numéro du rectangle survolé
-                    break outerLoop; // Sortir des boucles une fois le premier survol détecté
-                }
-            }
-        }
-
-        // Méthode pour gérer les interactions basées sur le survol
-        handleInteractions() {
-            if (this.hoveredRect !== null) {
-                bgTargetOpacity = 20;
-                rectTargetOpacity = 20;
-
-                let hoveredRectObj = this.rectangles.find(r => r.number === this.hoveredRect);
-                if (hoveredRectObj) {
-                    this.rectangles.forEach(rect => {
-                        if (rect.row === hoveredRectObj.row) {
-                            if (rect.col < hoveredRectObj.col) {
-                                rect.targetShiftX = -layout.shiftOffsetX; // Déplacer à gauche
-                            } else if (rect.col > hoveredRectObj.col) {
-                                rect.targetShiftX = layout.shiftOffsetX; // Déplacer à droite
-                            } else {
-                                rect.targetShiftX = 0; // Rectangle survolé reste centré
-                            }
-                        } else {
-                            rect.targetShiftX = 0; // Autres lignes ne bougent pas
-                        }
-
-                        if (rect.number === this.hoveredRect) {
-                            rect.targetSize = layout.hoverSize; // Agrandir le rectangle survolé
-                            if (rect.row === 0) {
-                                rect.targetShiftY = targetShiftY - layout.shiftAmount; // Déplacer légèrement vers le haut
-                            } else if (rect.row === 1) {
-                                rect.targetShiftY = targetShiftY + layout.shiftAmount; // Déplacer légèrement vers le bas
-                            }
-                            // Si row == 2, ajustez si nécessaire
-                        } else {
-                            rect.targetSize = layout.baseSize; // Réinitialiser la taille des autres rectangles
-                            rect.targetShiftY = targetShiftY; // Réinitialiser le décalage vertical
-                        }
-
-                        // Mettre à jour les propriétés pour des transitions fluides
-                        rect.update();
-                    });
-                }
-            } else {
-                bgTargetOpacity = 200;
-                rectTargetOpacity = 200;
-
-                // Aucun rectangle survolé, réinitialiser toutes les propriétés
-                this.rectangles.forEach(rect => {
-                    rect.targetSize = layout.baseSize; // Réinitialiser la taille
-                    rect.targetShiftX = 0; // Réinitialiser le décalage horizontal
-                    rect.targetShiftY = targetShiftY; // Réinitialiser le décalage vertical
-
-                    // Mettre à jour les propriétés pour des transitions fluides
-                    rect.update();
-                });
-            }
-        }
-
-        // Méthode pour gérer le texte et les images basés sur le survol
-        handleTextAndImage() {
-            if (this.hoveredRect !== null) {
-                let newImageIndex = this.hoveredRect - 1;
-
-                if (currentImageIndex !== newImageIndex) {
-                    // Réinitialiser l'opacité de l'image précédente
-                    if (currentImageIndex !== -1) {
-                        imageManager.setTargetOpacity(currentImageIndex, 0);
-                    }
-
-                    // Mettre à jour l'index de l'image actuelle
-                    currentImageIndex = newImageIndex;
-
-                    // Définir l'opacité cible pour l'image actuelle
-                    imageManager.setTargetOpacity(currentImageIndex, 255);
-
-                    // Mettre à jour le texte actuel
-                    currentText = textManager.getText(currentImageIndex + 1);
-                }
-            } else {
-                // Aucune image n'est survolée, réinitialiser l'image actuelle
-                if (currentImageIndex !== -1) {
-                    imageManager.setTargetOpacity(currentImageIndex, 0);
-                    currentImageIndex = -1;
-                }
-
-                // Réinitialiser le texte
-                currentText = null;
-            }
-        }
-    }
-
-    // Classe pour gérer les opacités et le rendu global
-    class RenderManager {
-        constructor(textManager, imageManager) {
-            this.textManager = textManager;
-            this.imageManager = imageManager;
-        }
-
-        // Méthode pour mettre à jour les opacités des images
-        update() {
-            this.imageManager.updateOpacities();
-        }
-
-        // Méthode pour dessiner les éléments
-        draw(currentText) {
-            // Dessiner l'image de relief actuellement sélectionnée en arrière-plan avec son opacité actuelle
-            if (currentImageIndex !== -1) {
-                this.imageManager.drawImage(currentImageIndex, 0, 0, p.width, p.height);
-            }
-
-            // Dessiner le rectangle noir de fond avec opacité dynamique
-            p.noStroke();
-            p.fill(0, bgOpacity); // Noir avec opacité dynamique
-            p.rect(0, 0, p.width, p.height); // Rectangle centré couvrant tout l'écran
-
-            // Gestion du texte dynamique avec fade-in et fade-out
-            if (currentText) {
-                textTargetOpacity = 255; // Opacité cible pour le texte
-            } else {
-                textTargetOpacity = 0; // Opacité cible à 0 lorsque aucun rectangle n'est survolé
-            }
-
-            // Interpoler l'opacité du texte
-            textOpacityCurrent = p.lerp(textOpacityCurrent, textTargetOpacity, 0.1);
-
-            // Dessiner le texte en haut centre de l'écran avec l'opacité actuelle
-            if (currentText && textOpacityCurrent > 0) {
-                p.push();
-                p.noStroke();
-                p.fill(255, textOpacityCurrent); // Texte blanc avec opacité dynamique
-                p.textFont(myFont);
-                p.textAlign(p.CENTER, p.TOP);
-
-                // Partie pour le titre (en gras italique et taille dynamique)
-                p.textSize(layout.titleSize);
-                p.textStyle(p.BOLDITALIC);
-                let titleY = -p.height / 2 + 20; // Positionner le titre
-                p.text(currentText.title, 0, titleY);
-
-                // Partie pour les descriptions (en normal et taille dynamique)
-                p.textSize(layout.descriptionSize);
-                p.textStyle(p.NORMAL);
-
-                // Calculer la position Y initiale pour les descriptions
-                let descriptionY = titleY + layout.titleToDescriptionSpacing; // Commencer après l'écart défini
-
-                // Itérer sur le tableau des descriptions et les afficher
-                currentText.descriptions.forEach(description => {
-                    textManager.drawColoredText(description, 0, descriptionY, p.width, layout.lineSpacing);
-                    descriptionY += layout.lineSpacing; // Ajouter de l'espace entre les lignes
-                });
-
-                // Vérifier si descriptions2 existe et l'afficher
-                if (currentText.descriptions2) {
-                    p.textSize(layout.description2Size);
-
-                    // description2X et description2Y sont déjà calculés dans calculateSizes
-                    // Utiliser les variables globales layout.description2X et layout.description2Y
-
-                    // Aligner le texte à gauche
-                    p.textAlign(p.LEFT, p.TOP);
-
-                    // Utiliser uniquement drawColoredText sans p.text
-                    currentText.descriptions2.forEach(line => {
-                        textManager.drawColoredText(line, layout.description2X, layout.description2Y, layout.lineWidth2, layout.lineSpacing2);
-                        layout.description2Y += layout.lineSpacing2; // Ajouter l'espacement des lignes
-                    });
-
-                    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
-                    p.textAlign(p.CENTER, p.TOP);
-                }
-
-                // Vérifier si descriptions3 existe et l'afficher
-                if (currentText.descriptions3) {
-                    p.textSize(layout.description3Size);
-                    let description3X = p.width / 2 - layout.paragrapheSpacing3;
-                    let description3Y = titleY + layout.titleToDescriptionSpacing + layout.description3YShift;
-
-                    // Aligner le texte à gauche
-                    p.textAlign(p.LEFT, p.TOP);
-
-                    // Utiliser uniquement drawColoredText sans p.text
-                    currentText.descriptions3.forEach(line => {
-                        textManager.drawColoredText(line, description3X, description3Y, layout.lineWidth3, layout.lineSpacing3);
-                        description3Y += layout.lineSpacing3; // Ajouter l'espacement des lignes
-                    });
-
-                    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
-                    p.textAlign(p.CENTER, p.TOP);
-                }
-
-                // Vérifier si descriptions4 existe et l'afficher
-                if (currentText.descriptions4) {
-                    p.textSize(layout.description4Size);
-                    let description4X = p.width / 2 - layout.paragrapheSpacing4;
-                    let description4Y = titleY + layout.titleToDescriptionSpacing + layout.description4YShift + layout.lineSpacing3 - 1;
-
-                    // Aligner le texte à gauche
-                    p.textAlign(p.LEFT, p.TOP);
-
-                    // Utiliser uniquement drawColoredText sans p.text
-                    currentText.descriptions4.forEach(line => {
-                        textManager.drawColoredText(line, description4X, description4Y, layout.lineWidth4, layout.lineSpacing4);
-                        description4Y += layout.lineSpacing4; // Ajouter l'espacement des lignes
-                    });
-
-                    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
-                    p.textAlign(p.CENTER, p.TOP);
-                }
-
-                p.pop();
-            }
-        }
-    }
-
-    // Fonction pour initialiser le gestionnaire de textes
-    function setupTextManager(textsData) {
-        textManager = new TextManager(textsData, specialWords);
-    }
-
-    // Fonction pour initialiser le gestionnaire d'images
-    function setupImageManager() {
-        imageManager = new ImageManager(reliefImages);
-    }
-
-    // Fonction pour calculer les tailles et espacements basés sur la fenêtre
-    function calculateSizes() {
-        const initialWidth = 900; // Largeur de référence pour baseSize et spacing
-        let scaleFactor = p.width / initialWidth;
-        // Ajuster baseSize et spacing proportionnellement à la largeur actuelle, en respectant les minima
-
-        setGridBasedOnOrientation();
-
-        // Ajout d'ajustements basés sur l'orientation
-        if (isPortrait()) {
-            layout.baseSize = p.max(70, 80 * scaleFactor);
-            layout.spacing = p.max(18, 24 * scaleFactor);
-            layout.hoverSize = 90;
-
-            layout.titleSize = p.max(36, 44 * scaleFactor);
-            layout.descriptionSize = p.max(26, 34 * scaleFactor);
-            layout.description2Size = p.max(20, 24 * scaleFactor);
-            layout.description3Size = p.max(10, 14 * scaleFactor);
-            layout.description4Size = p.max(10, 14 * scaleFactor);
-
-            // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
-            layout.lineSpacing = p.max(30, 40 * scaleFactor);
-            layout.lineSpacing2 = p.max(30, 40 * scaleFactor);
-            layout.lineSpacing3 = p.max(12, 18 * scaleFactor);
-            layout.lineSpacing4 = p.max(12, 18 * scaleFactor);
-
-            // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
-            layout.titleToDescriptionSpacing = p.max(40, 80 * scaleFactor);
-
-            // Ajuster l'écart pour description2Y, description3Y, et description4Y
-            layout.description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-            layout.description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-            layout.description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-
-            // Calculer les largeurs de ligne
-            layout.lineWidth2 = p.max(360, 440 * scaleFactor);
-            layout.lineWidth3 = p.max(160, 230 * scaleFactor);
-            layout.lineWidth4 = p.max(160, 230 * scaleFactor);
-
-            // Calculer les espacements des paragraphes
-            layout.paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
-            layout.paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
-            layout.paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
-
-            // Définir la marge pour descriptions2
-            layout.margin = layout.paragrapheSpacing2;
-
-            // Calculer description2X et description2Y
-            layout.description2X = p.width / 6;
-            layout.description2Y = -p.height / 2 + 20 + layout.titleToDescriptionSpacing + layout.description2YShift + 10;
-        } else {
-            layout.baseSize = p.max(40, 50 * scaleFactor);
-            layout.spacing = p.max(14, 20 * scaleFactor);
-            layout.hoverSize = 60;
-
-            layout.titleSize = p.max(18, 28 * scaleFactor); // Plus grand en paysage
-            layout.descriptionSize = p.max(16, 22 * scaleFactor); // Plus grand en paysage
-            layout.description2Size = p.max(12, 16 * scaleFactor); // Plus grand en paysage
-            layout.description3Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
-            layout.description4Size = p.max(12, 18 * scaleFactor); // Plus grand en paysage
-
-            // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
-            layout.lineSpacing = p.max(14, 24 * scaleFactor);
-            layout.lineSpacing2 = p.max(14, 20 * scaleFactor);
-            layout.lineSpacing3 = p.max(12, 18 * scaleFactor);
-            layout.lineSpacing4 = p.max(12, 18 * scaleFactor);
-
-            // Ajuster l'écart entre le titre et les descriptions, avec un minimum de 20px
-            layout.titleToDescriptionSpacing = p.max(20, 40 * scaleFactor);
-
-            // Ajuster l'écart pour description2Y, description3Y, et description4Y
-            layout.description2YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-            layout.description3YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-            layout.description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
-
-            // Calculer les largeurs de ligne
-            layout.lineWidth2 = p.max(320, 440 * scaleFactor);
-            layout.lineWidth3 = p.max(160, 230 * scaleFactor);
-            layout.lineWidth4 = p.max(160, 230 * scaleFactor);
-
-            // Calculer les espacements des paragraphes
-            layout.paragrapheSpacing2 = p.max(360, 500 * scaleFactor);
-            layout.paragrapheSpacing3 = p.max(360, 550 * scaleFactor);
-            layout.paragrapheSpacing4 = p.max(180, 280 * scaleFactor);
-
-            // Définir la marge pour descriptions2
-            layout.margin = layout.paragrapheSpacing2;
-
-            // Calculer description2X et description2Y
-            layout.description2X = p.width / 2 - layout.margin;
-            layout.description2Y = -p.height / 2 + 20 + layout.titleToDescriptionSpacing + layout.description2YShift + 10;
-        }
-    }
-
-    // Fonction pour initialiser ou réinitialiser les rectangles
-    function initializeRectangles() {
-        rectangles = []; // Réinitialiser le tableau des rectangles
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < cols; col++) {
-                let number = row * cols + col + 1; // Numérotation de 1 à (rows * cols)
-                rectangles.push(new Rectangle(row, col, number, layout.baseSize, layout.hoverSize));
-            }
-        }
-    }
-
-    // Constantes en dehors de la fonction pour éviter de recréer l'objet à chaque appel
-    const specialWords = {
-        "a,a'": [255, 150, 150], // Rouge
-        "a'": [255, 150, 150],   // Rouge
-        "a": [255, 150, 150],    // Rouge
-        "c": [150, 255, 150],    // Vert
-        "c'": [150, 255, 150],   // Vert
-        "c,c'": [150, 255, 150], // Vert
-        "cd,c'd'": [150, 255, 150], // Vert
-        "APA'": [150, 255, 150], // Vert
-        "mm'": [150, 150, 255], // Bleu
-        "C1": [0, 0, 255], // Bleu
-        "C1d": [255, 165, 0], // Orange
-        "bc,b'c'": [255, 150, 150],
-    };
-
-    // Fonction preload pour charger la police, les images et les textes avant le setup
+    // Fonction preload pour charger la police et les images avant le setup
     p.preload = function() {
         myFont = p.loadFont('fonts/OldNewspaperTypes.ttf');
 
         // Charger les images de relief
         for (let i = 1; i <= 30; i++) {
-            let img = p.loadImage(`assets/relief/relief(${i}).JPG`,
-                () => { /* Image chargée avec succès */ },
+            let img = p.loadImage(`assets/relief/relief(${i}).JPG`,  
+                () => { /* Image chargée avec succès */ }, 
                 () => { console.error(`Erreur de chargement de l'image assets/relief/relief(${i}).JPG`); }
             );
             reliefImages.push(img);
+            imageOpacities.push(0);         // Initialiser l'opacité à 0
+            imageTargetOpacities.push(0);   // Initialiser l'opacité cible à 0
         }
+        
+        // Initialiser les textes (Lorem Ipsum)
+        for (let i = 1; i <= 30; i++) {
 
-        // Charger les textes depuis le fichier JSON
-        textsData = p.loadJSON('assets/texts.json');
-    };
+            if (i === 1) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Description du point.`  // ligne 1
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Fig(1): a,a' point situé dans l'angle antérieur supérieur,`,
+                        `figuré par le coude d'une pièce de cuivre.         `,
+                        `Fig(2): a,a' point situé sur le mur,  au dessus du sol, et`,
+                        `se confondant avec sa projection horizontale a         `,
+                        `Fig(3): a,a' point situé sur le sol,  en avant  du mur, et`,
+                        `se confondant avec sa projection horizontale a         `,
+                        `Fig(4): a,a' point situé sur la ligne de  terre  et se con-`,
+                        `fondant avec chacune de ses projections.           `,
+                        `Fig(5): a,a' point situé dans l'angle  antérieur inférieur`,
+                        `figuré par le coude d'une pièce de cuivre.         `,
+                        `Fig(6): a,a' point situé  sur le mur,  au dessous  du sol.`,
+                        `Le point vient en a'après le rabattement du plan verti-`,
+                        `cal sur le plan horizontal. Dans l'espace,  il n'est autre `,
+                        `que le trou 5.                                       `,
+                        `Fig(7): a,a' point situé dans l'angle postérieur supérieur`,
+                        `figuré par le coude d'une pièce de cuivre.             `,
+                        `Fig(8): a,a' point sur  le sol derrière  le mur.  Ce point`,
+                        `n'est  autre que le trou 2  avec lequel a coïncide après`,
+                        `le rabattement du plan vertical.                       `,
+                        `Fig(9): a,a' point situé dans l'angle postérieur inférieur,`,
+                        `figuré par le coude d'une pièce de cuivre.             `,
+                        `Les projections sont les trous 1 et 4 avec lesquels a et `,
+                        `a' se confondent après le rabattement du plan vertical.`,
+                    ]
+                });
+            }
+            if (i === 2) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Représentation de la droite. Tracés d'une droite.`,  // ligne 1
+                        `Angle que fait une droite avec les plans de projection.`,  // ligne 2
+                        `Distance de deux points.`  // ligne 3
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Représentation de la droite cd,c'd' droite représentée`,
+                        `par ses deux projections,figurée par un fil noir`,
+                        `Traces d'une droite d trace horizontale de la droite,`,
+                        `c' trace verticale.                                `,
+                        `Angles que fait une droite avec les plans de projection.`,
+                        `C1 rabattement du point c' sur le sol.             `,
+                        `C1d rabattement de la droite sur le même plan.`,
+                        `cdC1 angle que fait le droite avec le plan horizontal.`,
+                        `Autre Méthode d1 rabattement du point d sur le mur, par`,
+                        `une rotation autour de cc'.                       `,
+                        `c'd1 rabattement de la droite sur le même plan.`,
+                        `c'd1c angle de la droite avec le plan horizontal.`,
+                        `Distance de deux points: a,a' point donné, figuré par le`,
+                        `coude d'une pièce de cuivre.                       `,
+                        `b,b' autre point donné, également figuré par le coude`,
+                        `d'une pièce de cuivre.                             `,
+                        `cd,c'd' droite passant par les deux points.        `,
+                        `A1 rabattement du point a,a' sur le sol par rotation`,
+                        `autour de cd.                                      `,
+                        `B1 rabattement du point bb' sur le même plan.`,
+                        `A1B1 distance des deux points.                     `,
+                        `Autre méthode. a'1 rabattement du point a,a' sur le mur,`,
+                        `par une rotation autour de cc'.                    `,
+                        `b1' rabattement du point b,b' sur le même plan.`,
+                        `a'1b'1 distance des deux points.                  `,
+                    ]
+                });
+            } 
+            if (i === 3) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Représentation de la droite (cas particulier).`  // ligne 1
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Représentation de la droite: ab,a'b' droite passant`,
+                        `par le point b de la ligne de terre, figurée par la`,
+                        `branche libre d'un fil de fer.                 `,
+                        `se confondant avec sa projection horizontale a`,
+                        `Angles d'une droite avec les plans de projection:`,
+                        `m,m' point pris sur la droite, figuré par le coude de`,
+                        `la pièce de cuivre.                            `,
+                        `M1 rabattement de ce point sur le plan horizontal.`,
+                        `bM1 rabattement de la droite sur ce plan.`,
+                        `mbM1 angle de la droite avec le même plan.`,
+                        `M2 rabattement du point m,m' sur le plan vertical.`,
+                        `bM2 rabattement de la droite sur ce plan.`,
+                        `m'bM2 angle de la droite avec le même plan.`,
+                    ]
+                });
+            } 
+            if (i === 4) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Représentation de la droite (cas particulier).`  // ligne 1
+                    ],
+                    descriptions3: [
+                        `LEGENDE`,
+                        `Fig(1): Droite perçant le mur au`, 
+                        `dessus du sol et  le sol derrière`,
+                        `le mur, figurée par une aiguille`,
+                        `droite.`,
+                        `a b,a'b' projections de la droite`,
+                        `b' trace verticale de la droite,`,
+                        `c trace horizontale ou plutôt la`,
+                        `trace horizontale est le point 3`,
+                        `avec laquel c coïncide, lorsqu'on`,
+                        `rabat le plan vertical sur le plan`,
+                        `horizontal.`,
+                        `Fig(2): Droite située dans un plan`,
+                        `de profil perçant le mur au dessus`,
+                        `du sol, et le sol en avant du mur,`,
+                        `figurée par une aiguille droite.`,
+                        `m,m' et n,n' points donnés dans un`,
+                        `plan de profil en déterminant la`,
+                        `droite.`,
+                        `M1 rabattement du point m,m' par`,
+                        `une rotation autour de la trace`,
+                        `horizontale du plan de profil`,
+                        `(mM1 = a'u = a'm').            `,
+                        `N1 rabattement du point n,n' par`,
+                        `une rotation autour de la trace`,
+                        `horizontale du plan de profil`,
+                        `(nN1 = a'v = a'n').            `,
+                        `M,N, rabattement de la droite`,
+                        `passant par les deux points.`,
+                        `a trace horizontale de la droite.`,
+                        `B1 rabattement de latrace verticale`,
+                        `de la droite.                   `,
+                        `b trace verticale relevée.      `,
+                        `a'aB1 angle de la droite et du plan`,
+                        `horizontal.                     `,
+                        `aB1a' angle de la droite et du plan`,
+                        `vertical.                       `,
 
-    // Fonction setup pour initialiser le canvas et les rectangles
-    p.setup = function() {
+                    ],
+                    descriptions4: [
+                        `aa',a'b' projections de la droite`,
+                        `(partie visible).                `,
+                        `Fig(3): Droite située dans un plan`,
+                        `de profil, perçant le mur au dessous`,
+                        `du sol et le sol en avant du mur,`,
+                        `figurée par une aiguille droite.`,
+                        `a trace horizontale de la droite.`,
+                        `c' trace verticale de la droite ou`,
+                        `plutôt cette trace est le point 2 qui`,
+                        `vient s'appliquer en C', lorsqu'on`,
+                        `rabat le plan vertical sur le plan`,
+                        `horizontal.                      `,
+                        `Les deux traces a et c' determinent`,
+                        `la droite.                       `,
+                        `C'1 rabattement de la trace verticale`,
+                        `de la droite.                     `,
+                        `a'aC'1 angle de la droite et du plan`,
+                        `horizontal.                       `,
+                        `aC'1a' angle de la droite et du plan`,
+                        `vertical.                        `,
+                        `ab,a'b' projections de la droite`,
+                        `(partie visible).                `,
+                        `Fig(4): Droite perçant le sol en avant`,
+                        `du mur et le mur au dessous du sol,`,
+                        `figurée par une aiguille droite.`,
+                        `ab,a'b' projections de la droite.`,
+                        `a trace horizontale de la droite.`,
+                        `c' trace verticale, ou plutôt la trace`,
+                        `verticale est le point 1 qui vient`,
+                        `coïncider avec c' lorsqu'on rabat le`,
+                        `plan vertical sur le plan horizontal.`,
+                    ]
+                });
+            } 
+            if (i === 5) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Représentation du plan. Droite située dans un plan.`  // ligne 1
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Fig(1): APA'   plan donné.               `,
+                        `PA trace horizontale du plan.                 `,
+                        `cd,c'd' droite située dans le plan, figurée par`,
+                        `un fil noir.                                   `,
+                        `Fig(2) BQB', plan dont les traces sont en ligne`,
+                        `droite lorsque le plan vertical est rabattu.   `,
+                    ],
+                });
+            } 
+            if (i === 6) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Droites parallèles. Par un point faire passer un`,
+                        `plan parallèle à un plan donné.`, 
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Théorie: cd,c'd' et ef,e'f' droites parallèles.`,
+                        `Problème: APA'   plan donné.              `,
+                        `mm' poins donné, figuré par le coude de la`,
+                        `pièce de cuivre.                            `,
+                        `cd,c'd' droite prise arbitrairement dans le plan`,
+                        `donné, figurée par un fil rouge              `,
+                        `ef,e'f' droite parallèle à la précédente et passant`,
+                        `par le point donné figurée par un fil rouge.`,
+                        `BQB' plan parallèle au plan donné.         `,
+                    ],
+                });
+            } 
+            if (i === 7) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Droites perpendiculaire à un plan`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `APA'   plan donné.                       `,
+                        `mm' point donné, figuré par le coude de la pièce`,
+                        `de cuivre.                                 `,
+                        `bc,b'c' droite passant par le point et perpendiculaire`,
+                        `au plan donné figurée par le branche libre du`,
+                        `fil de fer.                                 `,
+                    ],
+                });
+            } 
+            if (i === 8) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Horizontale d'un plan. Par un point`,
+                        `mener un plan parallèle à un plan donné.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Théorie: dc,d'c' horizontal du plan BQB' figurée`,
+                        `par la branche libre du fil de fer.        `,
+                        `Problème APA' plan donné.                  `,
+                        `m,m' point donné, figuré par le coude de la pièce`,
+                        `dc,d'c' horizontale du plan cherché, passant par`,
+                        `le point donné.                            `,
+                        `BQB' plan parallèle au plan donné.         `,
+                    ],
+                });
+            } 
+            if (i === 9) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Ligne de plus grands pente.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `APA' plan donné                        `,
+                        `m, m' point quelconque pris dans le plan, figuré`,
+                        `par le coude de la pièce de cuivre.              `,
+                        `Le fil noir est la ligne de plus grande pente. On`,
+                        `veux démontrer qu'elle est perpendiculaire à PA.`,
+                        `Le fil rouge ayant sa trace en d est une droite`, 
+                        `quelconque prise dans le plan et passant par le`,
+                        `point m, m.'                              `,
+                        `Le fil rouge ayant se trace en d, et la même droite`,
+                        `après sa rotation autour de la branche libre du fil`,
+                        `de cuivre.                                  `,
+                        `On voit que la portion des fils rouges comprise entre`,
+                        `le point M de l'espace et le plan horizontal en plus`,
+                        `grande que la portion correspondante du fil noir,`,
+                        `ce qui démontre le théorème.               `,
+                    ],
+                    
+                });
+            } 
+            if (i === 10) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Rotation d'un point autour d'un axe perpendiculaire`,
+                        `au plan vertical de projection autour d'un axe vertical.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `Fig(1): Rotation d'un point situé dans un plan de profil,`,
+                        `autour de la trace horizontale de celui-ci.`,
+                        `m, m' point donné dans le plan de profil, la trace`,
+                        `horizontale de ce plan se confond avec a b.`,
+                        `m2 point rabattu sur le plan horizontal`,
+                        `(mm2 = am2' = am').                          `,
+                        `Rotation d'un point situé dans un plan de profil, autour`, 
+                        `d'une horizontale de ce plan.                   `,
+                        `a' trace verticale de l'horizontale donnée figurée par`,
+                        `le fil de fer.                              `,
+                        `ab projection horizontale de la même droite.`,
+                        `m,m' point donné, figuré par le coude de la pièce`,
+                        `de cuivre                                  `,
+                        `m1,m1' projection nouvelles du point, après une`,
+                        `rotation de 90°.                               `,
+                        `Fig(2): Rotation d'un point autour d'un axe vertical.`,
+                        `a trace horizontale de l'axe; lequel est figuré par`,
+                        `le fil de fer.                                 `,
+                        `a'b' projections nouvelles du point quand il a tourné`,
+                        `de l'angle m a m1.                             `,
+                        `m2, m2' projection nouvelles du point quand il s'est`,
+                        `placé dans un plan parallèle au plan vertical et`,
+                        `passant par l'axe donné.                       `,
+                    ],
+                    
+                });
+            } 
+            if (i === 11) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Rotation d'un point autour d'un axe situé`,
+                        `dans le plan horizontal de projection.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `ab axe donné, situé dans leplan horizontal.`,
+                        `m, m' point donné, figuré par le coude de la`,
+                        `pièce de cuivre.                           `,
+                        `M1 rabattement du point sur le plan horizontal par`,
+                        `une rotation autour de mn perpendiculaire à`,
+                        `ab (mM1 = ms = uv = um').                       `,
+                        `M2 rabattement du point sur le plan horizontal,`, 
+                        `par une rotation autour de ab (nM2 = nM1).`,
+                    ],
+                    
+                });
+            } 
+            if (i === 12) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Rabattement d'un plan vertical.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `APA'  plan donné perpendiculaire au plan horizontal.`,
+                        `cP,c'd' projections d'une droite située dans le plan,`,
+                        `figurée par un fil noir.                       `,
+                        `cP,e'f' projections d'une horizontale du plan, figurée`,
+                        `par le fil de fer.                             `,
+                        `m,m' point situé dans le plan, figuré par le coude.`,
+                        `du fil de cuivre.                              `, 
+                        `PA1' rabattement de la trace verticale PA' du plan,`,
+                        `par une rotation autour de PA.             `,
+                        `M1 rabattement du point m,m' (mM1 = Ps = Pv = um')`,
+                        `cD1 rabattement de la droite dont les projections`,
+                        `sont cP,c'd'.                                  `,
+                        `E1F1 rabattement de l'horizontale du plan.     `,
+                    ],
+                    
+                });
+            } 
+            if (i === 13) {
+                texts.push({
+                    title: `Relief ${i}`,  // Texte pour le titre
+                    descriptions: [
+                        `Rabattement d'un plan quelconque.`,
+                    ],
+                    descriptions2: [
+                        `LEGENDE`,
+                        `APA' plan donné.                           `,
+                        `m,m' point du plan, figuré par le coude du`,
+                        `fil de cuivre.                            `,
+                        `bc,b'c' horizontale du plan, figurée par le de fer.`,
+                        `gd,g'd' droit située dans le plan, figurée par`,
+                        `le fil noir.                               `,
+                        `E1 rabattement du point e' par une rotation autour`, 
+                        `de ef perpendiculaire à PA (eE1 = ce'),`,
+                        `E2 rabattement du point e' par une rotation autour de`,
+                        `PA (fE2 = fE1).                            `,
+                        `PA1 rabattement de la trace verticale PA' du plan.`,
+                        `B1C1 rabattement de l'horizontale du plan.`,
+                        `M1 rabattement du point m,m' par une rotation autour de`,
+                        `m n perpendiculaire à PA (mM1 = mr =uv = um').`,
+                        `M2 rabattement du point m,m' par une rotation autour`,
+                        `de PA (nM2 = nM1).                            `,
+                        `G1d rabattement de la droite gd,g'd'.`,
+                    ],
+                    
+                });
+            } 
+        }
+    }
+
+     // Fonction setup pour initialiser le canvas et les rectangles
+        p.setup = function() {
         // Créer un canvas en 2D qui couvre toute la fenêtre
         p.createCanvas(p.windowWidth, p.windowHeight);
         p.rectMode(p.CENTER); // Mode de dessin des rectangles centrés
@@ -629,10 +718,6 @@ const sketch2 = (p) => {
 
         // Initialiser les rectangles avec leurs numéros
         initializeRectangles();
-
-        // Initialiser les gestionnaires de textes et d'images
-        setupTextManager(textsData);
-        setupImageManager();
     };
 
     // Fonction pour dessiner les rectangles, les images et gérer les interactions
@@ -645,23 +730,248 @@ const sketch2 = (p) => {
         // Détection du rectangle survolé
         let relMouseX = p.mouseX - p.width / 2;
         let relMouseY = p.mouseY - p.height / 2;
+        let hoveredRect = null;
 
-        // Initialiser le gestionnaire d'interactions
-        let interactionManager = new InteractionManager(rectangles, textManager, imageManager);
-        interactionManager.detectHoveredRect(relMouseX, relMouseY);
-        interactionManager.handleInteractions();
-        interactionManager.handleTextAndImage();
+        // Détection du rectangle survolé (priorité à la première ligne)
+        outerLoop:
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                let rect = rectangles[row * cols + col];
+                let x = -((cols * (baseSize + spacing) - spacing) / 2) + baseSize / 2 + col * (baseSize + spacing);
+                let y = -((rows * (baseSize + spacing) - spacing) / 2) + baseSize / 2 + row * (baseSize + spacing);
 
-        // Mettre à jour les opacités des images
-        imageManager.updateOpacities();
+                // Utiliser targetShiftY pour le décalage vertical
+                let d = p.dist(relMouseX, relMouseY, x + rect.currentShiftX, y + rect.currentShiftY + targetShiftY);
 
-        // Mettre à jour les opacités du fond et des rectangles
+                if (d < rect.currentSize / 2) { // Si la souris est sur le rectangle
+                    hoveredRect = rect.number; // Stocker le numéro du rectangle survolé
+                    break outerLoop; // Sortir des boucles une fois le premier survol détecté
+                }
+            }
+        }
+
+        // Définir les opacités cibles en fonction de l'état de survol
+        if (hoveredRect !== null) {
+            bgTargetOpacity = 20;
+            rectTargetOpacity = 20;
+        } else {
+            bgTargetOpacity = 200;
+            rectTargetOpacity = 200;
+        }
+
+        // Gestion des cibles de taille, de décalage et du positionnement pour maintenir l'espacement
+        if (hoveredRect !== null) {
+            let hoveredRectObj = rectangles.find(r => r.number === hoveredRect);
+            if (hoveredRectObj) {
+                rectangles.forEach(rect => {
+                    if (rect.row === hoveredRectObj.row) {
+                        if (rect.col < hoveredRectObj.col) {
+                            rect.targetShiftX = -shiftOffsetX; // Déplacer à gauche
+                        } else if (rect.col > hoveredRectObj.col) {
+                            rect.targetShiftX = shiftOffsetX; // Déplacer à droite
+                        } else {
+                            rect.targetShiftX = 0; // Rectangle survolé reste centré
+                        }
+                    } else {
+                        rect.targetShiftX = 0; // Autres lignes ne bougent pas
+                    }
+
+                    if (rect.number === hoveredRect) {
+                        rect.targetSize = hoverSize; // Agrandir le rectangle survolé
+                        if (rect.row === 0) {
+                            rect.targetShiftY = targetShiftY - shiftAmount; // Déplacer légèrement vers le haut
+                        } else if (rect.row === 1) {
+                            rect.targetShiftY = targetShiftY + shiftAmount; // Déplacer légèrement vers le bas
+                        }
+                        // Si row == 2, ajustez si nécessaire
+                    } else {
+                        rect.targetSize = baseSize; // Réinitialiser la taille des autres rectangles
+                        rect.targetShiftY = targetShiftY; // Réinitialiser le décalage vertical
+                    }
+
+                    // Mettre à jour les propriétés pour des transitions fluides
+                    rect.update();
+                });
+            }
+        } else {
+            // Aucun rectangle survolé, réinitialiser toutes les propriétés
+            rectangles.forEach(rect => {
+                rect.targetSize = baseSize; // Réinitialiser la taille
+                rect.targetShiftX = 0; // Réinitialiser le décalage horizontal
+                rect.targetShiftY = targetShiftY; // Réinitialiser le décalage vertical
+
+                // Mettre à jour les propriétés pour des transitions fluides
+                rect.update();
+            });
+        }
+
+        // Interpoler les opacités vers les cibles
         bgOpacity = p.lerp(bgOpacity, bgTargetOpacity, fadeSpeed);
         rectOpacity = p.lerp(rectOpacity, rectTargetOpacity, fadeSpeed);
 
-        // Rendre les éléments
-        let renderManager = new RenderManager(textManager, imageManager);
-        renderManager.draw(currentText);
+        // Gestion des images avec fade-in uniquement
+        if (hoveredRect !== null) {
+            let newImageIndex = hoveredRect - 1;
+
+            if (currentImageIndex !== newImageIndex) {
+                // Réinitialiser l'opacité de l'image précédente
+                if (currentImageIndex !== -1) {
+                    imageOpacities[currentImageIndex] = 0;
+                }
+
+                // Mettre à jour l'index de l'image actuelle
+                currentImageIndex = newImageIndex;
+
+                // Définir l'opacité cible pour l'image actuelle
+                imageTargetOpacities[currentImageIndex] = 255;
+
+                // Mettre à jour le texte actuel
+                currentText = texts[currentImageIndex];
+            }
+        } else {
+            // Aucune image n'est survolée, réinitialiser l'image actuelle
+            if (currentImageIndex !== -1) {
+                imageOpacities[currentImageIndex] = 0;
+                currentImageIndex = -1;
+            }
+
+            // Réinitialiser le texte
+            currentText = null;
+        }
+
+        // Mettre à jour les opacités des images en fonction des cibles
+        for (let i = 0; i < imageOpacities.length; i++) {
+            imageOpacities[i] = p.lerp(imageOpacities[i], imageTargetOpacities[i], 0.1);
+        }
+
+        // Dessiner l'image de relief actuellement sélectionnée en arrière-plan avec son opacité actuelle
+        if (currentImageIndex !== -1 && imageOpacities[currentImageIndex] > 0) {
+            p.push();
+            p.noStroke();
+            p.tint(255, imageOpacities[currentImageIndex]); // Appliquer l'opacité
+            p.imageMode(p.CENTER);
+            p.image(reliefImages[currentImageIndex], 0, 0, p.width, p.height); // Étendre l'image pour couvrir le fond
+            p.pop();
+        }
+
+        // Dessiner le rectangle noir de fond avec opacité dynamique
+        p.noStroke();
+        p.fill(0, bgOpacity); // Noir avec opacité dynamique
+        p.rect(0, 0, p.width, p.height); // Rectangle centré couvrant tout l'écran
+
+        // Gestion du texte dynamique avec fade-in et fade-out
+        if (hoveredRect !== null) {
+            textTargetOpacity = 255; // Opacité cible pour le texte
+        } else {
+            textTargetOpacity = 0; // Opacité cible à 0 lorsque aucun rectangle n'est survolé
+        }
+
+        // Interpoler l'opacité du texte
+        textOpacity = p.lerp(textOpacity, textTargetOpacity, 0.1);
+
+        // Dessiner le texte en haut centre de l'écran avec l'opacité actuelle
+        if (currentText && textOpacity > 0) {
+            p.push();
+            p.noStroke();
+            p.fill(255, textOpacity); // Texte blanc avec opacité dynamique
+            p.textFont(myFont);
+            p.textAlign(p.CENTER, p.TOP);
+
+            // Partie pour le titre (en gras italique et taille dynamique)
+            p.textSize(titleSize);
+            p.textStyle(p.BOLDITALIC);
+            let titleY = -p.height / 2 + 20; // Positionner le titre
+            p.text(currentText.title, 0, titleY);  
+
+            // Partie pour les descriptions (en normal et taille dynamique)
+            p.textSize(descriptionSize);
+            p.textStyle(p.NORMAL);
+
+            // Calculer la position Y initiale pour les descriptions
+            let descriptionY = titleY + titleToDescriptionSpacing;  // Commencer après l'écart défini
+
+            // Itérer sur le tableau des descriptions et les afficher
+            currentText.descriptions.forEach(description => {
+                drawColoredText(p, description, 0, descriptionY, p.width);  // Justification selon votre besoin
+                descriptionY += lineSpacing;  // Ajouter de l'espace entre les lignes
+            });
+
+            // Vérifier si descriptions2 existe et l'afficher
+            if (currentText.descriptions2) {
+                let description2Y = titleY + titleToDescriptionSpacing + description2YShift;
+    p.textSize(description2Size);
+    
+    // description2X et description2Y sont déjà calculés dans calculateSizes
+    // Utiliser les variables globales description2X et description2Y
+    
+    // Aligner le texte à gauche
+    p.textAlign(p.LEFT, p.TOP);
+
+    // Utiliser uniquement drawColoredText sans p.text
+    currentText.descriptions2.forEach(line => {
+        drawColoredText(p, line, description2X, description2Y, lineWidth2);
+        description2Y += lineSpacing2; // Ajouter l'espacement des lignes
+    });
+
+    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
+    p.textAlign(p.CENTER, p.TOP);
+}
+            // Vérifier si descriptions3 existe et l'afficher
+            if (currentText.descriptions3) {
+                p.textSize(description3Size);
+                const margin = paragrapheSpacing3;
+                let description3X = p.width / 2 - margin;
+                let description3Y = titleY + titleToDescriptionSpacing + description3YShift;
+
+                // Aligner le texte à gauche
+                p.textAlign(p.LEFT, p.TOP);
+
+                // Utiliser uniquement drawColoredText sans p.text
+                currentText.descriptions3.forEach(line => {
+                    drawColoredText(p, line, description3X, description3Y, lineWidth3);
+                    description3Y += lineSpacing3; // Ajouter l'espacement des lignes
+                });
+
+                // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
+                p.textAlign(p.CENTER, p.TOP);
+            }
+
+            // Vérifier si descriptions4 existe et l'afficher
+            if (currentText.descriptions4) {
+                p.textSize(description4Size);
+                const margin = paragrapheSpacing4;
+                let description4X = p.width / 2 - margin;
+                let description4Y = titleY + titleToDescriptionSpacing + description4YShift + lineSpacing3 - 1;
+
+                // Aligner le texte à gauche
+                p.textAlign(p.LEFT, p.TOP);
+
+                // Utiliser uniquement drawColoredText sans p.text
+                currentText.descriptions4.forEach(line => {
+                    drawColoredText(p, line, description4X, description4Y, lineWidth4);
+                    description4Y += lineSpacing4; // Ajouter l'espacement des lignes
+                });
+
+                // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
+                p.textAlign(p.CENTER, p.TOP);
+            }
+
+            p.pop();
+        }
+
+        // Dessiner les rectangles après le fond et les images pour qu'ils restent visibles
+        rectangles.forEach(rect => {
+            // Calculer la position ajustée du rectangle
+            let totalWidth = cols * (baseSize + spacing) - spacing;
+            let totalHeight = rows * (baseSize + spacing) - spacing;
+            let startX = -totalWidth / 2 + baseSize / 2;
+            let startY = -totalHeight / 2 + baseSize / 2;
+            let x = startX + rect.col * (baseSize + spacing) + rect.currentShiftX;
+            let yPos = startY + rect.row * (baseSize + spacing) + rect.currentShiftY;
+
+            // Dessiner le rectangle avec l'opacité actuelle des rectangles
+            rect.draw(x, yPos, rectOpacity);
+        });
     };
 
     // Fonction pour redimensionner le canvas lors du changement de taille de la fenêtre
@@ -672,6 +982,7 @@ const sketch2 = (p) => {
         setGridBasedOnOrientation();
         setTargetShiftYBasedOnOrientation(); // Ajuste le décalage vertical basé sur l'orientation
         initializeRectangles();
+        // Aucun recalcul supplémentaire nécessaire car les positions sont recalculées dynamiquement dans draw()
     };
 };
 
