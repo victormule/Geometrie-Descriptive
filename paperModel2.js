@@ -110,7 +110,7 @@ const sketch2 = (p) => {
         description4Size = p.max(10, 14 * scaleFactor);
 
         // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
-        lineSpacing = p.max(18, 22 * scaleFactor);
+        lineSpacing = p.max(30,36 * scaleFactor);
         lineSpacing2 = p.max(30, 40 * scaleFactor);
         lineSpacing3 = p.max(12, 18 * scaleFactor);
         lineSpacing4 = p.max(12, 18 * scaleFactor);
@@ -125,7 +125,7 @@ const sketch2 = (p) => {
         description4YShift = p.map(scaleFactor, 0, 1, 120, 0, true); // scaleFactor de 1 à 0, shift de 0 à 100
         
         // Calculer les largeurs de ligne
-        lineWidth = p.max(500, 600 * scaleFactor);
+        lineWidth = p.max(350, 500 * scaleFactor);
         lineWidth2 = p.max(500, 600 * scaleFactor);
         lineWidth3 = p.max(160, 230 * scaleFactor);
         lineWidth4 = p.max(160, 230 * scaleFactor);
@@ -141,7 +141,7 @@ const sketch2 = (p) => {
 
         // Calculer description2X et description2Y
         descriptionX = 0;
-        description2X = p.width / 2 - margin -50;
+        description2X = p.width / 2;
         
     } else {
         baseSize = p.max(40, 50 * scaleFactor);
@@ -904,14 +904,8 @@ const sketch2 = (p) => {
     // Aligner le texte à gauche
     p.textAlign(p.CENTER, p.TOP);
 
-    // Utiliser uniquement drawColoredText sans p.text
-    currentText.descriptions.forEach(line => {
-        drawColoredText(p, line, descriptionX, descriptionY, lineWidth);
-        descriptionY += lineSpacing; // Ajouter l'espacement des lignes
-    });
-
-    // Réinitialiser l'alignement pour éviter d'affecter d'autres textes
-    p.textAlign(p.CENTER, p.TOP);
+    let titleY = -p.height / 2 + 20; // Positionner le titre
+    p.text(currentText.title, 0, titleY);  
 }
             // Vérifier si descriptions2 existe et l'afficher
             if (currentText.descriptions2) {
