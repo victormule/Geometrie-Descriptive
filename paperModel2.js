@@ -104,13 +104,13 @@ const sketch2 = (p) => {
         hoverSize = 90;
 
         titleSize = p.max(36, 44 * scaleFactor);
-        descriptionSize = p.max(26, 34 * scaleFactor);
+        descriptionSize = p.max(32, 40 * scaleFactor);
         description2Size = p.max(20, 24 * scaleFactor);
         description3Size = p.max(10, 14 * scaleFactor);
         description4Size = p.max(10, 14 * scaleFactor);
 
         // Ajuster l'espacement entre les lignes proportionnellement, avec un minimum de 15px
-        lineSpacing = p.max(30, 40 * scaleFactor);
+        lineSpacing = p.max(18, 22 * scaleFactor);
         lineSpacing2 = p.max(30, 40 * scaleFactor);
         lineSpacing3 = p.max(12, 18 * scaleFactor);
         lineSpacing4 = p.max(12, 18 * scaleFactor);
@@ -140,8 +140,8 @@ const sketch2 = (p) => {
         margin = paragrapheSpacing2;
 
         // Calculer description2X et description2Y
-        descriptionX = p.width / 2 - margin -200;
-        description2X = p.width / 2 - margin -200;
+        descriptionX = p.width / 2;
+        description2X = p.width / 2 - margin -50;
         
     } else {
         baseSize = p.max(40, 50 * scaleFactor);
